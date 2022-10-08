@@ -1,13 +1,10 @@
-import { Box } from "@chakra-ui/react";
-import "./App.css";
+import { Box } from '@chakra-ui/react';
 
 function App() {
   return (
-    <div className="App">
-      <Box bg="red.900" fontSize="md">
-        Welcome
-      </Box>
-    </div>
+    <Box bg='red.900' fontSize='md'>
+      Welcome
+    </Box>
   );
 }
 
