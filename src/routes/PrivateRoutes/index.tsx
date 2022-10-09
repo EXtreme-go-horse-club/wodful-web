@@ -1,14 +1,15 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Login from '../../pages/Login';
 
-const SignRoutes = () => {
+import Home from '../../pages/private/Home';
+
+const PrivateRoutes = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<Login />} />
+        <Route path='/' element={<Home />} />
       </Routes>
     </BrowserRouter>
   );
 };
 
-export default SignRoutes;
+export default PrivateRoutes;

@@ -6,7 +6,7 @@ export class AuthenticateService {
     private readonly url = `http://localhost:3333/auth/`,
   ) {}
 
-  async login(username: string, password: string) {
+  async login(email: string, password: string) {
     const headers = {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${localStorage.getItem('@Wodful:tkn')}`,
@@ -16,7 +16,7 @@ export class AuthenticateService {
       method: 'post',
       url: `${this.url}`,
       headers,
-      body: { username, password },
+      body: { email, password },
     });
 
     switch (statusCode) {

@@ -1,8 +1,8 @@
-import useAuth from '../../hooks/useAuth';
+import useAuth from '../../../hooks/useAuth';
 
 const Login = () => {
   function handleLogin() {
-    Login({ username: 'mcastegnaro', password: 'senha@123' });
+    Login({ email: 'matheus@email.com', password: 'senha@123' });
   }
 
   const { Login } = useAuth();

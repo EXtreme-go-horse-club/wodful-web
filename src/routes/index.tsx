@@ -1,10 +1,10 @@
 import useAuth from '../hooks/useAuth';
-import OtherRoutes from './OtherRoutes';
-import SignRoutes from './SignRoutes';
+import PublicRoutes from './PrivateRoutes';
+import PrivateRoutes from './PublicRoutes';
 
 const Routes = () => {
   const { signed } = useAuth();
-  return signed ? <OtherRoutes /> : <SignRoutes />;
+  return signed ? <PublicRoutes /> : <PrivateRoutes />;
 };
 
 export default Routes;

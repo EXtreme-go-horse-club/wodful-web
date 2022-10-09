@@ -1,15 +1,14 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Login from '../../pages/public/Login';
 
-import Home from '../../pages/Home';
-
-const OtherRoutes = () => {
+const PublicRoutes = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<Home />} />
+        <Route path='/' element={<Login />} />
       </Routes>
     </BrowserRouter>
   );
 };
 
-export default OtherRoutes;
+export default PublicRoutes;

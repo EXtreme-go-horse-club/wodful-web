@@ -1,5 +1,10 @@
 import { createContext, useCallback, useEffect, useState } from 'react';
 import { AxiosAdapter } from '../../adapters/AxiosAdapter';
+import {
+  AuthenticatedUserData,
+  IAuthenticateUserRequest,
+  IUserData,
+} from '../../data/interfaces/user';
 import { AuthenticateService } from '../../services/Authenticate';
 
 interface AuthProviderProps {
@@ -9,23 +14,8 @@ interface AuthProviderProps {
 export interface AuthContextData {
   signed: boolean;
   user: IUserData | null;
-  Login({ username, password }: IAuthenticateRequest): Promise<void>;
+  Login({ email, password }: IAuthenticateUserRequest): Promise<void>;
   Logout(): void;
-}
-
-interface IUserData {
-  name: string;
-  email: string;
-}
-
-interface AuthenticatedUserData {
-  token: string;
-  user: IUserData;
-}
-
-interface IAuthenticateRequest {
-  username: string;
-  password: string;
 }
 
 const AuthContext = createContext({} as AuthContextData);
@@ -35,9 +25,9 @@ const axios = new AxiosAdapter();
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<IUserData | null>(null);
 
-  const Login = useCallback(async ({ username, password }: IAuthenticateRequest) => {
+  const Login = useCallback(async ({ email, password }: IAuthenticateUserRequest) => {
     await new AuthenticateService(axios)
-      .login(username, password)
+      .login(email, password)
       .then((userData: AuthenticatedUserData) => {
         setUser(userData.user);
 
