@@ -9,7 +9,7 @@ export class AuthenticateService {
   async login(username: string, password: string) {
     const headers = {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('@Wodful:token')}`,
+      Authorization: `Bearer ${localStorage.getItem('@Wodful:tkn')}`,
     };
 
     const { statusCode, body } = await this.httpClient.request({

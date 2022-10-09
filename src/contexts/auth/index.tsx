@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useCallback, useEffect, useState } from 'react';
 import { AxiosAdapter } from '../../adapters/AxiosAdapter';
 import { AuthenticateService } from '../../services/Authenticate';
 
@@ -35,29 +35,27 @@ const axios = new AxiosAdapter();
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<IUserData | null>(null);
 
-  // TODO: AJUSTAR PARA USE CALL BACK
-  async function Login({ username, password }: IAuthenticateRequest) {
+  const Login = useCallback(async ({ username, password }: IAuthenticateRequest) => {
     await new AuthenticateService(axios)
       .login(username, password)
       .then((userData: AuthenticatedUserData) => {
         setUser(userData.user);
 
-        localStorage.setItem('@Wodful:user', JSON.stringify(userData.user));
-        localStorage.setItem('@Wodful:token', userData.token);
+        localStorage.setItem('@Wodful:usr', JSON.stringify(userData.user));
+        localStorage.setItem('@Wodful:tkn', userData.token);
       });
-  }
+  }, []);
 
-  // TODO: AJUSTAR PARA USE CALL BACK
-  function Logout() {
+  const Logout = useCallback(() => {
     setUser(null);
 
-    localStorage.removeItem('@Wodful:user');
-    localStorage.removeItem('@Wodful:token');
-  }
+    localStorage.removeItem('@Wodful:usr');
+    localStorage.removeItem('@Wodful:tkn');
+  }, []);
 
   useEffect(() => {
-    const storagedUser = localStorage.getItem('@Wodful:user');
-    const storagedToken = localStorage.getItem('@Wodful:token');
+    const storagedUser = localStorage.getItem('@Wodful:usr');
+    const storagedToken = localStorage.getItem('@Wodful:tkn');
 
     if (storagedToken && storagedUser) {
       setUser(JSON.parse(storagedUser));
