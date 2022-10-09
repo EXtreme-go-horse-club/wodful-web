@@ -3,7 +3,7 @@ import { HttpClient, HttpStatusCode } from '../../data/interfaces/http';
 export class AuthenticateService {
   constructor(
     private readonly httpClient: HttpClient<any>,
-    private readonly url = `http://localhost:3333/auth/`,
+    private readonly url = `${import.meta.env.VITE_BASE_API_URL}`,
   ) {}
 
   async login(email: string, password: string) {
@@ -14,7 +14,7 @@ export class AuthenticateService {
 
     const { statusCode, body } = await this.httpClient.request({
       method: 'post',
-      url: `${this.url}`,
+      url: `${this.url}/auth/`,
       headers,
       body: { email, password },
     });

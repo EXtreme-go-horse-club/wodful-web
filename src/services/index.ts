@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const wodfulApiPrivate = axios.create({
-  baseURL: 'http://localhost:3333',
+  baseURL: `${import.meta.env.VITE_BASE_API_URL}`,
 });
 
 [wodfulApiPrivate].forEach((instance) => {
