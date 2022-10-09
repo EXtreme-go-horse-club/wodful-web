@@ -1,7 +1,20 @@
 import axios from 'axios';
 
-const wodfulAPI = axios.create({
+const wodfulApiPrivate = axios.create({
   baseURL: 'http://localhost:3333',
 });
 
-export default wodfulAPI;
+[wodfulApiPrivate].forEach((instance) => {
+  instance.interceptors.request.use(
+    (config) => {
+      const token = localStorage.getItem('@Wodful:token');
+
+      if (token) config.headers!.Authorization = `Bearer ${token}`;
+
+      return config;
+    },
+    (error) => Promise.reject(error),
+  );
+});
+
+export default wodfulApiPrivate;

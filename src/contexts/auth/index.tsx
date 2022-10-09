@@ -1,6 +1,6 @@
-import { AxiosResponse } from 'axios';
 import { createContext, useEffect, useState } from 'react';
-import wodfulAPI from '../../services';
+import { AxiosAdapter } from '../../adapters/AxiosAdapter';
+import { AuthenticateService } from '../../services/Authenticate';
 
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -30,24 +30,24 @@ interface IAuthenticateRequest {
 
 const AuthContext = createContext({} as AuthContextData);
 
+const axios = new AxiosAdapter();
+
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<IUserData | null>(null);
 
+  // TODO: AJUSTAR PARA USE CALL BACK
   async function Login({ username, password }: IAuthenticateRequest) {
-    await wodfulAPI
-      .post('/auth/', {
-        username,
-        password,
-      })
-      .then((userData: AxiosResponse<AuthenticatedUserData>) => {
-        setUser(userData.data.user);
-        wodfulAPI.defaults.headers.Authorization = `Bearer ${userData.data.token}`;
-        localStorage.setItem('@Wodful:user', JSON.stringify(userData.data.user));
-        localStorage.setItem('@Wodful:token', userData.data.token);
-      })
-      .finally(() => console.log(user));
+    await new AuthenticateService(axios)
+      .login(username, password)
+      .then((userData: AuthenticatedUserData) => {
+        setUser(userData.user);
+
+        localStorage.setItem('@Wodful:user', JSON.stringify(userData.user));
+        localStorage.setItem('@Wodful:token', userData.token);
+      });
   }
 
+  // TODO: AJUSTAR PARA USE CALL BACK
   function Logout() {
     setUser(null);
 
@@ -61,7 +61,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
     if (storagedToken && storagedUser) {
       setUser(JSON.parse(storagedUser));
-      wodfulAPI.defaults.headers.Authorization = `Bearer ${storagedToken}`;
     }
   }, []);
 
