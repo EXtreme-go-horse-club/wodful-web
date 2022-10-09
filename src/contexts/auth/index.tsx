@@ -1,11 +1,7 @@
+import { AxiosAdapter } from '@/adapters/AxiosAdapter';
+import { AuthenticatedUserData, IAuthenticateUserRequest, IUserData } from '@/data/interfaces/user';
+import { AuthenticateService } from '@/services/Authenticate';
 import { createContext, useCallback, useEffect, useState } from 'react';
-import { AxiosAdapter } from '../../adapters/AxiosAdapter';
-import {
-  AuthenticatedUserData,
-  IAuthenticateUserRequest,
-  IUserData,
-} from '../../data/interfaces/user';
-import { AuthenticateService } from '../../services/Authenticate';
 
 interface AuthProviderProps {
   children: React.ReactNode;

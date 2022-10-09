@@ -1,5 +1,5 @@
+import Login from '@/pages/public/Login';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Login from '../../pages/public/Login';
 
 const PublicRoutes = () => {
   return (
