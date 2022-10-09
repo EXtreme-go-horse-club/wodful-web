@@ -1,10 +1,11 @@
-import { Box } from '@chakra-ui/react';
+import { AuthProvider } from './contexts/auth';
+import Routes from './routes';
 
 function App() {
   return (
-    <Box bg='red.900' fontSize='md'>
-      Welcome
-    </Box>
+    <AuthProvider>
+      <Routes />
+    </AuthProvider>
   );
 }
 
