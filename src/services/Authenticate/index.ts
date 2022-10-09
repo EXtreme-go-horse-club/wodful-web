@@ -1,4 +1,4 @@
-import { HttpClient, HttpStatusCode } from '../../data/interfaces/http';
+import { HttpClient, HttpStatusCode } from '@/data/interfaces/http';
 
 export class AuthenticateService {
   constructor(

@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import Home from '../../pages/private/Home';
+import Home from '@/pages/private/Home';
 
 const PrivateRoutes = () => {
   return (
