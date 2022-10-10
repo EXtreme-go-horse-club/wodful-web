@@ -2,7 +2,7 @@
 
 > This document will help you set your ambient to run Wodful web
 
-Remember this application is the front-end part of Wodful, to run all the project you need the back-end too on this liunk:[back-end](https://github.com/EXtreme-go-horse-club/wodful-api).
+Remember this application is the front-end part of Wodful, to run all the project you need the back-end too on this liunk: [back-end](https://github.com/EXtreme-go-horse-club/wodful-api).
 
 ## Used tecnologies
 
