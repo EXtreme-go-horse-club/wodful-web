@@ -74,7 +74,7 @@ const Login = () => {
               </FormControl>
               <Button
                 isLoading={isLoading}
-                disabled={isEmpty}
+                disabled={isEmpty || isLoading}
                 colorScheme='teal'
                 size='lg'
                 onClick={handleLogin}
