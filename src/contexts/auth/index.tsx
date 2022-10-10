@@ -12,6 +12,8 @@ export interface AuthContextData {
   user: IUserData | null;
   Login({ email, password }: IAuthenticateUserRequest): Promise<void>;
   Logout(): void;
+  isLoading: boolean;
+  isError: boolean;
 }
 
 const AuthContext = createContext({} as AuthContextData);
@@ -20,16 +22,22 @@ const axios = new AxiosAdapter();
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<IUserData | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
 
   const Login = useCallback(async ({ email, password }: IAuthenticateUserRequest) => {
+    setIsLoading(true);
     await new AuthenticateService(axios)
       .login(email, password)
       .then((userData: AuthenticatedUserData) => {
+        setIsError(false);
         setUser(userData.user);
 
         localStorage.setItem('@Wodful:usr', JSON.stringify(userData.user));
         localStorage.setItem('@Wodful:tkn', userData.token);
-      });
+      })
+      .catch(() => setIsError(true))
+      .finally(() => setIsLoading(false));
   }, []);
 
   const Logout = useCallback(() => {
@@ -49,7 +57,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ signed: Boolean(user), user, Login, Logout }}>
+    <AuthContext.Provider
+      value={{ signed: Boolean(user), user, Login, Logout, isLoading, isError }}
+    >
       {children}
     </AuthContext.Provider>
   );
