@@ -7,6 +7,7 @@ const PrivateRoutes = () => {
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<Home />} />
+        <Route path='/daledole' element={<Home />} />
       </Routes>
     </BrowserRouter>
   );
