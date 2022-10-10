@@ -2,7 +2,7 @@
 
 > This document will help you set your ambient to run Wodful web
 
-Remember this application is the front-end part of Wodful, to run all the project you need the back-end too on this [link](https://github.com/EXtreme-go-horse-club/wodful-api).
+Remember this application is the front-end part of Wodful, to run all the project you need the back-end too on this liunk:[back-end](https://github.com/EXtreme-go-horse-club/wodful-api).
 
 ## Used tecnologies
 
@@ -17,7 +17,7 @@ Remember this application is the front-end part of Wodful, to run all the projec
 ## Setup Installation
 
 1. Clone this repo;
-2. Install ``` yarn ``` in your PC;
+2. We strong recommend you install and use ``` yarn ```;
 3. Run ``` yarn ``` in the terminal to install all the dependeces;
 4. Run ``` yarn dev ``` in the terminal to start the project;
 5. In your browser change ``` http://127.0.0.1:5173/ ``` to ``` http://localhost:5173/ ```;
