@@ -1,4 +1,4 @@
-# Wodful web
+# Wodful web <img src="./src/assets/images/wodful-black-logo.svgg" alt="Alt text" title="Optional title">
 
 > This document will help you set your ambient to run Wodful web
 
