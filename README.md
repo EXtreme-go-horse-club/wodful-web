@@ -1,4 +1,4 @@
-# Wodful web <img src="./src/assets/images/wodful.png" alt="Alt text" title="Optional title">
+# Wodful web <img src="./src/assets/images/wodful.png" alt="logo wodfull" style="max-width: 50px; background= white;">
 
 > This document will help you set your ambient to run Wodful web
 
