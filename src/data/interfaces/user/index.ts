@@ -3,7 +3,7 @@ export interface IUserData {
   email: string;
 }
 
-export interface AuthenticatedUserData {
+export interface AuthenticatedUser {
   token: string;
   user: IUserData;
 }
