@@ -1,12 +1,12 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import Home from '@/pages/private/Home';
+import Championship from '@/pages/private/Championship';
 
 const PrivateRoutes = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<Home />} />
+        <Route path='/championships' element={<Championship />} />
       </Routes>
     </BrowserRouter>
   );
