@@ -1,5 +1,17 @@
 import useAuth from '@/hooks/useAuth';
-import { Box, Button, Flex, Heading, HStack, Image, Stack, Text, VStack } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Center,
+  Flex,
+  Heading,
+  HStack,
+  Image,
+  SimpleGrid,
+  Stack,
+  Text,
+  VStack,
+} from '@chakra-ui/react';
 import { MapPin } from 'react-feather';
 import { exeChampionships } from './exempleChampionships';
 
@@ -18,9 +30,9 @@ const Championship = () => {
 
   // py={6} px={10}
   return (
-    <>
+    <Center>
       <Box as='section' px={10}>
-        <Box py={6}>
+        <Box justifyContent='space-between' py={6} maxW='1200px'>
           <Flex
             direction={['column', 'row']}
             gap={['16px', '0px']}
@@ -36,11 +48,11 @@ const Championship = () => {
           </Flex>
         </Box>
 
-        <Box color='gray.600' as='section'>
+        <SimpleGrid maxW='1200px' gap='24px' color='gray.600' columns={3} spacing={2}>
           {allChampionships.map((championship) => (
             <Box
               as='section'
-              maxW='384px'
+              w='384px'
               borderWidth='1px'
               borderColor='gray.200'
               borderRadius='lg'
@@ -78,9 +90,9 @@ const Championship = () => {
               </Box>
             </Box>
           ))}
-        </Box>
+        </SimpleGrid>
       </Box>
-    </>
+    </Center>
   );
 };
 
