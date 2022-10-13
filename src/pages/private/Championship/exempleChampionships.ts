@@ -16,7 +16,7 @@ export const exeChampionships = [
     startDate: '2022-10-10',
     endDate: '2022-10-12',
     accessCode: 'NADAI23',
-    resultType: 'SCORE',
+    resultType: 'RANKING',
     address: 'Rua Romário Vidal n 3, Vila Yolanda',
   },
   {
@@ -43,7 +43,7 @@ export const exeChampionships = [
     startDate: '2022-10-10',
     endDate: '2022-10-12',
     accessCode: 'NADAI23',
-    resultType: 'SCORE',
+    resultType: 'RANKING',
     address: 'Rua Romário Vidal n 3, Vila Yolanda',
   },
   {
