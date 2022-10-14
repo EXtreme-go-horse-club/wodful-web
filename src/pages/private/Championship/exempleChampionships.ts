@@ -9,6 +9,7 @@ export const exeChampionships = [
     accessCode: 'NADAI21',
     resultType: 'SCORE',
     address: 'Rua Romário Vidal n 3, Vila Yolanda',
+    id: '86c5a500-0ab8-46d0-9887-71e9f73899b9',
   },
   {
     banner: banner,
@@ -18,6 +19,7 @@ export const exeChampionships = [
     accessCode: 'NADAI23',
     resultType: 'RANKING',
     address: 'Rua Romário Vidal n 3, Vila Yolanda',
+    id: 'afe191bc-ec9d-4aba-8312-89aa26025480',
   },
   {
     banner: banner,
@@ -27,6 +29,7 @@ export const exeChampionships = [
     accessCode: 'NADAI23',
     resultType: 'SCORE',
     address: 'Rua Romário Vidal n 3, Vila Yolanda',
+    id: 'db2b15d2-59e0-43a4-a94d-4be20b5b7e91',
   },
   {
     banner: banner,
@@ -36,6 +39,7 @@ export const exeChampionships = [
     accessCode: 'NADAI23',
     resultType: 'SCORE',
     address: 'Rua Romário Vidal n 3, Vila Yolanda',
+    id: '38223083-971b-43b2-be34-9df8d05c155e',
   },
   {
     banner: banner,
@@ -45,6 +49,7 @@ export const exeChampionships = [
     accessCode: 'NADAI24',
     resultType: 'RANKING',
     address: 'Rua Romário Vidal n 3, Vila Yolanda',
+    id: '9c6555f7-b58e-4200-90e2-621c303ae052',
   },
   {
     banner: banner,
@@ -54,6 +59,7 @@ export const exeChampionships = [
     accessCode: 'NADAI25',
     resultType: 'SCORE',
     address: 'Rua Romário Vidal n 3, Vila Yolanda',
+    id: 'f1b4f62c-20ca-4db3-a49d-39d10584d1e6',
   },
   {
     banner: banner,
@@ -63,5 +69,6 @@ export const exeChampionships = [
     accessCode: 'NADAI25',
     resultType: 'SCORE',
     address: 'Rua Romário Vidal n 3, Vila Yolanda',
+    id: '98f7196f-9d23-4d24-bbee-d40218fd2060',
   },
 ];
