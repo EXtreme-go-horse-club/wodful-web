@@ -1,11 +1,14 @@
 import Login from '@/pages/public/Login';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 const PublicRoutes = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<Login />} />
+        <Route path='/login' element={<Login />} />
+
+        <Route path='/' element={<Navigate to='/login' replace />} />
+        <Route path='/championships' element={<Navigate to='/login' replace />} />
       </Routes>
     </BrowserRouter>
   );
