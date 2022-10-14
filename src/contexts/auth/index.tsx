@@ -1,5 +1,5 @@
 import { AxiosAdapter } from '@/adapters/AxiosAdapter';
-import { AuthenticatedUserData, IAuthenticateUserRequest, IUserData } from '@/data/interfaces/user';
+import { AuthenticatedUser, IAuthenticateUserRequest, IUserData } from '@/data/interfaces/user';
 import { AuthenticateService } from '@/services/Authenticate';
 import { createContext, useCallback, useEffect, useState } from 'react';
 
@@ -28,8 +28,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const Login = useCallback(async ({ email, password }: IAuthenticateUserRequest) => {
     setIsLoading(true);
     await new AuthenticateService(axios)
-      .login(email, password)
-      .then((userData: AuthenticatedUserData) => {
+      .login({ email, password })
+      .then((userData: AuthenticatedUser) => {
         setIsError(false);
         setUser(userData.user);
 
