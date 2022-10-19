@@ -1,13 +1,16 @@
 import { AxiosAdapter } from '@/adapters/AxiosAdapter';
-import { ChampionshipModel } from '@/models/championshipModel';
+import { IChampionship } from '@/data/interfaces/championship';
 import { ChampionshipService } from '@/services/Championship';
-import { Box, Button, Center, Flex, Heading, SimpleGrid } from '@chakra-ui/react';
+import { Box, Button, Center, Flex, Heading, SimpleGrid, useDisclosure } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import ChampionshipList from './components/ChampionshipList';
+import CreateChampionship from './components/CreateChampionship';
+import ListChampionship from './components/ListChampionship';
 
 const Championship = () => {
   const axios = new AxiosAdapter();
-  const [championships, setChampionships] = useState<ChampionshipModel[]>([]);
+  const [championships, setChampionships] = useState<IChampionship[]>([]);
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
     getChampionships();
@@ -16,8 +19,8 @@ const Championship = () => {
   const getChampionships = async () => {
     await new ChampionshipService(axios)
       .listAllChampionships()
-      .then((championships: ChampionshipModel) => {
-        setChampionships(championships as unknown as ChampionshipModel[]);
+      .then((championships: IChampionship) => {
+        setChampionships(championships as unknown as IChampionship[]);
       })
       .catch((error) => console.log(error));
   };
@@ -35,14 +38,16 @@ const Championship = () => {
             <Heading as='h4' size='md'>
               Lista de campeonatos
             </Heading>
-            <Button onClick={getChampionships} size='lg' colorScheme='teal'>
+            <Button size='lg' colorScheme='teal' onClick={onOpen}>
               Criar campeonato
             </Button>
           </Flex>
         </Box>
 
+        <CreateChampionship isOpen={isOpen} onClose={onClose} />
+
         <SimpleGrid maxW='1200px' gap='24px' color='gray.600' columns={3} spacing={2}>
-          <ChampionshipList championships={championships} />
+          <ListChampionship championships={championships} />
         </SimpleGrid>
       </Box>
     </Center>

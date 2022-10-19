@@ -1,9 +1,11 @@
-import { ChampionshipModel } from '@/models/championshipModel';
 import { Box, Heading, HStack, Image, Stack, Text, VStack } from '@chakra-ui/react';
 import { MapPin } from 'react-feather';
 
+import { IChampionship } from '@/data/interfaces/championship';
+import { formatDate } from '@/utils/formatDate';
+
 interface ChampionshipListProps {
-  championships: ChampionshipModel[];
+  championships: IChampionship[];
 }
 
 const resultType: { [key: string]: string } = {
@@ -11,7 +13,7 @@ const resultType: { [key: string]: string } = {
   RANKING: 'Colocação',
 };
 
-const ChampionshipList = ({ championships }: ChampionshipListProps) => {
+const ListChampionship = ({ championships }: ChampionshipListProps) => {
   return (
     <>
       {championships.map((championship) => (
@@ -33,7 +35,7 @@ const ChampionshipList = ({ championships }: ChampionshipListProps) => {
                   {championship.name}
                 </Heading>
                 <Text>
-                  {championship.startDate} até {championship.startDate}
+                  {formatDate(championship.startDate)} até {formatDate(championship.endDate)}
                 </Text>
               </VStack>
 
@@ -59,4 +61,4 @@ const ChampionshipList = ({ championships }: ChampionshipListProps) => {
   );
 };
 
-export default ChampionshipList;
+export default ListChampionship;
