@@ -6,8 +6,8 @@ const PrivateRoutes = () => {
     <BrowserRouter>
       <Routes>
         <Route path='/championships' element={<Championship />} />
-
         <Route path='/' element={<Navigate to='/championships' replace />} />
+
         <Route path='/login' element={<Navigate to='/championships' replace />} />
       </Routes>
     </BrowserRouter>

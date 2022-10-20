@@ -1,25 +1,28 @@
 import { Box, Heading, HStack, Image, Stack, Text, VStack } from '@chakra-ui/react';
 import { MapPin } from 'react-feather';
 
-import { IChampionship } from '@/data/interfaces/championship';
+import useChampionships from '@/hooks/useChampionshipData';
 import { formatDate } from '@/utils/formatDate';
-
-interface ChampionshipListProps {
-  championships: IChampionship[];
-}
+import { useEffect } from 'react';
 
 const resultType: { [key: string]: string } = {
   SCORE: 'Pontuação',
   RANKING: 'Colocação',
 };
 
-const ListChampionship = ({ championships }: ChampionshipListProps) => {
+const ListChampionship = () => {
+  const { List, championships } = useChampionships();
+
+  useEffect(() => {
+    List();
+  }, [List]);
+
   return (
     <>
-      {championships.map((championship) => (
+      {championships?.map((championship) => (
         <Box
           as='section'
-          w='384px'
+          maxW='384px'
           borderWidth='1px'
           borderColor='gray.200'
           borderRadius='lg'
@@ -29,17 +32,17 @@ const ListChampionship = ({ championships }: ChampionshipListProps) => {
             <Image borderTopRadius='lg' src={championship.banner} />
           </Stack>
           <Box p={6}>
-            <VStack gap='16px' align='start'>
+            <VStack gap='8px' align='start'>
               <VStack align='start' spacing={1}>
                 <Heading color='black' as='h4' size='md'>
                   {championship.name}
                 </Heading>
-                <Text>
+                <Text fontSize='14px'>
                   {formatDate(championship.startDate)} até {formatDate(championship.endDate)}
                 </Text>
               </VStack>
 
-              <HStack align='start' gap='24px'>
+              <HStack fontSize='14px' align='start' gap='24px'>
                 <VStack align='start' spacing={0}>
                   <Text as='b'>Código de acesso</Text>
                   <Text fontSize='sm'>{championship.accessCode}</Text>
@@ -49,7 +52,7 @@ const ListChampionship = ({ championships }: ChampionshipListProps) => {
                   <Text>{resultType[championship.resultType]}</Text>
                 </VStack>
               </HStack>
-              <HStack>
+              <HStack fontSize='14px'>
                 <MapPin size={16} />
                 <Text>{championship.address}</Text>
               </HStack>

@@ -3,20 +3,20 @@ import { HttpClient, HttpStatusCode } from '@/data/interfaces/http';
 
 export interface ChampionshipDTO {
   name: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: string;
+  endDate: string;
   accessCode: string;
-  banner: File;
+  banner: any;
   resultType: string;
   address: string;
 }
 export class ChampionshipService {
   constructor(
-    private readonly httpClient: HttpClient<IChampionship>,
+    private readonly httpClient: HttpClient<IChampionship | IChampionship[]>,
     private readonly path = '/championships/',
   ) {}
 
-  async listAllChampionships(): Promise<IChampionship> {
+  async listAll(): Promise<IChampionship[]> {
     const { statusCode, body } = await this.httpClient.request({
       method: 'get',
       url: this.path,
@@ -24,13 +24,13 @@ export class ChampionshipService {
 
     switch (statusCode) {
       case HttpStatusCode.ok:
-        return body!;
+        return body! as IChampionship[];
       default:
         throw new Error();
     }
   }
 
-  async createChampionship({
+  async create({
     name,
     startDate,
     endDate,
@@ -38,7 +38,7 @@ export class ChampionshipService {
     banner,
     resultType,
     address,
-  }: ChampionshipDTO): Promise<ChampionshipDTO> {
+  }: ChampionshipDTO): Promise<IChampionship> {
     const { statusCode, body } = await this.httpClient.request({
       method: 'post',
       url: this.path,
@@ -55,7 +55,7 @@ export class ChampionshipService {
 
     switch (statusCode) {
       case HttpStatusCode.ok:
-        return body!;
+        return body! as IChampionship;
       default:
         throw new Error();
     }

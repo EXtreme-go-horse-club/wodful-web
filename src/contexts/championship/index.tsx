@@ -1,17 +1,18 @@
 import { AxiosAdapter } from '@/adapters/AxiosAdapter';
 import { IChampionship } from '@/data/interfaces/championship';
-import { ChampionshipService } from '@/services/Championship';
+import { ChampionshipDTO, ChampionshipService } from '@/services/Championship';
 import { createContext, useCallback, useState } from 'react';
 
 interface ChampionshipProps {
   children: React.ReactNode;
 }
 
-export interface ChampionshipData {
-  championship: IChampionship | null;
+export interface ChampionshipContextData {
+  championships: IChampionship[];
   isLoading: boolean;
   isError: boolean;
-  CreateChampionship({
+  List: () => Promise<void>;
+  Create({
     name,
     startDate,
     endDate,
@@ -19,19 +20,19 @@ export interface ChampionshipData {
     banner,
     resultType,
     address,
-  }: IChampionship): Promise<void>;
+  }: ChampionshipDTO): Promise<void>;
 }
 
-const ChampionshipContext = createContext({} as ChampionshipData);
+const ChampionshipContext = createContext({} as ChampionshipContextData);
 
 const axios = new AxiosAdapter();
 
-export const CreateChampionshipProvider = ({ children }: ChampionshipProps) => {
-  const [championship, setChampionship] = useState<IChampionship | null>(null);
+export const ChampionshipProvider = ({ children }: ChampionshipProps) => {
+  const [championships, setChampionships] = useState<IChampionship[]>([] as IChampionship[]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
 
-  const CreateChampionship = useCallback(
+  const Create = useCallback(
     async ({
       name,
       startDate,
@@ -40,13 +41,13 @@ export const CreateChampionshipProvider = ({ children }: ChampionshipProps) => {
       banner,
       resultType,
       address,
-    }: IChampionship) => {
+    }: ChampionshipDTO) => {
       setIsLoading(true);
       await new ChampionshipService(axios)
-        .createChampionship({ name, startDate, endDate, accessCode, banner, resultType, address })
-        .then((championshipData) => {
+        .create({ name, startDate, endDate, accessCode, banner, resultType, address })
+        .then((newChampionship) => {
           setIsError(false);
-          setChampionship(championshipData);
+          setChampionships([...championships, newChampionship]);
         })
         .catch(() => setIsError(true))
         .finally(() => setIsLoading(false));
@@ -54,13 +55,26 @@ export const CreateChampionshipProvider = ({ children }: ChampionshipProps) => {
     [],
   );
 
+  const List = useCallback(async () => {
+    setIsLoading(true);
+    await new ChampionshipService(axios)
+      .listAll()
+      .then((allChampionships) => {
+        setIsError(false);
+        setChampionships(allChampionships);
+      })
+      .catch(() => setIsError(true))
+      .finally(() => setIsLoading(false));
+  }, []);
+
   return (
     <ChampionshipContext.Provider
       value={{
-        CreateChampionship,
+        Create,
         isLoading,
         isError,
-        championship,
+        List,
+        championships,
       }}
     >
       {children}
