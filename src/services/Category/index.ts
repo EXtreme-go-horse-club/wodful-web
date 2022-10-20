@@ -1,21 +1,36 @@
+import { ICategory, ICategoryDTO } from '@/data/interfaces/category';
 import { HttpClient, HttpStatusCode } from '@/data/interfaces/http';
-import { CategoryModel } from '@/models/categoryMode';
 
 export class CategoryService {
   constructor(
-    private readonly httpClient: HttpClient<CategoryModel>,
+    private readonly httpClient: HttpClient<ICategory[] | ICategory>,
     private readonly path = '/categories/',
   ) {}
 
-  async listAllCategories(): Promise<CategoryModel[]> {
+  async create({ championshipId, name, description, members }: ICategoryDTO): Promise<ICategory> {
     const { statusCode, body } = await this.httpClient.request({
-      method: 'get',
-      url: this.path + '47e3b328-de59-4725-a5d8-82b40b9b9a2a',
+      method: 'post',
+      url: this.path,
+      body: { championshipId, name, description, members },
     });
 
     switch (statusCode) {
       case HttpStatusCode.ok:
-        return body!;
+        return body! as ICategory;
+      default:
+        throw new Error();
+    }
+  }
+
+  async listAll(id: string): Promise<ICategory[]> {
+    const { statusCode, body } = await this.httpClient.request({
+      method: 'get',
+      url: this.path + id,
+    });
+
+    switch (statusCode) {
+      case HttpStatusCode.ok:
+        return body! as ICategory[];
       default:
         throw new Error();
     }
