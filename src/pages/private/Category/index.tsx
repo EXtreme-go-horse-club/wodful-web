@@ -1,7 +1,9 @@
 import { CategoryProvider } from '@/contexts/category';
 import { Box, Button, HStack, Text, useDisclosure } from '@chakra-ui/react';
+import { lazy } from 'react';
 import CreateCategory from './components/create';
-import ListCategory from './components/list';
+
+const ListCategory = lazy(() => import('./components/list'));
 
 const Category = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();

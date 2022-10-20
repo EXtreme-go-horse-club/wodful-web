@@ -20,7 +20,7 @@ const CategoryContext = createContext({} as CategoryContextData);
 const axios = new AxiosAdapter();
 
 export const CategoryProvider = ({ children }: CategoryProviderProps) => {
-  const [categories, setCategories] = useState<ICategory[]>({} as ICategory[]);
+  const [categories, setCategories] = useState<ICategory[]>([] as ICategory[]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
 

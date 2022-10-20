@@ -18,13 +18,14 @@ import {
   Tr,
 } from '@chakra-ui/react';
 import { useEffect } from 'react';
-import { MoreHorizontal } from 'react-feather';
 
 const ListCategory = () => {
   const { List, categories } = useCategoryData();
+
   useEffect(() => {
-    List('47e3b328-de59-4725-a5d8-82b40b9b9a2a');
-  }, [categories]);
+    List('d7edfd13-6322-4ae7-8e24-7b359881379c');
+  }, [List]);
+
   return (
     <TableContainer border='1px' borderColor='gray.100' fontSize='sm' color='#2D3748'>
       <Table variant='simple'>
@@ -40,7 +41,7 @@ const ListCategory = () => {
           </Tr>
         </Thead>
         <Tbody>
-          {categories?.map((category) => (
+          {categories.map((category) => (
             <Tr key={category.id}>
               <Td p='26px'>{category.description}</Td>
               <Td p='26px'>
@@ -49,9 +50,7 @@ const ListCategory = () => {
                 </Tag>
               </Td>
               <Td p='26px'>
-                <Flex justify='end'>
-                  <MoreHorizontal cursor='pointer' size={18} />
-                </Flex>
+                <Flex justify='end'>....</Flex>
               </Td>
             </Tr>
           ))}
