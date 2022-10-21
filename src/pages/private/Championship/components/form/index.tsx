@@ -18,7 +18,6 @@ interface FormChampionshipProps {
 }
 
 const FormChampionship = ({ isOpen, onClose }: FormChampionshipProps) => {
-  // https://www.youtube.com/watch?v=4j6QiEbBoS0&t=189s&ab_channel=LesterFernandez
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -29,9 +28,8 @@ const FormChampionship = ({ isOpen, onClose }: FormChampionshipProps) => {
       resultType: '',
       address: '',
     },
-    onSubmit: (values: any, actions: any) => {
+    onSubmit: (values) => {
       console.log(JSON.stringify(values, null, 2));
-      actions.resetForm();
     },
   });
 
@@ -46,12 +44,14 @@ const FormChampionship = ({ isOpen, onClose }: FormChampionshipProps) => {
           <X onClick={onClose} cursor='pointer' size={18} />
         </HStack>
 
-        <VStack>
+        <form onSubmit={formik.handleSubmit}>
           <VStack align='start' w='100%' flexDirection='column' gap='24px'>
             <FormControl>
               <FormLabel m={0}>Nome</FormLabel>
               <Input
+                as='input'
                 name='name'
+                id='name'
                 onChange={formik.handleChange}
                 value={formik.values.name}
                 placeholder='Nome do campeonato'
@@ -62,10 +62,12 @@ const FormChampionship = ({ isOpen, onClose }: FormChampionshipProps) => {
               <FormControl alignItems='start'>
                 <FormLabel m={0}>Data de início</FormLabel>
                 <Input
+                  as='input'
                   name='startDate'
-                  type='datetime-local'
+                  id='startDate'
                   onChange={formik.handleChange}
                   value={formik.values.startDate}
+                  type='datetime-local'
                   placeholder='DD/MM/AAAA'
                 />
               </FormControl>
@@ -73,7 +75,9 @@ const FormChampionship = ({ isOpen, onClose }: FormChampionshipProps) => {
               <FormControl>
                 <FormLabel m={0}>Data de encerramento</FormLabel>
                 <Input
+                  as='input'
                   name='endDate'
+                  id='endDate'
                   onChange={formik.handleChange}
                   value={formik.values.endDate}
                   type='datetime-local'
@@ -85,7 +89,9 @@ const FormChampionship = ({ isOpen, onClose }: FormChampionshipProps) => {
             <FormControl>
               <FormLabel m={0}>Local</FormLabel>
               <Input
+                as='input'
                 name='address'
+                id='address'
                 onChange={formik.handleChange}
                 value={formik.values.address}
                 placeholder='Endereço'
@@ -95,7 +101,9 @@ const FormChampionship = ({ isOpen, onClose }: FormChampionshipProps) => {
             <FormControl>
               <FormLabel m={0}>Código do campeonato</FormLabel>
               <Input
+                as='input'
                 name='accessCode'
+                id='accessCode'
                 onChange={formik.handleChange}
                 value={formik.values.accessCode}
                 placeholder='Código'
@@ -106,8 +114,9 @@ const FormChampionship = ({ isOpen, onClose }: FormChampionshipProps) => {
               <FormLabel m={0}>Tipo de resultado</FormLabel>
               <Select
                 name='resultType'
-                value={formik.values.resultType}
+                id='resultType'
                 onChange={formik.handleChange}
+                value={formik.values.resultType}
                 placeholder='Selecione o tipo'
               >
                 <option value='SCORE'>Pontuação</option>
@@ -117,7 +126,15 @@ const FormChampionship = ({ isOpen, onClose }: FormChampionshipProps) => {
 
             <FormControl>
               <FormLabel m={0}>Capa do campeonato</FormLabel>
-              <Input name='banner' value={formik.values.banner} p={1} type='file' />
+              <Input
+                as='input'
+                name='banner'
+                id='banner'
+                onChange={formik.handleChange}
+                value={formik.values.banner}
+                p={1}
+                type='file'
+              />
             </FormControl>
 
             <ButtonGroup flexDirection='column' alignItems='end' gap='12px' w='100%'>
@@ -129,7 +146,7 @@ const FormChampionship = ({ isOpen, onClose }: FormChampionshipProps) => {
               </Button>
             </ButtonGroup>
           </VStack>
-        </VStack>
+        </form>
       </VStack>
     </>
   );
