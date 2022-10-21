@@ -44,7 +44,7 @@ const Championship = () => {
             </Box>
 
             <ComponentModal size='lg' isOpen={isOpen} onClose={onClose}>
-              <FormChampionship isOpen={isOpen} onClose={onClose} />
+              <FormChampionship onClose={onClose} />
             </ComponentModal>
 
             <SimpleGrid

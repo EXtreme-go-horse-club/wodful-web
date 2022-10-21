@@ -3,8 +3,8 @@ import { HttpClient, HttpStatusCode } from '@/data/interfaces/http';
 
 export interface ChampionshipDTO {
   name: string;
-  startDate: string;
-  endDate: string;
+  startDate: Date;
+  endDate: Date;
   accessCode: string;
   banner: any;
   resultType: string;
