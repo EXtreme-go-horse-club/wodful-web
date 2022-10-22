@@ -1,116 +1,102 @@
+import { ICategoryDTO } from '@/data/interfaces/category';
+import useCategoryData from '@/hooks/useCategoryData';
+import { errorMessages } from '@/utils/errorMessages';
 import {
   Button,
   ButtonGroup,
   FormControl,
   FormErrorMessage,
   FormLabel,
-  Heading,
-  HStack,
   Input,
   Select,
   Textarea,
   VStack,
 } from '@chakra-ui/react';
-import { useFormik } from 'formik';
-import { X } from 'react-feather';
-import * as Yup from 'yup';
+import { useForm } from 'react-hook-form';
 
 interface CreateModalProps {
   onClose: () => void;
 }
 
-const CategorySchema = Yup.object().shape({
-  name: Yup.string()
-    .min(2, 'Insira um nome maior!')
-    .max(50, 'Nome muito longo!')
-    .required('Required'),
-  description: Yup.string()
-    .min(2, 'Descrição muito curta')
-    .max(255, 'Descrição muito longa!')
-    .required('Required'),
-  members: Yup.number().required('Required'),
-});
-
 const CreateCategory = ({ onClose }: CreateModalProps) => {
-  const formik = useFormik({
-    initialValues: {
-      name: '',
-      description: '',
-      members: '',
-    },
-    validationSchema: CategorySchema,
-    onSubmit: (values) => {
-      console.log(JSON.stringify(values, null, 2));
-    },
+  const { Create } = useCategoryData();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm<ICategoryDTO>({
+    mode: 'onBlur',
   });
-
+  function onSubmit(category: ICategoryDTO) {
+    category.championshipId = '47e3b328-de59-4725-a5d8-82b40b9b9a2a';
+    category.members = parseInt(category.members, 10);
+    console.log(category);
+    Create(category);
+  }
   return (
-    <VStack pt={4} pb={4} align='start' spacing='24px'>
-      <HStack w='100%' align='start' justify='space-between'>
-        <Heading as='h4' size='md'>
-          Criar campeonato
-        </Heading>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <VStack align='start' w='100%' spacing={6} pt={6} pb={6} flexDirection='column'>
+        <FormControl isInvalid={!!errors.name}>
+          <FormLabel htmlFor='name' m={0}>
+            Nome
+          </FormLabel>
+          <Input
+            as='input'
+            id='name'
+            placeholder='Nome da categoria'
+            {...register('name', {
+              required: errorMessages['required'],
+              minLength: { value: 4, message: errorMessages['minLength'] },
+              maxLength: { value: 50, message: errorMessages['maxLengthSm'] },
+            })}
+          />
 
-        <X onClick={onClose} cursor='pointer' size={18} />
-      </HStack>
-      {/* <HStack w='100%' align='start'> */}
-      <form onSubmit={formik.handleSubmit}>
-        <VStack align='start' w='100%' flexDirection='column' gap='24px'>
-          <FormControl isInvalid={!!formik.errors.name}>
-            <FormLabel m={0}>Nome</FormLabel>
-            <Input
-              as='input'
-              name='name'
-              id='name'
-              onChange={formik.handleChange}
-              value={formik.values.name}
-              placeholder='Nome da categoria'
-            />
-
-            {!!formik.errors.name && <FormErrorMessage>{formik.errors.name}</FormErrorMessage>}
-          </FormControl>
-          <FormControl isInvalid={!!formik.errors.description}>
-            <FormLabel mt='24px'>Descrição</FormLabel>
-            <Textarea
-              placeholder='Descrição da categoria'
-              as='textarea'
-              name='description'
-              id='description'
-              onChange={formik.handleChange}
-              value={formik.values.description}
-            />
-          </FormControl>
-          <FormControl isInvalid={!!formik.errors.members}>
-            <FormLabel mt='24px'>Membros</FormLabel>
-            <Select
-              as='select'
-              name='members'
-              id='members'
-              onChange={formik.handleChange}
-              placeholder='Selecione o número de membros'
-              value={formik.values.members}
-            >
-              <option value='1'>1</option>
-              <option value='2'>2</option>
-              <option value='3'>3</option>
-              <option value='4'>4</option>
-              <option value='5'>5</option>
-            </Select>
-          </FormControl>
-          <ButtonGroup flexDirection='column' alignItems='end' gap='12px' w='100%'>
-            <Button colorScheme='teal' w='100%' disabled={!formik.isValid} type='submit'>
-              Adicionar
-            </Button>
-            <Button variant='outline' w='100%' mt='12px' onClick={onClose}>
-              Fechar
-            </Button>
-          </ButtonGroup>
-        </VStack>
-      </form>
-      {/* </HStack> */}
-    </VStack>
-
-    // <ModalFooter display='flex' flexDirection='column'>
+          <FormErrorMessage>{errors.name && errors.name.message}</FormErrorMessage>
+        </FormControl>
+        <FormControl isInvalid={!!errors.description}>
+          <FormLabel>Descrição</FormLabel>
+          <Textarea
+            placeholder='Descrição da categoria'
+            as='textarea'
+            id='description'
+            {...register('description', {
+              required: errorMessages['required'],
+              minLength: { value: 4, message: errorMessages['minLength'] },
+              maxLength: { value: 250, message: errorMessages['maxLengthLg'] },
+            })}
+          />
+          <FormErrorMessage>{errors.description && errors.description.message}</FormErrorMessage>
+        </FormControl>
+        <FormControl isInvalid={!!errors.members}>
+          <FormLabel>Membros</FormLabel>
+          <Select
+            as='select'
+            id='members'
+            placeholder='Selecione o número de membros'
+            {...register('members', {
+              required: 'Favor preencher o campo',
+            })}
+          >
+            <option value='1'>1</option>
+            <option value='2'>2</option>
+            <option value='3'>3</option>
+            <option value='4'>4</option>
+            <option value='5'>5</option>
+          </Select>
+          {!!errors.members && (
+            <FormErrorMessage>{errors.members && errors.members.message}</FormErrorMessage>
+          )}
+        </FormControl>
+        <ButtonGroup flexDirection='column' alignItems='end' gap={6} w='100%'>
+          <Button colorScheme='teal' w='100%' mt={4} type='submit' disabled={!isValid}>
+            Adicionar
+          </Button>
+          <Button variant='outline' w='100%' onClick={onClose}>
+            Fechar
+          </Button>
+        </ButtonGroup>
+      </VStack>
+    </form>
   );
 };
 

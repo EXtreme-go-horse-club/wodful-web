@@ -44,13 +44,13 @@ const ListCategory = () => {
         <Tbody>
           {categories.map((category) => (
             <Tr key={category.id}>
-              <Td p='26px'>{category.description}</Td>
-              <Td p='26px'>
+              <Td p={6}>{category.description}</Td>
+              <Td p={6}>
                 <Tag size='md' key='md' variant='solid' colorScheme='teal'>
                   {category.name}
                 </Tag>
               </Td>
-              <Td p='26px'>
+              <Td p={6}>
                 <Flex justify='end'>
                   <MoreHorizontal cursor='pointer' size={18} />
                 </Flex>
@@ -61,7 +61,7 @@ const ListCategory = () => {
         <Tfoot>
           <Tr>
             <Th display='flex' flexDirection='row'>
-              <Flex align='center' mr='8px'>
+              <Flex align='center' mr={2}>
                 Linhas por página
               </Flex>
 

@@ -11,7 +11,7 @@ const Category = () => {
 
   return (
     <CategoryProvider>
-      <Box w='100%' display='flex' flexDirection='column' alignItems='center' p='24px'>
+      <Box w='100%' display='flex' flexDirection='column' alignItems='center' p={6}>
         <HStack w='100%' justifyContent='space-between'>
           <Text fontSize='2xl' as='b'>
             Lista de categorias
@@ -20,10 +20,10 @@ const Category = () => {
             Adicionar categoria
           </Button>
         </HStack>
-        <ComponentModal size='lg' isOpen={isOpen} onClose={onClose}>
+        <ComponentModal modalHeader='Criar categoria' size='lg' isOpen={isOpen} onClose={onClose}>
           <CreateCategory onClose={onClose} />
         </ComponentModal>
-        <Box w='100%' marginTop='24px'>
+        <Box w='100%' marginTop={6}>
           <ListCategory />
         </Box>
       </Box>
