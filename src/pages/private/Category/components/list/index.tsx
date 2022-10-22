@@ -18,12 +18,13 @@ import {
   Tr,
 } from '@chakra-ui/react';
 import { useEffect } from 'react';
+import { MoreHorizontal } from 'react-feather';
 
 const ListCategory = () => {
   const { List, categories } = useCategoryData();
 
   useEffect(() => {
-    List('d7edfd13-6322-4ae7-8e24-7b359881379c');
+    List('47e3b328-de59-4725-a5d8-82b40b9b9a2a');
   }, [List]);
 
   return (
@@ -50,7 +51,9 @@ const ListCategory = () => {
                 </Tag>
               </Td>
               <Td p='26px'>
-                <Flex justify='end'>....</Flex>
+                <Flex justify='end'>
+                  <MoreHorizontal cursor='pointer' size={18} />
+                </Flex>
               </Td>
             </Tr>
           ))}

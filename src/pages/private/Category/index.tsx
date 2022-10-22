@@ -1,7 +1,8 @@
+import ComponentModal from '@/components/modal';
 import { CategoryProvider } from '@/contexts/category';
 import { Box, Button, HStack, Text, useDisclosure } from '@chakra-ui/react';
 import { lazy } from 'react';
-import CreateCategory from './components/create';
+import CreateCategory from './components/form';
 
 const ListCategory = lazy(() => import('./components/list'));
 
@@ -19,7 +20,9 @@ const Category = () => {
             Adicionar categoria
           </Button>
         </HStack>
-        <CreateCategory isOpen={isOpen} onClose={onClose} />
+        <ComponentModal size='lg' isOpen={isOpen} onClose={onClose}>
+          <CreateCategory onClose={onClose} />
+        </ComponentModal>
         <Box w='100%' marginTop='24px'>
           <ListCategory />
         </Box>
