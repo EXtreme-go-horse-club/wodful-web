@@ -43,8 +43,13 @@ const Championship = () => {
               </Flex>
             </Box>
 
-            <ComponentModal size='lg' isOpen={isOpen} onClose={onClose}>
-              <FormChampionship onClose={onClose} />
+            <ComponentModal
+              modalHeader='Criar Campeonato'
+              size='lg'
+              isOpen={isOpen}
+              onClose={onClose}
+            >
+              <FormChampionship />
             </ComponentModal>
 
             <SimpleGrid

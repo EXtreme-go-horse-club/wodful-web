@@ -4,185 +4,140 @@ import {
   FormControl,
   FormErrorMessage,
   FormLabel,
-  Heading,
   HStack,
   Input,
   Select,
   VStack,
 } from '@chakra-ui/react';
-import { useFormik } from 'formik';
-import { X } from 'react-feather';
 
-import * as Yup from 'yup';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
-interface FormChampionshipProps {
-  onClose: () => void;
+enum ResultTypeEnum {
+  score = 'SCORE',
+  ranking = 'RANKING',
+}
+interface IFormInpusts {
+  name: string;
+  startDate: Date;
+  endDate: Date;
+  accessCode: string;
+  banner: File | null;
+  resultType: ResultTypeEnum | null;
+  address: string;
 }
 
-const SUPPORTED_FORMATS = ['.jpeg', '.png'];
+const FormChampionship = () => {
+  const {
+    handleSubmit,
+    register,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<IFormInpusts>();
 
-const ChampionshipSchema = Yup.object().shape({
-  name: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('* Campo obrigatório'),
-  startDate: Yup.date().required('* Campo obrigatório'),
-  endDate: Yup.date().required('* Campo obrigatório'),
-  address: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('* Campo obrigatório'),
-  accessCode: Yup.string()
-    .min(2, 'Too Short!')
-    .max(20, 'Too Long!')
-    .required('* Campo obrigatório'),
-  resultType: Yup.string().oneOf(['SCORE', 'RANKING']).required('* Campo obrigatório'),
-  banner: Yup.mixed().required('* Campo obrigatório'),
-});
+  const onSubmit: SubmitHandler<IFormInpusts> = (data) => {
+    console.log(data);
 
-const FormChampionship = ({ onClose }: FormChampionshipProps) => {
-  const formik = useFormik({
-    initialValues: {
-      name: '',
-      startDate: '',
-      endDate: '',
-      accessCode: '',
-      banner: '',
-      resultType: '',
-      address: '',
-    },
-    validationSchema: ChampionshipSchema,
-    onSubmit: (values) => {
-      console.log(JSON.stringify(values, null, 2));
-    },
-  });
+    setTimeout(() => {
+      reset();
+    }, 5000);
+  };
 
   return (
     <>
       <VStack pt={4} pb={4} align='start' spacing='24px'>
-        <HStack w='100%' align='start' justify='space-between'>
-          <Heading as='h4' size='md'>
-            Criar campeonato
-          </Heading>
-
-          <X onClick={onClose} cursor='pointer' size={18} />
-        </HStack>
-
-        <form onSubmit={formik.handleSubmit}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <VStack align='start' w='100%' flexDirection='column' gap='24px'>
-            <FormControl isInvalid={!!formik.errors.name}>
+            <FormControl isInvalid={!!errors.name}>
               <FormLabel m={0}>Nome</FormLabel>
               <Input
-                as='input'
-                name='name'
-                id='name'
-                onChange={formik.handleChange}
-                value={formik.values.name}
                 placeholder='Nome do campeonato'
+                {...register('name', {
+                  required: '* Campo obrigatório',
+                  minLength: { value: 4, message: 'Nome muito curto' },
+                  maxLength: { value: 40, message: 'Nome muito longo' },
+                })}
               />
-
-              {!!formik.errors.name && <FormErrorMessage>{formik.errors.name}</FormErrorMessage>}
+              <FormErrorMessage>{errors.name && errors.name.message}</FormErrorMessage>
             </FormControl>
 
             <HStack>
-              <FormControl alignItems='start' isInvalid={!!formik.errors.startDate}>
+              <FormControl alignItems='start' isInvalid={!!errors.startDate}>
                 <FormLabel m={0}>Data de início</FormLabel>
                 <Input
-                  as='input'
-                  name='startDate'
-                  id='startDate'
-                  onChange={formik.handleChange}
-                  value={formik.values.startDate}
                   type='datetime-local'
                   placeholder='DD/MM/AAAA'
+                  {...register('startDate', {
+                    required: '* Campo obrigatório',
+                  })}
                 />
-
-                {!!formik.errors.startDate && (
-                  <FormErrorMessage>{formik.errors.startDate}</FormErrorMessage>
-                )}
+                <FormErrorMessage>{errors.startDate && errors.startDate.message}</FormErrorMessage>
               </FormControl>
 
-              <FormControl isInvalid={!!formik.errors.endDate}>
+              <FormControl isInvalid={!!errors.endDate}>
                 <FormLabel m={0}>Data de encerramento</FormLabel>
                 <Input
-                  as='input'
-                  name='endDate'
-                  id='endDate'
-                  onChange={formik.handleChange}
-                  value={formik.values.endDate}
                   type='datetime-local'
                   placeholder='DD/MM/AAAA'
+                  {...register('endDate', {
+                    required: '* Campo obrigatório',
+                  })}
                 />
-
-                {!!formik.errors.endDate && (
-                  <FormErrorMessage>{formik.errors.endDate}</FormErrorMessage>
-                )}
+                <FormErrorMessage>{errors.endDate && errors.endDate.message}</FormErrorMessage>
               </FormControl>
             </HStack>
 
-            <FormControl isInvalid={!!formik.errors.address}>
+            <FormControl isInvalid={!!errors.address}>
               <FormLabel m={0}>Local</FormLabel>
               <Input
-                as='input'
-                name='address'
-                id='address'
-                onChange={formik.handleChange}
-                value={formik.values.address}
                 placeholder='Endereço'
+                {...register('address', {
+                  required: '* Campo obrigatório',
+                  minLength: { value: 4, message: 'Nome muito curto' },
+                  maxLength: { value: 50, message: 'Nome muito longo' },
+                })}
               />
-              {!!formik.errors.address && (
-                <FormErrorMessage>{formik.errors.address}</FormErrorMessage>
-              )}
+              <FormErrorMessage>{errors.address && errors.address.message}</FormErrorMessage>
             </FormControl>
 
-            <FormControl isInvalid={!!formik.errors.accessCode}>
+            <FormControl isInvalid={!!errors.accessCode}>
               <FormLabel m={0}>Código do campeonato</FormLabel>
               <Input
-                as='input'
-                name='accessCode'
-                id='accessCode'
-                onChange={formik.handleChange}
-                value={formik.values.accessCode}
                 placeholder='Código'
+                {...register('accessCode', {
+                  required: '* Campo obrigatório',
+                  minLength: { value: 4, message: 'Nome muito curto' },
+                  maxLength: { value: 20, message: 'Nome muito longo' },
+                })}
               />
-              {!!formik.errors.accessCode && (
-                <FormErrorMessage>{formik.errors.accessCode}</FormErrorMessage>
-              )}
+              <FormErrorMessage>{errors.accessCode && errors.accessCode.message}</FormErrorMessage>
             </FormControl>
 
-            <FormControl isInvalid={!!formik.errors.resultType}>
+            <FormControl isInvalid={!!errors.resultType}>
               <FormLabel m={0}>Tipo de resultado</FormLabel>
               <Select
-                name='resultType'
-                id='resultType'
-                onChange={formik.handleChange}
-                value={formik.values.resultType}
+                {...register('resultType', { required: '* Campo obrigatório' })}
                 placeholder='Selecione o tipo'
               >
                 <option value='SCORE'>Pontuação</option>
                 <option value='RANKING'>Colocação</option>
               </Select>
-              {!!formik.errors.resultType && (
-                <FormErrorMessage>{formik.errors.resultType}</FormErrorMessage>
-              )}
+              <FormErrorMessage>{errors.resultType && errors.resultType.message}</FormErrorMessage>
             </FormControl>
 
-            <FormControl isInvalid={!!formik.errors.banner}>
+            <FormControl isInvalid={!!errors.banner}>
               <FormLabel m={0}>Capa do campeonato</FormLabel>
               <Input
-                as='input'
-                name='banner'
-                id='banner'
-                onChange={formik.handleChange}
-                value={formik.values.banner}
                 p={1}
                 type='file'
+                {...register('banner', { required: '* Campo obrigatório' })}
               />
-
-              {!!formik.errors.banner && (
-                <FormErrorMessage>{formik.errors.banner}</FormErrorMessage>
-              )}
             </FormControl>
 
             <ButtonGroup flexDirection='column' alignItems='end' gap='12px' w='100%'>
-              <Button w='100%' disabled={!formik.isValid} colorScheme='teal' type='submit'>
+              <Button w='100%' isLoading={isSubmitting} colorScheme='teal' type='submit'>
                 Adicionar
               </Button>
-              <Button w='100%' variant='outline' onClick={() => console.log(!formik.isValid)}>
+              <Button w='100%' variant='outline'>
                 Fechar
               </Button>
             </ButtonGroup>

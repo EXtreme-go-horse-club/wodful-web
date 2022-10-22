@@ -38,7 +38,8 @@ const ListChampionship = () => {
                   {championship.name}
                 </Heading>
                 <Text fontSize='14px'>
-                  {formatDate(championship.startDate)} até {formatDate(championship.endDate)}
+                  {formatDate(`${championship.startDate}`)} até
+                  {formatDate(`${championship.endDate}`)}
                 </Text>
               </VStack>
 
