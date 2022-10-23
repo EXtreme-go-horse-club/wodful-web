@@ -1,8 +1,8 @@
 export interface IChampionship {
   id: string;
   name: string;
-  startDate: string;
-  endDate: string;
+  startDate: Date;
+  endDate: Date;
   accessCode: string;
   banner: string;
   resultType: string;
