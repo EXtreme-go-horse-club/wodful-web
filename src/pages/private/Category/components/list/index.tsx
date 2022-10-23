@@ -42,12 +42,17 @@ const ListCategory = () => {
           </Tr>
         </Thead>
         <Tbody>
-          {categories.map((category) => (
+          {categories?.map((category) => (
             <Tr key={category.id}>
-              <Td p={6}>{category.description}</Td>
+              <Td p={6}>{category.name}</Td>
               <Td p={6}>
-                <Tag size='md' key='md' variant='solid' colorScheme='teal'>
-                  {category.name}
+                <Tag
+                  size='md'
+                  key='md'
+                  variant='solid'
+                  colorScheme={category.isTeam ? 'teal' : 'blue'}
+                >
+                  {category.isTeam ? 'Time' : 'Individual'}
                 </Tag>
               </Td>
               <Td p={6}>

@@ -15,7 +15,7 @@ export class CategoryService {
     });
 
     switch (statusCode) {
-      case HttpStatusCode.ok:
+      case HttpStatusCode.created:
         return body! as ICategory;
       default:
         throw new Error();
