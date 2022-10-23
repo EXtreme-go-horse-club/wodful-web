@@ -1,7 +1,3 @@
-// interface CreateModalProps {
-//   onClose: () => void;
-//   isOpen: boolean;
-// }
 import useCategoryData from '@/hooks/useCategoryData';
 import {
   Flex,
