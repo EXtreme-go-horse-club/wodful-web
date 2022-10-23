@@ -31,7 +31,6 @@ const CreateCategory = ({ onClose }: CreateModalProps) => {
     category.championshipId = '47e3b328-de59-4725-a5d8-82b40b9b9a2a';
     category.members = Number(category.members);
     Create(category);
-    onClose;
   }
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

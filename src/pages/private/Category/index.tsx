@@ -10,7 +10,7 @@ const Category = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <CategoryProvider>
+    <CategoryProvider onClose={onClose}>
       <Box w='100%' display='flex' flexDirection='column' alignItems='center' p={6}>
         <HStack w='100%' justifyContent='space-between'>
           <Text fontSize='2xl' as='b'>

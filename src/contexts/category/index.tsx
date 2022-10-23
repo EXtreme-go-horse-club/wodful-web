@@ -7,6 +7,7 @@ import { createContext, useCallback, useState } from 'react';
 
 interface CategoryProviderProps {
   children: React.ReactNode;
+  onClose: () => void;
 }
 
 export interface CategoryContextData {
@@ -21,7 +22,7 @@ const CategoryContext = createContext({} as CategoryContextData);
 
 const axios = new AxiosAdapter();
 
-export const CategoryProvider = ({ children }: CategoryProviderProps) => {
+export const CategoryProvider = ({ children, onClose }: CategoryProviderProps) => {
   const toast = useToast();
   const [categories, setCategories] = useState<ICategory[]>([] as ICategory[]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -38,7 +39,8 @@ export const CategoryProvider = ({ children }: CategoryProviderProps) => {
             status: 'success',
             isClosable: true,
           });
-          setCategories([...categories, newCategory]);
+          setCategories((categories) => [...categories, newCategory]);
+          onClose();
         })
         .catch(() => {
           toast({

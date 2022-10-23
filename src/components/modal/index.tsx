@@ -30,16 +30,7 @@ const ComponentModal = ({
         <ModalContent>
           <ModalHeader> {modalHeader}</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>
-            {/* <HStack pt={4} w='100%' align='start' justify='space-between'>
-              <Heading as='h4' size='md'>
-                {modalTitle}
-              </Heading>
-
-              <X onClick={onClose} cursor='pointer' size={18} />
-            </HStack> */}
-            {children}
-          </ModalBody>
+          <ModalBody>{children}</ModalBody>
         </ModalContent>
       </Modal>
     </>
