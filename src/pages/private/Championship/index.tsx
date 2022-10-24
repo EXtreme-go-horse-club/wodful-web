@@ -16,7 +16,7 @@ const Championship = () => {
 
   return (
     <Suspense fallback={<>loading</>}>
-      <ChampionshipProvider>
+      <ChampionshipProvider onClose={onClose}>
         <Center>
           <Button onClick={Logout}>deslogar</Button>
           <Box
@@ -49,7 +49,7 @@ const Championship = () => {
               isOpen={isOpen}
               onClose={onClose}
             >
-              <FormChampionship />
+              <FormChampionship onClose={onClose} />
             </ComponentModal>
 
             <SimpleGrid

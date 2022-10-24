@@ -1,15 +1,6 @@
-import { IChampionship } from '@/data/interfaces/championship';
+import { ChampionshipDTO, IChampionship } from '@/data/interfaces/championship';
 import { HttpClient, HttpStatusCode } from '@/data/interfaces/http';
 
-export interface ChampionshipDTO {
-  name: string;
-  startDate: Date;
-  endDate: Date;
-  accessCode: string;
-  banner: any;
-  resultType: string;
-  address: string;
-}
 export class ChampionshipService {
   constructor(
     private readonly httpClient: HttpClient<IChampionship | IChampionship[]>,
@@ -54,7 +45,7 @@ export class ChampionshipService {
     });
 
     switch (statusCode) {
-      case HttpStatusCode.ok:
+      case HttpStatusCode.created:
         return body! as IChampionship;
       default:
         throw new Error();

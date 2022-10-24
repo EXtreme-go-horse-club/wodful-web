@@ -4,7 +4,17 @@ export interface IChampionship {
   startDate: Date;
   endDate: Date;
   accessCode: string;
-  banner: string;
+  banner: File;
+  resultType: string;
+  address: string;
+}
+
+export interface ChampionshipDTO {
+  name: string;
+  startDate: Date;
+  endDate: Date;
+  accessCode: string;
+  banner: File;
   resultType: string;
   address: string;
 }

@@ -1,3 +1,6 @@
+import { ChampionshipDTO } from '@/data/interfaces/championship';
+import useChampionshipData from '@/hooks/useChampionshipData';
+import { validationMessages } from '@/utils/messages';
 import {
   Button,
   ButtonGroup,
@@ -12,49 +15,46 @@ import {
 
 import { SubmitHandler, useForm } from 'react-hook-form';
 
-enum ResultTypeEnum {
-  score = 'SCORE',
-  ranking = 'RANKING',
-}
-interface IFormInpusts {
-  name: string;
-  startDate: Date;
-  endDate: Date;
-  accessCode: string;
-  banner: File | null;
-  resultType: ResultTypeEnum | null;
-  address: string;
+interface CreateModalProps {
+  onClose: () => void;
 }
 
-const FormChampionship = () => {
+const FormChampionship = ({ onClose }: CreateModalProps) => {
+  const { Create } = useChampionshipData();
+
+  const getBanner = (e: any) => {
+    const banner = e.target.files[0];
+    console.log(banner);
+  };
+
   const {
     handleSubmit,
     register,
-    reset,
     formState: { errors, isSubmitting },
-  } = useForm<IFormInpusts>();
+  } = useForm<ChampionshipDTO>();
 
-  const onSubmit: SubmitHandler<IFormInpusts> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<ChampionshipDTO> = async (championship) => {
+    console.log(championship, '1');
 
-    setTimeout(() => {
-      reset();
-    }, 5000);
+    await Create(championship);
+    console.log(championship, '2');
+
+    console.log(championship, '3');
   };
 
   return (
     <>
-      <VStack pt={4} pb={4} align='start' spacing='24px'>
-        <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <VStack pt={4} pb={4} align='start' spacing='24px'>
           <VStack align='start' w='100%' flexDirection='column' gap='24px'>
             <FormControl isInvalid={!!errors.name}>
               <FormLabel m={0}>Nome</FormLabel>
               <Input
                 placeholder='Nome do campeonato'
                 {...register('name', {
-                  required: '* Campo obrigatório',
-                  minLength: { value: 4, message: 'Nome muito curto' },
-                  maxLength: { value: 40, message: 'Nome muito longo' },
+                  required: validationMessages['required'],
+                  minLength: { value: 4, message: validationMessages['minLength'] },
+                  maxLength: { value: 50, message: validationMessages['maxLengthSm'] },
                 })}
               />
               <FormErrorMessage>{errors.name && errors.name.message}</FormErrorMessage>
@@ -67,7 +67,7 @@ const FormChampionship = () => {
                   type='datetime-local'
                   placeholder='DD/MM/AAAA'
                   {...register('startDate', {
-                    required: '* Campo obrigatório',
+                    required: validationMessages['required'],
                   })}
                 />
                 <FormErrorMessage>{errors.startDate && errors.startDate.message}</FormErrorMessage>
@@ -91,9 +91,9 @@ const FormChampionship = () => {
               <Input
                 placeholder='Endereço'
                 {...register('address', {
-                  required: '* Campo obrigatório',
-                  minLength: { value: 4, message: 'Nome muito curto' },
-                  maxLength: { value: 50, message: 'Nome muito longo' },
+                  required: validationMessages['required'],
+                  minLength: { value: 4, message: validationMessages['minLength'] },
+                  maxLength: { value: 50, message: validationMessages['maxLengthSm'] },
                 })}
               />
               <FormErrorMessage>{errors.address && errors.address.message}</FormErrorMessage>
@@ -104,9 +104,9 @@ const FormChampionship = () => {
               <Input
                 placeholder='Código'
                 {...register('accessCode', {
-                  required: '* Campo obrigatório',
-                  minLength: { value: 4, message: 'Nome muito curto' },
-                  maxLength: { value: 20, message: 'Nome muito longo' },
+                  required: validationMessages['required'],
+                  minLength: { value: 4, message: validationMessages['minLength'] },
+                  maxLength: { value: 20, message: validationMessages['maxLengthSm'] },
                 })}
               />
               <FormErrorMessage>{errors.accessCode && errors.accessCode.message}</FormErrorMessage>
@@ -115,7 +115,7 @@ const FormChampionship = () => {
             <FormControl isInvalid={!!errors.resultType}>
               <FormLabel m={0}>Tipo de resultado</FormLabel>
               <Select
-                {...register('resultType', { required: '* Campo obrigatório' })}
+                {...register('resultType', { required: validationMessages['required'] })}
                 placeholder='Selecione o tipo'
               >
                 <option value='SCORE'>Pontuação</option>
@@ -129,21 +129,22 @@ const FormChampionship = () => {
               <Input
                 p={1}
                 type='file'
-                {...register('banner', { required: '* Campo obrigatório' })}
+                {...register('banner', { required: validationMessages['required'] })}
               />
+              <FormErrorMessage>{errors.banner && errors.banner.message}</FormErrorMessage>
             </FormControl>
 
             <ButtonGroup flexDirection='column' alignItems='end' gap='12px' w='100%'>
               <Button w='100%' isLoading={isSubmitting} colorScheme='teal' type='submit'>
                 Adicionar
               </Button>
-              <Button w='100%' variant='outline'>
+              <Button w='100%' variant='outline' onClick={onClose}>
                 Fechar
               </Button>
             </ButtonGroup>
           </VStack>
-        </form>
-      </VStack>
+        </VStack>
+      </form>
     </>
   );
 };
