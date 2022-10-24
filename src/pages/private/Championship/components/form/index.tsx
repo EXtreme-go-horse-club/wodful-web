@@ -29,9 +29,8 @@ const FormChampionship = ({ onClose }: CreateModalProps) => {
   } = useForm<ChampionshipDTO>();
 
   const onSubmit: SubmitHandler<ChampionshipDTO> = async (championship) => {
-    const banner = championship.banner as unknown as FileList;
+    const banner = championship.banner as FileList;
     championship.banner = banner[0];
-
     await Create(championship);
   };
 
