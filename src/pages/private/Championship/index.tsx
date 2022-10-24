@@ -18,7 +18,6 @@ const Championship = () => {
     <Suspense fallback={<>loading</>}>
       <ChampionshipProvider onClose={onClose}>
         <Center>
-          <Button onClick={Logout}>deslogar</Button>
           <Box
             w='100%'
             display='flex'

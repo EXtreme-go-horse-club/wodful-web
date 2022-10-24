@@ -33,6 +33,9 @@ export class ChampionshipService {
     const { statusCode, body } = await this.httpClient.request({
       method: 'post',
       url: this.path,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
       body: {
         name,
         startDate,

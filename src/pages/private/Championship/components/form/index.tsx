@@ -12,7 +12,6 @@ import {
   Select,
   VStack,
 } from '@chakra-ui/react';
-import { useState } from 'react';
 
 import { SubmitHandler, useForm } from 'react-hook-form';
 
@@ -21,19 +20,7 @@ interface CreateModalProps {
 }
 
 const FormChampionship = ({ onClose }: CreateModalProps) => {
-  const [banner, setBanner] = useState('' as any);
-
   const { Create } = useChampionshipData();
-
-  const convertBanner = (file: any) => {
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      setBanner(reader.result?.toString());
-    };
-
-    reader.readAsDataURL(file);
-  };
 
   const {
     handleSubmit,
@@ -42,12 +29,9 @@ const FormChampionship = ({ onClose }: CreateModalProps) => {
   } = useForm<ChampionshipDTO>();
 
   const onSubmit: SubmitHandler<ChampionshipDTO> = async (championship) => {
-    console.log(championship.banner[0], 'banner');
-    convertBanner(championship.banner[0]);
+    const banner = championship.banner as unknown as FileList;
+    championship.banner = banner[0];
 
-    championship.banner = banner;
-
-    console.log(championship, 'championship');
     await Create(championship);
   };
 
@@ -138,6 +122,7 @@ const FormChampionship = ({ onClose }: CreateModalProps) => {
               <Input
                 p={1}
                 type='file'
+                multiple={false}
                 {...register('banner', { required: validationMessages['required'] })}
               />
               <FormErrorMessage>{errors.banner && errors.banner.message}</FormErrorMessage>
