@@ -1,8 +1,6 @@
 import { Box, Button, Center, Flex, Heading, SimpleGrid, useDisclosure } from '@chakra-ui/react';
 import { lazy, Suspense } from 'react';
 
-import useAuth from '@/hooks/useAuth';
-
 import ComponentModal from '@/components/modal';
 import { ChampionshipProvider } from '@/contexts/championship';
 
@@ -10,8 +8,6 @@ const ListChampionship = lazy(() => import('./components/list'));
 const FormChampionship = lazy(() => import('./components/form'));
 
 const Championship = () => {
-  const { Logout } = useAuth();
-
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
