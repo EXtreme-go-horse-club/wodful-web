@@ -29,7 +29,10 @@ const ListChampionship = () => {
           key={championship.id}
         >
           <Stack h='100px' overflow='hidden'>
-            <Image borderTopRadius='lg' src={championship.banner} />
+            <Image
+              borderTopRadius='lg'
+              src={`${import.meta.env.VITE_BASE_SERVER_URL}/banner/${championship.banner}`}
+            />
           </Stack>
           <Box p={6}>
             <VStack gap='8px' align='start'>
