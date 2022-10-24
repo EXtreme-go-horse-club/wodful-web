@@ -14,7 +14,7 @@ export interface ChampionshipDTO {
   startDate: Date;
   endDate: Date;
   accessCode: string;
-  banner: File;
+  banner: File | FileList;
   resultType: string;
   address: string;
 }
