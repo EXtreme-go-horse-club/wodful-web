@@ -14,3 +14,8 @@ export const categoryMessages = {
   success: 'Categoria adicionada com sucesso',
   error: 'Algo deu errado ao adicionar a categoria',
 };
+
+export const workoutMessages = {
+  success: 'Prova adicionada com sucesso',
+  error: 'Algo deu errado ao adicionar a prova',
+};

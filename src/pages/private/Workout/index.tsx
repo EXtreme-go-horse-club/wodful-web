@@ -3,7 +3,7 @@ import { CategoryProvider } from '@/contexts/category';
 import { WorkoutProvider } from '@/contexts/workout';
 import { Box, Button, HStack, Text, useDisclosure } from '@chakra-ui/react';
 import { lazy } from 'react';
-import CreateWorkout from './components/form';
+import FormWorkout from './components/form';
 
 const ListWorkout = lazy(() => import('./components/list'));
 
@@ -23,7 +23,7 @@ const Workout = () => {
             </Button>
           </HStack>
           <ComponentModal modalHeader='Criar prova' size='lg' isOpen={isOpen} onClose={onClose}>
-            <CreateWorkout onClose={onClose} />
+            <FormWorkout onClose={onClose} />
           </ComponentModal>
           <Box w='100%' marginTop={6}>
             <ListWorkout />

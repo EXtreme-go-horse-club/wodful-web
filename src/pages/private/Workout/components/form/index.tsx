@@ -20,7 +20,7 @@ interface CreateModalProps {
   onClose: () => void;
 }
 
-const CreateWorkout = ({ onClose }: CreateModalProps) => {
+const FormWorkout = ({ onClose }: CreateModalProps) => {
   const { Create } = useWorkoutData();
   const { List, categories } = useCategoryData();
   useEffect(() => {
@@ -118,4 +118,4 @@ const CreateWorkout = ({ onClose }: CreateModalProps) => {
   );
 };
 
-export default CreateWorkout;
+export default FormWorkout;
