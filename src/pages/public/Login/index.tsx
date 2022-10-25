@@ -18,7 +18,6 @@ import wodfulWhiteLogo from '@/assets/icons/wodful-white-logo.svg';
 import { useState } from 'react';
 
 const Login = () => {
-  // isLoading usar no botão
   const { Login, isError, isLoading } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

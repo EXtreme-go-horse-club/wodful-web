@@ -8,9 +8,9 @@ import {
 } from '@chakra-ui/react';
 
 interface CreateChampionshipProps {
-  modalHeader: string;
   isOpen: boolean;
-  children: any;
+  modalHeader: string;
+  children: React.ReactNode;
   size: 'sm' | 'md' | 'lg' | 'xl';
   onClose: () => void;
 }
@@ -26,9 +26,8 @@ const ComponentModal = ({
     <>
       <Modal size={size} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-
         <ModalContent>
-          <ModalHeader> {modalHeader}</ModalHeader>
+          <ModalHeader>{modalHeader}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>{children}</ModalBody>
         </ModalContent>
