@@ -4,6 +4,7 @@ import { MapPin } from 'react-feather';
 import useChampionships from '@/hooks/useChampionshipData';
 import { formatDate } from '@/utils/formatDate';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const resultType: { [key: string]: string } = {
   SCORE: 'Pontuação',
@@ -12,6 +13,7 @@ const resultType: { [key: string]: string } = {
 
 const ListChampionship = () => {
   const { List, championships } = useChampionships();
+  const navigate = useNavigate();
 
   useEffect(() => {
     List();
@@ -27,6 +29,8 @@ const ListChampionship = () => {
           borderColor='gray.200'
           borderRadius='lg'
           key={championship.id}
+          cursor='pointer'
+          onClick={() => navigate(`${championship.id}/tickets`)}
         >
           <Stack h='100px' overflow='hidden'>
             <Image

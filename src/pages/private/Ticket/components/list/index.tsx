@@ -16,13 +16,15 @@ import {
 } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import { MoreHorizontal } from 'react-feather';
+import { useParams } from 'react-router-dom';
 
 const ListTicket = () => {
   const { List, tickets } = useTicketData();
+  const { id } = useParams();
 
   useEffect(() => {
-    List('27e21ddd-74f5-4b14-bf0b-59247717feff');
-  }, [List]);
+    List(id as string);
+  }, [List, id]);
 
   return (
     <TableContainer border='1px' borderColor='gray.100' fontSize='sm' color='#2D3748'>

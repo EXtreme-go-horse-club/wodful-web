@@ -1,10 +1,8 @@
 import ComponentModal from '@/components/modal';
 import { TicketProvider } from '@/contexts/ticket';
 import { Box, Button, HStack, Text, useDisclosure } from '@chakra-ui/react';
-import { lazy } from 'react';
-import CreateCategory from '../Category/components/form';
-
-const ListTicket = lazy(() => import('./components/list'));
+import FormTicket from './components/form';
+import ListTicket from './components/list';
 
 const Ticket = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -21,7 +19,7 @@ const Ticket = () => {
           </Button>
         </HStack>
         <ComponentModal modalHeader='Adicionar ticket' size='lg' isOpen={isOpen} onClose={onClose}>
-          <CreateCategory onClose={onClose} />
+          <FormTicket onClose={onClose} />
         </ComponentModal>
         <Box w='100%' marginTop={6}>
           <ListTicket />
