@@ -1,5 +1,5 @@
 import { AxiosAdapter } from '@/adapters/AxiosAdapter';
-import { ITicket, TicketChampionshipDTO } from '@/data/interfaces/ticket';
+import { ITicket, TicketDTO } from '@/data/interfaces/ticket';
 import { TicketService } from '@/services/Ticket';
 import { ticketMessages } from '@/utils/messages';
 import { useToast } from '@chakra-ui/react';
@@ -23,7 +23,7 @@ export interface TicketContextData {
     price,
     quantity,
     categoryId,
-  }: TicketChampionshipDTO) => Promise<void>;
+  }: TicketDTO) => Promise<void>;
 }
 
 const TicketContext = createContext({} as TicketContextData);
@@ -37,15 +37,7 @@ export const TicketProvider = ({ children, onClose }: TicketProviderProps) => {
   const [isError, setIsError] = useState<boolean>(false);
 
   const Create = useCallback(
-    async ({
-      name,
-      description,
-      startDate,
-      endDate,
-      price,
-      quantity,
-      categoryId,
-    }: TicketChampionshipDTO) => {
+    async ({ name, description, startDate, endDate, price, quantity, categoryId }: TicketDTO) => {
       setIsLoading(true);
       await new TicketService(axios)
         .create({

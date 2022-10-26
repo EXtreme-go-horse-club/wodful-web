@@ -31,7 +31,7 @@ export class WorkoutService {
   async listAll(id: string): Promise<IWorkout[]> {
     const { statusCode, body } = await this.httpClient.request({
       method: 'get',
-      url: this.path + '?championshipId=' + id,
+      url: `${this.path}?championshipId=${id}`,
     });
 
     switch (statusCode) {

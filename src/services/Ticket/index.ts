@@ -1,5 +1,5 @@
 import { HttpClient, HttpStatusCode } from '@/data/interfaces/http';
-import { ITicket, TicketChampionshipDTO } from '@/data/interfaces/ticket';
+import { ITicket, TicketDTO } from '@/data/interfaces/ticket';
 
 export class TicketService {
   constructor(
@@ -15,7 +15,7 @@ export class TicketService {
     price,
     quantity,
     categoryId,
-  }: TicketChampionshipDTO): Promise<ITicket> {
+  }: TicketDTO): Promise<ITicket> {
     const { statusCode, body } = await this.httpClient.request({
       method: 'post',
       url: this.path,

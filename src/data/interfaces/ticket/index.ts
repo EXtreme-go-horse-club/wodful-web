@@ -9,7 +9,7 @@ export interface ITicket {
   quantity: number;
 }
 
-export interface TicketChampionshipDTO {
+export interface TicketDTO {
   name: string;
   description: string;
   startDate: Date;
