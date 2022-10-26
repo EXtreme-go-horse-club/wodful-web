@@ -10,11 +10,13 @@ const PrivateRoutes = () => {
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<Championship />} />
-        <Route path='/categories' element={<Category />} />
-        <Route path='/tickets' element={<Ticket />} />
-        <Route path='/workouts' element={<Workout />} />
-        <Route path='/championships' element={<Championship />} />
         <Route path='/' element={<Navigate to='/championships' replace />} />
+
+        <Route path='/championships' element={<Championship />}>
+          <Route path='/tickets' element={<Ticket />} />
+        </Route>
+        <Route path='/categories' element={<Category />} />
+        <Route path='/workouts' element={<Workout />} />
 
         <Route path='/login' element={<Navigate to='/championships' replace />} />
       </Routes>

@@ -69,7 +69,7 @@ const ListTicket = () => {
           <Tr>
             <Th display='flex' flexDirection='row'>
               <Flex align='center' mr={2}>
-                Linhas por páginaaaa
+                Linhas por página
               </Flex>
 
               <Select placeholder='1' w='75px'>
