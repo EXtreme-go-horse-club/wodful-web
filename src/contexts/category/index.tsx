@@ -45,6 +45,7 @@ export const CategoryProvider = ({ children, onClose }: CategoryProviderProps) =
             status: 'success',
             isClosable: true,
           });
+
           onClose!();
         })
         .catch(() => {
