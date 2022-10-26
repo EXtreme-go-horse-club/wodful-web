@@ -17,6 +17,7 @@ import { useEffect, useState } from 'react';
 import { MoreHorizontal } from 'react-feather';
 
 const ListCategory = () => {
+  //Mover para dentro do contexto.
   const [limit, setLimit] = useState('');
   const [page, setPage] = useState();
   const { List, categories } = useCategoryData();

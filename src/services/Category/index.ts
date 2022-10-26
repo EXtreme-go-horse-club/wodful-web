@@ -25,8 +25,8 @@ export class CategoryService {
 
   async listAll(
     id: string,
-    limit?: string,
-    page?: string,
+    limit?: number,
+    page?: number,
   ): Promise<IPageResponse<ICategory> | ICategory[]> {
     const { statusCode, body } = await this.httpClient.request({
       method: 'get',
