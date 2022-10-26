@@ -7,7 +7,7 @@ import { createContext, useCallback, useState } from 'react';
 
 interface CategoryProviderProps {
   children: React.ReactNode;
-  onClose: () => void;
+  onClose?: () => void;
 }
 
 export interface CategoryContextData {
@@ -40,7 +40,7 @@ export const CategoryProvider = ({ children, onClose }: CategoryProviderProps) =
             isClosable: true,
           });
           setCategories((categories) => [...categories, newCategory]);
-          onClose();
+          onClose!();
         })
         .catch(() => {
           toast({
