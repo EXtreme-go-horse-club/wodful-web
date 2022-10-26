@@ -69,16 +69,15 @@ const ListCategory = () => {
               </Flex>
 
               <Select
-                placeholder='1'
                 w='75px'
                 onChange={(event) => {
                   console.log(event.target.value);
                   setLimit(event.target.value);
                 }}
               >
-                <option value='option1'>5</option>
-                <option value='option2'>10</option>
-                <option value='option3'>20</option>
+                <option value='5'>5</option>
+                <option value='10'>10</option>
+                <option value='20'>20</option>
               </Select>
             </Th>
             <Th></Th>
