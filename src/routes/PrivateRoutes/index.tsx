@@ -2,6 +2,7 @@ import Championship from '@/pages/private/Championship';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import Category from '@/pages/private/Category';
+import Ticket from '@/pages/private/Ticket';
 
 const PrivateRoutes = () => {
   return (
@@ -9,6 +10,7 @@ const PrivateRoutes = () => {
       <Routes>
         <Route path='/' element={<Championship />} />
         <Route path='/categories' element={<Category />} />
+        <Route path='/tickets' element={<Ticket />} />
         <Route path='/championships' element={<Championship />} />
         <Route path='/' element={<Navigate to='/championships' replace />} />
 

@@ -14,3 +14,8 @@ export const categoryMessages = {
   success: 'Categoria adicionada com sucesso',
   error: 'Algo deu errado ao adicionar a categoria',
 };
+
+export const ticketMessages = {
+  success: 'Ticket adicionado com sucesso',
+  error: 'Algo deu errado ao adicionar o ticket',
+};
