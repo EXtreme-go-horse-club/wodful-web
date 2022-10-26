@@ -13,10 +13,12 @@ import {
   Thead,
   Tr,
 } from '@chakra-ui/react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { MoreHorizontal } from 'react-feather';
 
 const ListCategory = () => {
+  const [limit, setLimit] = useState('');
+  const [page, setPage] = useState();
   const { List, categories } = useCategoryData();
 
   useEffect(() => {
@@ -66,15 +68,22 @@ const ListCategory = () => {
                 Linhas por página
               </Flex>
 
-              <Select placeholder='1' w='75px'>
-                <option value='option1'>1</option>
-                <option value='option2'>2</option>
-                <option value='option3'>3</option>
+              <Select
+                placeholder='1'
+                w='75px'
+                onChange={(event) => {
+                  console.log(event.target.value);
+                  setLimit(event.target.value);
+                }}
+              >
+                <option value='option1'>5</option>
+                <option value='option2'>10</option>
+                <option value='option3'>20</option>
               </Select>
             </Th>
             <Th></Th>
             <Th>
-              <Flex justify='end'>1-5 de 32</Flex>{' '}
+              <Flex justify='end'>1-5 de 32</Flex>
             </Th>
           </Tr>
         </Tfoot>
