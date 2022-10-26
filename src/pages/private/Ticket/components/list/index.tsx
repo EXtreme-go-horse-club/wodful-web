@@ -1,9 +1,11 @@
+import useTicketData from '@/hooks/useTicketData';
+import { formatCurrency } from '@/utils/formatCurrency';
+import { formatDate } from '@/utils/formatDate';
 import {
   Flex,
   Select,
   Table,
   TableContainer,
-  Tag,
   Tbody,
   Td,
   Text,
@@ -12,10 +14,15 @@ import {
   Thead,
   Tr,
 } from '@chakra-ui/react';
+import { useEffect } from 'react';
 import { MoreHorizontal } from 'react-feather';
 
 const ListTicket = () => {
-  const dale = 'dole';
+  const { List, tickets } = useTicketData();
+
+  useEffect(() => {
+    List('27e21ddd-74f5-4b14-bf0b-59247717feff');
+  }, [List]);
 
   return (
     <TableContainer border='1px' borderColor='gray.100' fontSize='sm' color='#2D3748'>
@@ -23,28 +30,33 @@ const ListTicket = () => {
         <Thead bg='gray.50' border='1px' borderColor='gray.100'>
           <Tr>
             <Th>
-              <Text as='b'>Categoria</Text>
+              <Text as='b'>Nome</Text>
             </Th>
             <Th>
-              <Text as='b'>Formato</Text>
+              <Text as='b'>Valor do ingresso</Text>
+            </Th>
+            <Th>
+              <Text as='b'>Início</Text>
+            </Th>
+            <Th>
+              <Text as='b'>Encerramento</Text>
+            </Th>
+            <Th>
+              <Text as='b'>qnt. máx</Text>
             </Th>
             <Th></Th>
           </Tr>
         </Thead>
         <Tbody>
-          {categories?.map((category) => (
-            <Tr key={category.id}>
-              <Td p={6}>{category.name}</Td>
-              <Td p={6}>
-                <Tag
-                  size='md'
-                  key='md'
-                  variant='solid'
-                  colorScheme={category.isTeam ? 'teal' : 'blue'}
-                >
-                  {category.isTeam ? 'Time' : 'Individual'}
-                </Tag>
-              </Td>
+          {tickets?.map((ticket) => (
+            <Tr key={ticket.id}>
+              <Td p={6}>{ticket.name}</Td>
+
+              <Td p={6}>{formatCurrency(ticket.price)}</Td>
+              <Td p={6}>{formatDate(ticket.startDate)}</Td>
+              <Td p={6}>{formatDate(ticket.endDate)}</Td>
+              <Td p={6}>{ticket.quantity}</Td>
+
               <Td p={6}>
                 <Flex justify='end'>
                   <MoreHorizontal cursor='pointer' size={18} />
@@ -57,7 +69,7 @@ const ListTicket = () => {
           <Tr>
             <Th display='flex' flexDirection='row'>
               <Flex align='center' mr={2}>
-                Linhas por página
+                Linhas por páginaaaa
               </Flex>
 
               <Select placeholder='1' w='75px'>

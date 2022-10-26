@@ -1,7 +1,7 @@
-import Championship from '@/pages/private/Championship';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import Category from '@/pages/private/Category';
+import Championship from '@/pages/private/Championship';
 import Ticket from '@/pages/private/Ticket';
 
 const PrivateRoutes = () => {

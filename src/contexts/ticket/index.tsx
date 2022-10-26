@@ -85,7 +85,9 @@ export const TicketProvider = ({ children, onClose }: TicketProviderProps) => {
       .then((allTickets) => {
         setTickets(allTickets);
       })
-      .finally(() => setIsLoading(false));
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, []);
 
   return (
