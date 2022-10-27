@@ -65,6 +65,7 @@ export const CategoryProvider = ({ children, onClose }: CategoryProviderProps) =
     },
     [onClose, toast],
   );
+
   const List = useCallback(async (id: string) => {
     setIsLoading(true);
     await new CategoryService(axios)
@@ -81,7 +82,6 @@ export const CategoryProvider = ({ children, onClose }: CategoryProviderProps) =
       await new CategoryService(axios)
         .listAll(id, limit, page)
         .then((paginatedCategories) => {
-          console.log(paginatedCategories);
           setCategoriesPages(paginatedCategories as IPageResponse<ICategory>);
         })
         .finally(() => setIsLoading(false));

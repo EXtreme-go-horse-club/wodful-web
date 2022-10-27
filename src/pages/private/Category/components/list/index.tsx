@@ -25,19 +25,15 @@ const ListCategory = () => {
     useCategoryData();
 
   useEffect(() => {
-    ListPaginated('47e3b328-de59-4725-a5d8-82b40b9b9a2a');
+    ListPaginated('6efdf67b-898c-48e3-86de-af0cac8b1209');
   }, [ListPaginated]);
 
   const previousPage = () => {
-    console.log('previousPage');
     setPage(page - 1);
-    ListPaginated('47e3b328-de59-4725-a5d8-82b40b9b9a2a');
   };
 
   const nextPage = () => {
-    console.log('nextpage');
     setPage(page + 1);
-    ListPaginated('47e3b328-de59-4725-a5d8-82b40b9b9a2a');
   };
 
   return (
@@ -108,9 +104,7 @@ const ListCategory = () => {
                     <Button
                       disabled={!categoriesPages.previous || isLoading}
                       variant='link'
-                      onClick={() => {
-                        previousPage();
-                      }}
+                      onClick={previousPage}
                     >
                       <ChevronLeft color={categoriesPages.previous ? 'black' : 'gray'} size={16} />
                     </Button>
@@ -119,9 +113,7 @@ const ListCategory = () => {
                     <Button
                       disabled={!categoriesPages.next || isLoading}
                       variant='link'
-                      onClick={() => {
-                        nextPage();
-                      }}
+                      onClick={nextPage}
                     >
                       <ChevronRight color={categoriesPages.next ? 'black' : 'gray'} size={16} />
                     </Button>
