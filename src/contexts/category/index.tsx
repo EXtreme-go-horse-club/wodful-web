@@ -75,17 +75,19 @@ export const CategoryProvider = ({ children, onClose }: CategoryProviderProps) =
       .finally(() => setIsLoading(false));
   }, []);
 
-  const ListPaginated = useCallback(async (id: string) => {
-    setIsLoading(true);
-    console.log(limit, page);
-    await new CategoryService(axios)
-      .listAll(id, limit, page)
-      .then((paginatedCategories) => {
-        console.log(paginatedCategories);
-        setCategoriesPages(paginatedCategories as IPageResponse<ICategory>);
-      })
-      .finally(() => setIsLoading(false));
-  }, []);
+  const ListPaginated = useCallback(
+    async (id: string) => {
+      setIsLoading(true);
+      await new CategoryService(axios)
+        .listAll(id, limit, page)
+        .then((paginatedCategories) => {
+          console.log(paginatedCategories);
+          setCategoriesPages(paginatedCategories as IPageResponse<ICategory>);
+        })
+        .finally(() => setIsLoading(false));
+    },
+    [limit, page],
+  );
 
   return (
     <CategoryContext.Provider

@@ -13,6 +13,7 @@ import {
   Tfoot,
   Th,
   Thead,
+  Tooltip,
   Tr,
 } from '@chakra-ui/react';
 import { useEffect } from 'react';
@@ -20,11 +21,24 @@ import { ChevronLeft, ChevronRight, MoreHorizontal } from 'react-feather';
 
 const ListCategory = () => {
   //Mover para dentro do contexto.
-  const { ListPaginated, categoriesPages, page, limit, setLimit, setPage } = useCategoryData();
+  const { ListPaginated, categoriesPages, page, limit, setLimit, setPage, isLoading } =
+    useCategoryData();
 
   useEffect(() => {
     ListPaginated('47e3b328-de59-4725-a5d8-82b40b9b9a2a');
   }, [ListPaginated]);
+
+  const previousPage = () => {
+    console.log('previousPage');
+    setPage(page - 1);
+    ListPaginated('47e3b328-de59-4725-a5d8-82b40b9b9a2a');
+  };
+
+  const nextPage = () => {
+    console.log('nextpage');
+    setPage(page + 1);
+    ListPaginated('47e3b328-de59-4725-a5d8-82b40b9b9a2a');
+  };
 
   return (
     <TableContainer border='1px' borderColor='gray.100' fontSize='sm' color='#2D3748'>
@@ -90,34 +104,28 @@ const ListCategory = () => {
                   <Text>
                     {page * limit - (limit - 1)} - {page * limit} de {categoriesPages.count}
                   </Text>
-                  <Button
-                    variant='link'
-                    onClick={() => {
-                      categoriesPages.previous && setPage(page - 1);
-                      categoriesPages.previous &&
-                        ListPaginated('47e3b328-de59-4725-a5d8-82b40b9b9a2a');
-                    }}
-                  >
-                    <ChevronLeft
-                      cursor='pointer'
-                      color={categoriesPages.previous ? 'black' : 'gray'}
-                      size={16}
-                    />
-                  </Button>
-                  <Button
-                    variant='link'
-                    onClick={() => {
-                      categoriesPages.next && setPage(page + 1);
-                      categoriesPages.next && ListPaginated('47e3b328-de59-4725-a5d8-82b40b9b9a2a');
-                      console.log('depois', page);
-                    }}
-                  >
-                    <ChevronRight
-                      cursor='pointer'
-                      color={categoriesPages.next ? 'black' : 'gray'}
-                      size={16}
-                    />
-                  </Button>
+                  <Tooltip label='Página anterior' placement='top' hasArrow>
+                    <Button
+                      disabled={!categoriesPages.previous || isLoading}
+                      variant='link'
+                      onClick={() => {
+                        previousPage();
+                      }}
+                    >
+                      <ChevronLeft color={categoriesPages.previous ? 'black' : 'gray'} size={16} />
+                    </Button>
+                  </Tooltip>
+                  <Tooltip label='Próxima página' placement='top' hasArrow>
+                    <Button
+                      disabled={!categoriesPages.next || isLoading}
+                      variant='link'
+                      onClick={() => {
+                        nextPage();
+                      }}
+                    >
+                      <ChevronRight color={categoriesPages.next ? 'black' : 'gray'} size={16} />
+                    </Button>
+                  </Tooltip>
                 </HStack>
               </Flex>
             </Th>
