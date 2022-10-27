@@ -16,8 +16,12 @@ export interface CategoryContextData {
   categoriesPages: IPageResponse<ICategory>;
   isLoading: boolean;
   isError: boolean;
+  limit: number;
+  setLimit: (value: number) => void;
+  page: number;
+  setPage: (value: number) => void;
   List: (id: string) => Promise<void>;
-  ListPaginated: (id: string, limit: number, page: number) => Promise<void>;
+  ListPaginated: (id: string) => Promise<void>;
   Create: ({ championshipId, description, members, name }: ICategoryDTO) => Promise<void>;
 }
 
@@ -30,6 +34,8 @@ export const CategoryProvider = ({ children, onClose }: CategoryProviderProps) =
   const [categoriesPages, setCategoriesPages] = useState<IPageResponse<ICategory>>(
     {} as IPageResponse<ICategory>,
   );
+  const [limit, setLimit] = useState<number>(5);
+  const [page, setPage] = useState<number>(1);
   const [categories, setCategories] = useState<ICategory[]>([] as ICategory[]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
@@ -69,11 +75,13 @@ export const CategoryProvider = ({ children, onClose }: CategoryProviderProps) =
       .finally(() => setIsLoading(false));
   }, []);
 
-  const ListPaginated = useCallback(async (id: string, limit: number, page: number) => {
+  const ListPaginated = useCallback(async (id: string) => {
     setIsLoading(true);
+    console.log(limit, page);
     await new CategoryService(axios)
       .listAll(id, limit, page)
       .then((paginatedCategories) => {
+        console.log(paginatedCategories);
         setCategoriesPages(paginatedCategories as IPageResponse<ICategory>);
       })
       .finally(() => setIsLoading(false));
@@ -81,7 +89,19 @@ export const CategoryProvider = ({ children, onClose }: CategoryProviderProps) =
 
   return (
     <CategoryContext.Provider
-      value={{ categories, categoriesPages, isLoading, isError, Create, List, ListPaginated }}
+      value={{
+        categories,
+        categoriesPages,
+        isLoading,
+        isError,
+        limit,
+        page,
+        setLimit,
+        setPage,
+        Create,
+        List,
+        ListPaginated,
+      }}
     >
       {children}
     </CategoryContext.Provider>
