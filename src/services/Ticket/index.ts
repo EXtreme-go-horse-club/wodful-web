@@ -1,9 +1,10 @@
 import { HttpClient, HttpStatusCode } from '@/data/interfaces/http';
+import { IPageResponse } from '@/data/interfaces/pageResponse';
 import { ITicket, TicketDTO } from '@/data/interfaces/ticket';
 
 export class TicketService {
   constructor(
-    private readonly httpClient: HttpClient<ITicket[] | ITicket>,
+    private readonly httpClient: HttpClient<IPageResponse<ITicket> | ITicket[] | ITicket>,
     private readonly path = '/tickets/',
   ) {}
 
@@ -30,7 +31,7 @@ export class TicketService {
     }
   }
 
-  async listAll(id: string): Promise<ITicket[]> {
+  async listAll(id: string): Promise<IPageResponse<ITicket> | ITicket[]> {
     const { statusCode, body } = await this.httpClient.request({
       method: 'get',
       url: this.path + id,
@@ -38,7 +39,7 @@ export class TicketService {
 
     switch (statusCode) {
       case HttpStatusCode.ok:
-        return body! as ITicket[];
+        return body! as IPageResponse<ITicket> | ITicket[];
       default:
         throw new Error();
     }
