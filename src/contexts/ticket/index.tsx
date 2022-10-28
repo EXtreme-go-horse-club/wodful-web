@@ -5,6 +5,7 @@ import { TicketService } from '@/services/Ticket';
 import { ticketMessages } from '@/utils/messages';
 import { useToast } from '@chakra-ui/react';
 import { createContext, useCallback, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 interface TicketProviderProps {
   children: React.ReactNode;
@@ -48,39 +49,7 @@ export const TicketProvider = ({ children, onClose }: TicketProviderProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
 
-  const Create = useCallback(
-    async ({ name, description, startDate, endDate, price, quantity, categoryId }: TicketDTO) => {
-      setIsLoading(true);
-      await new TicketService(axios)
-        .create({
-          name,
-          description,
-          startDate,
-          endDate,
-          price,
-          quantity,
-          categoryId,
-        })
-        .then((newTicket: ITicket) => {
-          toast({
-            title: ticketMessages['success'],
-            status: 'success',
-            isClosable: true,
-          });
-          setTickets((tickets) => [...tickets, newTicket]);
-          onClose();
-        })
-        .catch(() => {
-          toast({
-            title: ticketMessages['error'],
-            status: 'error',
-            isClosable: true,
-          });
-        })
-        .finally(() => setIsLoading(false));
-    },
-    [],
-  );
+  const { id } = useParams();
 
   const List = useCallback(async (id: string) => {
     setIsLoading(true);
@@ -105,6 +74,40 @@ export const TicketProvider = ({ children, onClose }: TicketProviderProps) => {
         .finally(() => setIsLoading(false));
     },
     [limit, page],
+  );
+
+  const Create = useCallback(
+    async ({ name, description, startDate, endDate, price, quantity, categoryId }: TicketDTO) => {
+      setIsLoading(true);
+      await new TicketService(axios)
+        .create({
+          name,
+          description,
+          startDate,
+          endDate,
+          price,
+          quantity,
+          categoryId,
+        })
+        .then(() => {
+          toast({
+            title: ticketMessages['success'],
+            status: 'success',
+            isClosable: true,
+          });
+          ListPaginated(id as string);
+          onClose!();
+        })
+        .catch(() => {
+          toast({
+            title: ticketMessages['error'],
+            status: 'error',
+            isClosable: true,
+          });
+        })
+        .finally(() => setIsLoading(false));
+    },
+    [ListPaginated, onClose, toast, id],
   );
 
   return (

@@ -24,6 +24,7 @@ import { useParams } from 'react-router-dom';
 const ListTicket = () => {
   const { ListPaginated, ticketsPages, page, limit, setLimit, setPage, isLoading } =
     useTicketData();
+
   const { id } = useParams();
 
   useEffect(() => {
