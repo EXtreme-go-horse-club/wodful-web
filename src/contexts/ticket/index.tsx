@@ -1,4 +1,5 @@
 import { AxiosAdapter } from '@/adapters/AxiosAdapter';
+import { IPageResponse } from '@/data/interfaces/pageResponse';
 import { ITicket, TicketDTO } from '@/data/interfaces/ticket';
 import { TicketService } from '@/services/Ticket';
 import { ticketMessages } from '@/utils/messages';
@@ -12,8 +13,14 @@ interface TicketProviderProps {
 
 export interface TicketContextData {
   tickets: ITicket[];
+  ticketsPages: IPageResponse<ITicket>;
   isLoading: boolean;
   isError: boolean;
+  limit: number;
+  setLimit: (value: number) => void;
+  page: number;
+  setPage: (value: number) => void;
+  ListPaginated: (id: string) => Promise<void>;
   List: (id: string) => Promise<void>;
   Create: ({
     name,
@@ -32,6 +39,11 @@ const axios = new AxiosAdapter();
 
 export const TicketProvider = ({ children, onClose }: TicketProviderProps) => {
   const toast = useToast();
+  const [ticketsPages, setTicketsPages] = useState<IPageResponse<ITicket>>(
+    {} as IPageResponse<ITicket>,
+  );
+  const [limit, setLimit] = useState<number>(5);
+  const [page, setPage] = useState<number>(1);
   const [tickets, setTickets] = useState<ITicket[]>([] as ITicket[]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
@@ -75,15 +87,42 @@ export const TicketProvider = ({ children, onClose }: TicketProviderProps) => {
     await new TicketService(axios)
       .listAll(id)
       .then((allTickets) => {
-        setTickets(allTickets);
+        setTickets(allTickets as ITicket[]);
       })
       .finally(() => {
         setIsLoading(false);
       });
   }, []);
 
+  const ListPaginated = useCallback(
+    async (id: string) => {
+      setIsLoading(true);
+      await new TicketService(axios)
+        .listAll(id, limit, page)
+        .then((paginatedTickets) => {
+          setTicketsPages(paginatedTickets as IPageResponse<ITicket>);
+        })
+        .finally(() => setIsLoading(false));
+    },
+    [limit, page],
+  );
+
   return (
-    <TicketContext.Provider value={{ tickets, isLoading, isError, Create, List }}>
+    <TicketContext.Provider
+      value={{
+        tickets,
+        ticketsPages,
+        isLoading,
+        isError,
+        limit,
+        page,
+        setLimit,
+        setPage,
+        Create,
+        List,
+        ListPaginated,
+      }}
+    >
       {children}
     </TicketContext.Provider>
   );

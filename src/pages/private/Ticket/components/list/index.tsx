@@ -2,7 +2,9 @@ import useTicketData from '@/hooks/useTicketData';
 import { formatCurrency } from '@/utils/formatCurrency';
 import { formatDate } from '@/utils/formatDate';
 import {
+  Button,
   Flex,
+  HStack,
   Select,
   Table,
   TableContainer,
@@ -12,19 +14,29 @@ import {
   Tfoot,
   Th,
   Thead,
+  Tooltip,
   Tr,
 } from '@chakra-ui/react';
 import { useEffect } from 'react';
-import { MoreHorizontal } from 'react-feather';
+import { ChevronLeft, ChevronRight, MoreHorizontal } from 'react-feather';
 import { useParams } from 'react-router-dom';
 
 const ListTicket = () => {
-  const { List, tickets } = useTicketData();
+  const { ListPaginated, ticketsPages, page, limit, setLimit, setPage, isLoading } =
+    useTicketData();
   const { id } = useParams();
 
   useEffect(() => {
-    List(id as string);
-  }, [List, id]);
+    ListPaginated(id as string);
+  }, [ListPaginated, id]);
+
+  const previousPage = () => {
+    setPage(page - 1);
+  };
+
+  const nextPage = () => {
+    setPage(page + 1);
+  };
 
   return (
     <TableContainer border='1px' borderColor='gray.100' fontSize='sm' color='#2D3748'>
@@ -50,7 +62,7 @@ const ListTicket = () => {
           </Tr>
         </Thead>
         <Tbody>
-          {tickets?.map((ticket) => (
+          {ticketsPages.results?.map((ticket) => (
             <Tr key={ticket.id}>
               <Td p={6}>{ticket.name}</Td>
 
@@ -74,15 +86,46 @@ const ListTicket = () => {
                 Linhas por página
               </Flex>
 
-              <Select placeholder='1' w='75px'>
-                <option value='option1'>1</option>
-                <option value='option2'>2</option>
-                <option value='option3'>3</option>
+              <Select
+                w='75px'
+                onChange={(event) => {
+                  setLimit(Number(event.target.value));
+                  setPage(Number(1));
+                  ListPaginated(id as string);
+                }}
+              >
+                <option value='5'>5</option>
+                <option value='10'>10</option>
+                <option value='20'>20</option>
               </Select>
             </Th>
             <Th></Th>
             <Th>
-              <Flex justify='end'>1-5 de 32</Flex>
+              <Flex justify='end'>
+                <HStack>
+                  <Text>
+                    {page * limit - (limit - 1)} - {page * limit} de {ticketsPages.count}
+                  </Text>
+                  <Tooltip label='Página anterior' placement='top' hasArrow>
+                    <Button
+                      disabled={!ticketsPages.previous || isLoading}
+                      variant='link'
+                      onClick={previousPage}
+                    >
+                      <ChevronLeft color={ticketsPages.previous ? 'black' : 'gray'} size={16} />
+                    </Button>
+                  </Tooltip>
+                  <Tooltip label='Próxima página' placement='top' hasArrow>
+                    <Button
+                      disabled={!ticketsPages.next || isLoading}
+                      variant='link'
+                      onClick={nextPage}
+                    >
+                      <ChevronRight color={ticketsPages.next ? 'black' : 'gray'} size={16} />
+                    </Button>
+                  </Tooltip>
+                </HStack>
+              </Flex>
             </Th>
           </Tr>
         </Tfoot>
