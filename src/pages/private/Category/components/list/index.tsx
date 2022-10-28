@@ -20,12 +20,11 @@ import { useEffect } from 'react';
 import { ChevronLeft, ChevronRight, MoreHorizontal } from 'react-feather';
 
 const ListCategory = () => {
-  //Mover para dentro do contexto.
   const { ListPaginated, categoriesPages, page, limit, setLimit, setPage, isLoading } =
     useCategoryData();
 
   useEffect(() => {
-    ListPaginated('6efdf67b-898c-48e3-86de-af0cac8b1209');
+    ListPaginated('47e3b328-de59-4725-a5d8-82b40b9b9a2a');
   }, [ListPaginated]);
 
   const previousPage = () => {
@@ -82,10 +81,8 @@ const ListCategory = () => {
               <Select
                 w='75px'
                 onChange={(event) => {
-                  console.log(event.target.value);
                   setLimit(Number(event.target.value));
                   setPage(Number(1));
-                  ListPaginated('47e3b328-de59-4725-a5d8-82b40b9b9a2a');
                 }}
               >
                 <option value='5'>5</option>
@@ -121,18 +118,6 @@ const ListCategory = () => {
                 </HStack>
               </Flex>
             </Th>
-            {/* (page * limit -(limit-1)) -> (page * limit) de count 
-            1*5 - (5-1) -> 1*5 de 32
-            5-4 -> 5 de 32
-            1 -> 5 
-
-            3*5 - (5-1) -> 3*5 de 32
-            15-4 -> 15 de 32
-            11 -> 15
-            
-            
-            
-            */}
           </Tr>
         </Tfoot>
       </Table>

@@ -45,13 +45,13 @@ export const CategoryProvider = ({ children, onClose }: CategoryProviderProps) =
       setIsLoading(true);
       await new CategoryService(axios)
         .create({ championshipId, description, members, name })
-        .then((newCategory: ICategory) => {
+        .then(() => {
           toast({
             title: categoryMessages['success'],
             status: 'success',
             isClosable: true,
           });
-
+          ListPaginated(championshipId);
           onClose!();
         })
         .catch(() => {
