@@ -1,6 +1,7 @@
 import { Box, Button, Center, Flex, Heading, SimpleGrid, useDisclosure } from '@chakra-ui/react';
 import { lazy, Suspense } from 'react';
 
+import { Loader } from '@/components/Loader';
 import ComponentModal from '@/components/modal';
 import { ChampionshipProvider } from '@/contexts/championship';
 
@@ -11,7 +12,7 @@ const Championship = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <Suspense fallback={<>loading</>}>
+    <Suspense fallback={<Loader title='Carregando ...' />}>
       <ChampionshipProvider onClose={onClose}>
         <Center>
           <Box
