@@ -40,6 +40,29 @@ export const CategoryProvider = ({ children, onClose }: CategoryProviderProps) =
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
 
+  const List = useCallback(async (id: string) => {
+    setIsLoading(true);
+    await new CategoryService(axios)
+      .listAll(id)
+      .then((categories) => {
+        setCategories(categories as ICategory[]);
+      })
+      .finally(() => setIsLoading(false));
+  }, []);
+
+  const ListPaginated = useCallback(
+    async (id: string) => {
+      setIsLoading(true);
+      await new CategoryService(axios)
+        .listAll(id, limit, page)
+        .then((paginatedCategories) => {
+          setCategoriesPages(paginatedCategories as IPageResponse<ICategory>);
+        })
+        .finally(() => setIsLoading(false));
+    },
+    [limit, page],
+  );
+
   const Create = useCallback(
     async ({ championshipId, name, description, members }: ICategoryDTO) => {
       setIsLoading(true);
@@ -63,30 +86,7 @@ export const CategoryProvider = ({ children, onClose }: CategoryProviderProps) =
         })
         .finally(() => setIsLoading(false));
     },
-    [onClose, toast],
-  );
-
-  const List = useCallback(async (id: string) => {
-    setIsLoading(true);
-    await new CategoryService(axios)
-      .listAll(id)
-      .then((categories) => {
-        setCategories(categories as ICategory[]);
-      })
-      .finally(() => setIsLoading(false));
-  }, []);
-
-  const ListPaginated = useCallback(
-    async (id: string) => {
-      setIsLoading(true);
-      await new CategoryService(axios)
-        .listAll(id, limit, page)
-        .then((paginatedCategories) => {
-          setCategoriesPages(paginatedCategories as IPageResponse<ICategory>);
-        })
-        .finally(() => setIsLoading(false));
-    },
-    [limit, page],
+    [toast, ListPaginated, onClose],
   );
 
   return (
