@@ -6,9 +6,9 @@ import { CategoryProvider } from '@/contexts/category';
 import { TicketProvider } from '@/contexts/ticket';
 
 import { Loader } from '@/components/Loader';
-import FormTicket from './components/form';
 
 const ListTicket = lazy(() => import('./components/list'));
+const FormTicket = lazy(() => import('./components/form'));
 
 const Ticket = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();

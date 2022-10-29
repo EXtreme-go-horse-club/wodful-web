@@ -1,6 +1,7 @@
-import { Box, Button, Center, Flex, Heading, SimpleGrid, useDisclosure } from '@chakra-ui/react';
+import { Box, Button, Center, Flex, Heading, useDisclosure } from '@chakra-ui/react';
 import { lazy, Suspense } from 'react';
 
+import { Loader } from '@/components/Loader';
 import ComponentModal from '@/components/modal';
 import { ChampionshipProvider } from '@/contexts/championship';
 
@@ -11,7 +12,7 @@ const Championship = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <Suspense fallback={<>loading</>}>
+    <Suspense fallback={<Loader title='Carregando ...' />}>
       <ChampionshipProvider onClose={onClose}>
         <Center>
           <Box
@@ -47,15 +48,7 @@ const Championship = () => {
               <FormChampionship onClose={onClose} />
             </ComponentModal>
 
-            <SimpleGrid
-              maxW='1200px'
-              w='100%'
-              color='gray.600'
-              columns={[null, 1, 2, 3]}
-              spacing='24px'
-            >
-              <ListChampionship />
-            </SimpleGrid>
+            <ListChampionship />
           </Box>
         </Center>
       </ChampionshipProvider>
