@@ -1,6 +1,8 @@
 import useCategoryData from '@/hooks/useCategoryData';
 import {
+  Button,
   Flex,
+  HStack,
   Select,
   Table,
   TableContainer,
@@ -11,17 +13,27 @@ import {
   Tfoot,
   Th,
   Thead,
+  Tooltip,
   Tr,
 } from '@chakra-ui/react';
 import { useEffect } from 'react';
-import { MoreHorizontal } from 'react-feather';
+import { ChevronLeft, ChevronRight, MoreHorizontal } from 'react-feather';
 
 const ListCategory = () => {
-  const { List, categories } = useCategoryData();
+  const { ListPaginated, categoriesPages, page, limit, setLimit, setPage, isLoading } =
+    useCategoryData();
 
   useEffect(() => {
-    List('27e21ddd-74f5-4b14-bf0b-59247717feff');
-  }, [List]);
+    ListPaginated('47e3b328-de59-4725-a5d8-82b40b9b9a2a');
+  }, [ListPaginated]);
+
+  const previousPage = () => {
+    setPage(page - 1);
+  };
+
+  const nextPage = () => {
+    setPage(page + 1);
+  };
 
   return (
     <TableContainer border='1px' borderColor='gray.100' fontSize='sm' color='#2D3748'>
@@ -38,7 +50,7 @@ const ListCategory = () => {
           </Tr>
         </Thead>
         <Tbody>
-          {categories?.map((category) => (
+          {categoriesPages.results?.map((category) => (
             <Tr key={category.id}>
               <Td p={6}>{category.name}</Td>
               <Td p={6}>
@@ -66,15 +78,45 @@ const ListCategory = () => {
                 Linhas por página
               </Flex>
 
-              <Select placeholder='1' w='75px'>
-                <option value='option1'>1</option>
-                <option value='option2'>2</option>
-                <option value='option3'>3</option>
+              <Select
+                w='75px'
+                onChange={(event) => {
+                  setLimit(Number(event.target.value));
+                  setPage(Number(1));
+                }}
+              >
+                <option value='5'>5</option>
+                <option value='10'>10</option>
+                <option value='20'>20</option>
               </Select>
             </Th>
             <Th></Th>
             <Th>
-              <Flex justify='end'>1-5 de 32</Flex>{' '}
+              <Flex justify='end'>
+                <HStack>
+                  <Text>
+                    {page * limit - (limit - 1)} - {page * limit} de {categoriesPages.count}
+                  </Text>
+                  <Tooltip label='Página anterior' placement='top' hasArrow>
+                    <Button
+                      disabled={!categoriesPages.previous || isLoading}
+                      variant='link'
+                      onClick={previousPage}
+                    >
+                      <ChevronLeft color={categoriesPages.previous ? 'black' : 'gray'} size={16} />
+                    </Button>
+                  </Tooltip>
+                  <Tooltip label='Próxima página' placement='top' hasArrow>
+                    <Button
+                      disabled={!categoriesPages.next || isLoading}
+                      variant='link'
+                      onClick={nextPage}
+                    >
+                      <ChevronRight color={categoriesPages.next ? 'black' : 'gray'} size={16} />
+                    </Button>
+                  </Tooltip>
+                </HStack>
+              </Flex>
             </Th>
           </Tr>
         </Tfoot>

@@ -61,7 +61,7 @@ export const WorkoutProvider = ({ children, onClose }: WorkoutProviderProps) => 
   const List = useCallback(async (id: string) => {
     setIsLoading(true);
     await new WorkoutService(axios)
-      .listAll(id)
+      .listByChampionship(id)
       .then((allWorkouts) => {
         setWorkouts(allWorkouts);
       })
