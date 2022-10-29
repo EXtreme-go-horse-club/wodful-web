@@ -15,6 +15,11 @@ export const categoryMessages = {
   error: 'Algo deu errado ao adicionar a categoria',
 };
 
+export const ticketMessages = {
+  success: 'Ticket adicionado com sucesso',
+  error: 'Algo deu errado ao adicionar o ticket',
+};
+
 export const workoutMessages = {
   success: 'Prova adicionada com sucesso',
   error: 'Algo deu errado ao adicionar a prova',
