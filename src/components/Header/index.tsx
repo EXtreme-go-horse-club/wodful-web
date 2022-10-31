@@ -1,15 +1,15 @@
+import useApp from '@/hooks/useApp';
+import useAuth from '@/hooks/useAuth';
 import { Box, Flex, Heading, Image, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import Logo from '../../assets/icons/wodful-white-logo.svg';
-import useAuth from '@/hooks/useAuth';
-import { default as useChampionshipData } from '@/hooks/useChampionshipData';
 
 export const Header = () => {
   const { signed, Logout } = useAuth();
   const { user } = useAuth();
   const profile = user?.name.substring(0, 1);
 
-  const { currentChampionship } = useChampionshipData();
-  console.log(currentChampionship);
+  const { currentChampionship } = useApp();
+
   return (
     <Flex
       px='40px'
@@ -28,7 +28,7 @@ export const Header = () => {
         </Heading>
       </Flex>
       <Flex>
-        <Heading color='whiteAlpha.900'>{currentChampionship?.name}x</Heading>
+        <Heading color='whiteAlpha.900'>{currentChampionship?.name}</Heading>
       </Flex>
 
       <Flex>
@@ -56,9 +56,7 @@ export const Header = () => {
               </MenuList>
             </Menu>
           </Flex>
-        ) : (
-          <Flex />
-        )}
+        ) : null}
       </Flex>
     </Flex>
   );

@@ -16,9 +16,10 @@ import { useEffect } from 'react';
 import { ChevronLeft, ChevronRight, MapPin } from 'react-feather';
 import { Link as ReactRouter } from 'react-router-dom';
 
+import { IChampionship } from '@/data/interfaces/championship';
+import useApp from '@/hooks/useApp';
 import { default as useChampionshipData } from '@/hooks/useChampionshipData';
 import { formatDate } from '@/utils/formatDate';
-import { IChampionship } from '@/data/interfaces/championship';
 
 const resultType: { [key: string]: string } = {
   SCORE: 'Pontuação',
@@ -26,16 +27,10 @@ const resultType: { [key: string]: string } = {
 };
 
 const ListChampionship = () => {
-  const {
-    ListPaginated,
-    championshipsPages,
-    page,
-    limit,
-    setPage,
-    isLoading,
-    setCurrentChampionship,
-    currentChampionship,
-  } = useChampionshipData();
+  const { ListPaginated, championshipsPages, page, limit, setPage, isLoading } =
+    useChampionshipData();
+
+  const { setCurrentChampionship } = useApp();
 
   useEffect(() => {
     ListPaginated();
@@ -66,7 +61,6 @@ const ListChampionship = () => {
               to={`${championship.id}/tickets`}
               onClick={() => {
                 setCurrentChampionship(championship as IChampionship);
-                console.log(championship);
               }}
             >
               <Stack h='100px' overflow='hidden'>
