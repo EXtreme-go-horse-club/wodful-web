@@ -15,10 +15,11 @@ import {
 import { useForm } from 'react-hook-form';
 
 interface CreateModalProps {
+  id: string;
   onClose: () => void;
 }
 
-const CreateCategory = ({ onClose }: CreateModalProps) => {
+const FormCategory = ({ onClose, id }: CreateModalProps) => {
   const { Create } = useCategoryData();
   const {
     register,
@@ -28,7 +29,7 @@ const CreateCategory = ({ onClose }: CreateModalProps) => {
     mode: 'onChange',
   });
   function onSubmit(category: ICategoryDTO) {
-    category.championshipId = '47e3b328-de59-4725-a5d8-82b40b9b9a2a';
+    category.championshipId = id;
     category.members = Number(category.members);
     Create(category);
   }
@@ -97,4 +98,4 @@ const CreateCategory = ({ onClose }: CreateModalProps) => {
   );
 };
 
-export default CreateCategory;
+export default FormCategory;

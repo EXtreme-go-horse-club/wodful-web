@@ -3,11 +3,13 @@ import ComponentModal from '@/components/modal';
 import { CategoryProvider } from '@/contexts/category';
 import { Box, Button, HStack, Text, useDisclosure } from '@chakra-ui/react';
 import { lazy, Suspense } from 'react';
-import CreateCategory from './components/form';
+import { useParams } from 'react-router-dom';
+import FormCategory from './components/form';
 
 const ListCategory = lazy(() => import('./components/list'));
 
 const Category = () => {
+  const { id } = useParams();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -23,10 +25,10 @@ const Category = () => {
             </Button>
           </HStack>
           <ComponentModal modalHeader='Criar categoria' size='lg' isOpen={isOpen} onClose={onClose}>
-            <CreateCategory onClose={onClose} />
+            <FormCategory id={id as string} onClose={onClose} />
           </ComponentModal>
           <Box w='100%' marginTop={6}>
-            <ListCategory />
+            <ListCategory id={id as string} />
           </Box>
         </Box>
       </CategoryProvider>

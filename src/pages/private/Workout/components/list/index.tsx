@@ -1,6 +1,8 @@
 import useWorkoutData from '@/hooks/useWorkoutData';
 import {
+  Button,
   Flex,
+  HStack,
   Select,
   Table,
   TableContainer,
@@ -11,16 +13,30 @@ import {
   Tfoot,
   Th,
   Thead,
+  Tooltip,
   Tr,
 } from '@chakra-ui/react';
 import { useEffect } from 'react';
-import { MoreHorizontal } from 'react-feather';
+import { ChevronLeft, ChevronRight, MoreHorizontal } from 'react-feather';
 
-const ListWorkout = () => {
-  const { List, workouts } = useWorkoutData();
+interface IListWorkout {
+  id: string;
+}
+
+const ListWorkout = ({ id }: IListWorkout) => {
+  const { ListPaginated, workoutsPages, page, limit, setLimit, setPage, isLoading } =
+    useWorkoutData();
   useEffect(() => {
-    List('47e3b328-de59-4725-a5d8-82b40b9b9a2a');
-  }, [List]);
+    ListPaginated(id);
+  }, [ListPaginated, id]);
+
+  const previousPage = () => {
+    setPage(page - 1);
+  };
+
+  const nextPage = () => {
+    setPage(page + 1);
+  };
 
   return (
     <TableContainer border='1px' borderColor='gray.100' fontSize='sm' color='#2D3748'>
@@ -40,7 +56,7 @@ const ListWorkout = () => {
           </Tr>
         </Thead>
         <Tbody>
-          {workouts?.map((workout) => (
+          {workoutsPages.results?.map((workout) => (
             <Tr key={workout.id}>
               <Td p={6}>{workout.name}</Td>
               <Td p={6}>
@@ -69,15 +85,46 @@ const ListWorkout = () => {
                 Linhas por página
               </Flex>
 
-              <Select placeholder='1' w='75px'>
-                <option value='option1'>1</option>
-                <option value='option2'>2</option>
-                <option value='option3'>3</option>
+              <Select
+                w='75px'
+                onChange={(event) => {
+                  setLimit(Number(event.target.value));
+                  setPage(Number(1));
+                }}
+              >
+                <option value='5'>5</option>
+                <option value='10'>10</option>
+                <option value='20'>20</option>
               </Select>
             </Th>
             <Th></Th>
+            <Th></Th>
             <Th>
-              <Flex justify='end'>1-5 de 32</Flex>{' '}
+              <Flex justify='end'>
+                <HStack>
+                  <Text>
+                    {page * limit - (limit - 1)} - {page * limit} de {workoutsPages.count}
+                  </Text>
+                  <Tooltip label='Página anterior' placement='top' hasArrow>
+                    <Button
+                      disabled={!workoutsPages.previous || isLoading}
+                      variant='link'
+                      onClick={previousPage}
+                    >
+                      <ChevronLeft color={workoutsPages.previous ? 'black' : 'gray'} size={16} />
+                    </Button>
+                  </Tooltip>
+                  <Tooltip label='Próxima página' placement='top' hasArrow>
+                    <Button
+                      disabled={!workoutsPages.next || isLoading}
+                      variant='link'
+                      onClick={nextPage}
+                    >
+                      <ChevronRight color={workoutsPages.next ? 'black' : 'gray'} size={16} />
+                    </Button>
+                  </Tooltip>
+                </HStack>
+              </Flex>
             </Th>
           </Tr>
         </Tfoot>
