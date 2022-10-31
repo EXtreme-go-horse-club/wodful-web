@@ -18,6 +18,7 @@ import { Link as ReactRouter } from 'react-router-dom';
 
 import { default as useChampionshipData } from '@/hooks/useChampionshipData';
 import { formatDate } from '@/utils/formatDate';
+import { IChampionship } from '@/data/interfaces/championship';
 
 const resultType: { [key: string]: string } = {
   SCORE: 'Pontuação',
@@ -25,8 +26,16 @@ const resultType: { [key: string]: string } = {
 };
 
 const ListChampionship = () => {
-  const { ListPaginated, championshipsPages, page, limit, setPage, isLoading } =
-    useChampionshipData();
+  const {
+    ListPaginated,
+    championshipsPages,
+    page,
+    limit,
+    setPage,
+    isLoading,
+    setCurrentChampionship,
+    currentChampionship,
+  } = useChampionshipData();
 
   useEffect(() => {
     ListPaginated();
@@ -52,7 +61,14 @@ const ListChampionship = () => {
             key={championship.id}
             cursor='pointer'
           >
-            <LinkOverlay as={ReactRouter} to={`${championship.id}/tickets`}>
+            <LinkOverlay
+              as={ReactRouter}
+              to={`${championship.id}/tickets`}
+              onClick={() => {
+                setCurrentChampionship(championship as IChampionship);
+                console.log(championship);
+              }}
+            >
               <Stack h='100px' overflow='hidden'>
                 <Image
                   borderTopRadius='lg'

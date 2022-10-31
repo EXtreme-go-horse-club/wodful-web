@@ -1,9 +1,11 @@
+import { Header } from '@/components/Header';
 import Login from '@/pages/public/Login';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 const PublicRoutes = () => {
   return (
     <BrowserRouter>
+      <Header />
       <Routes>
         <Route path='/login' element={<Login />} />
 

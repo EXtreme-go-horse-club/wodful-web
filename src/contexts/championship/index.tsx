@@ -8,12 +8,14 @@ import { createContext, useCallback, useState } from 'react';
 
 interface ChampionshipProps {
   children: React.ReactNode;
-  onClose: () => void;
+  onClose?: () => void;
 }
 
 export interface ChampionshipContextData {
   championships: IChampionship[];
   championshipsPages: IPageResponse<IChampionship>;
+  currentChampionship: IChampionship;
+  setCurrentChampionship: (championship: IChampionship) => void;
   isLoading: boolean;
   isError: boolean;
   page: number;
@@ -38,6 +40,9 @@ const axios = new AxiosAdapter();
 
 export const ChampionshipProvider = ({ children, onClose }: ChampionshipProps) => {
   const toast = useToast();
+  const [currentChampionship, setCurrentChampionship] = useState<IChampionship>(
+    {} as IChampionship,
+  );
   const [championshipsPages, setChampionshipsPages] = useState<IPageResponse<IChampionship>>(
     {} as IPageResponse<IChampionship>,
   );
@@ -109,6 +114,8 @@ export const ChampionshipProvider = ({ children, onClose }: ChampionshipProps) =
       value={{
         championships,
         championshipsPages,
+        currentChampionship,
+        setCurrentChampionship,
         isLoading,
         isError,
         limit,

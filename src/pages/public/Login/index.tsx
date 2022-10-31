@@ -14,7 +14,6 @@ import {
 } from '@chakra-ui/react';
 
 import wodfulBlackLogo from '@/assets/icons/wodful-black-logo.svg';
-import wodfulWhiteLogo from '@/assets/icons/wodful-white-logo.svg';
 import { useState } from 'react';
 
 const Login = () => {
@@ -30,15 +29,6 @@ const Login = () => {
 
   return (
     <Box>
-      <Flex h='72px' bg='gray.800' color='white'>
-        <Center pl='10'>
-          <Image boxSize='40px' src={wodfulWhiteLogo} alt='wodfull white logo' />
-          <Heading as='h5' size='sm'>
-            Wodful
-          </Heading>
-        </Center>
-      </Flex>
-
       <Center h='90vh'>
         <Center maxW='xl' maxH='md' boxShadow='md' p='6' rounded='md'>
           <Stack gap='4' align='center' justify='center'>
