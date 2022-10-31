@@ -18,14 +18,17 @@ import {
 } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import { ChevronLeft, ChevronRight, MoreHorizontal } from 'react-feather';
+interface IListCategory {
+  id: string;
+}
 
-const ListCategory = () => {
+const ListCategory = ({ id }: IListCategory) => {
   const { ListPaginated, categoriesPages, page, limit, setLimit, setPage, isLoading } =
     useCategoryData();
 
   useEffect(() => {
-    ListPaginated('47e3b328-de59-4725-a5d8-82b40b9b9a2a');
-  }, [ListPaginated]);
+    ListPaginated(id);
+  }, [ListPaginated, id]);
 
   const previousPage = () => {
     setPage(page - 1);

@@ -17,15 +17,16 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 interface CreateModalProps {
+  id: string;
   onClose: () => void;
 }
 
-const FormWorkout = ({ onClose }: CreateModalProps) => {
+const FormWorkout = ({ onClose, id }: CreateModalProps) => {
   const { Create } = useWorkoutData();
   const { List, categories } = useCategoryData();
   useEffect(() => {
-    List('47e3b328-de59-4725-a5d8-82b40b9b9a2a');
-  }, [List]);
+    List(id);
+  }, [List, id]);
   const {
     register,
     handleSubmit,
@@ -34,7 +35,7 @@ const FormWorkout = ({ onClose }: CreateModalProps) => {
     mode: 'onChange',
   });
   function onSubmit(workout: IWorkoutDTO) {
-    workout.championshipId = '47e3b328-de59-4725-a5d8-82b40b9b9a2a';
+    workout.championshipId = id;
     Create(workout);
   }
   return (

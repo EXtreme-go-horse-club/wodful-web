@@ -1,9 +1,10 @@
 import { HttpClient, HttpStatusCode } from '@/data/interfaces/http';
+import { IPageResponse } from '@/data/interfaces/pageResponse';
 import { IWorkout, IWorkoutDTO } from '@/data/interfaces/workout';
 
 export class WorkoutService {
   constructor(
-    private readonly httpClient: HttpClient<IWorkout[] | IWorkout>,
+    private readonly httpClient: HttpClient<IPageResponse<IWorkout> | IWorkout[] | IWorkout>,
     private readonly path = '/workouts/',
   ) {}
 
@@ -28,15 +29,23 @@ export class WorkoutService {
     }
   }
 
-  async listByChampionship(id: string): Promise<IWorkout[]> {
+  async listByChampionship(
+    id: string,
+    limit?: number,
+    page?: number,
+  ): Promise<IPageResponse<IWorkout> | IWorkout[]> {
+    let url = `championships/${id}${this.path}`;
+
+    if (limit !== undefined && page !== undefined) url = `${url}?limit=${limit}&page=${page}`;
+
     const { statusCode, body } = await this.httpClient.request({
       method: 'get',
-      url: `championships/${id}/workouts`,
+      url: url,
     });
 
     switch (statusCode) {
       case HttpStatusCode.ok:
-        return body! as IWorkout[];
+        return body! as IPageResponse<IWorkout> | IWorkout[];
       default:
         throw new Error();
     }
