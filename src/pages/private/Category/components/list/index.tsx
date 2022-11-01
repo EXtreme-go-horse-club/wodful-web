@@ -16,19 +16,22 @@ import {
   Tooltip,
   Tr,
 } from '@chakra-ui/react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight, MoreHorizontal } from 'react-feather';
 interface IListCategory {
   id: string;
 }
 
 const ListCategory = ({ id }: IListCategory) => {
+  const [currentTotal, setCurrentTotal] = useState<number>(0);
+
   const { ListPaginated, categoriesPages, page, limit, setLimit, setPage, isLoading } =
     useCategoryData();
 
   useEffect(() => {
     ListPaginated(id);
-  }, [ListPaginated, id]);
+    setCurrentTotal(categoriesPages.results?.length);
+  }, [ListPaginated, categoriesPages.results?.length, id]);
 
   const previousPage = () => {
     setPage(page - 1);
@@ -97,9 +100,18 @@ const ListCategory = ({ id }: IListCategory) => {
             <Th>
               <Flex justify='end'>
                 <HStack>
-                  <Text>
-                    {page * limit - (limit - 1)} - {page * limit} de {categoriesPages.count}
-                  </Text>
+                  {page === 1 && (
+                    <Text>
+                      {page * limit - (limit - 1)} - {page * limit} de {categoriesPages.count}
+                    </Text>
+                  )}
+
+                  {page !== 1 && (
+                    <Text>
+                      {page * limit - (limit - 1)} - {page * limit - limit + currentTotal} de{' '}
+                      {categoriesPages.count}
+                    </Text>
+                  )}
                   <Tooltip label='Página anterior' placement='top' hasArrow>
                     <Button
                       disabled={!categoriesPages.previous || isLoading}
