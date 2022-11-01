@@ -5,13 +5,15 @@ import { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import Logo from '../../assets/icons/wodful-white-logo.svg';
 
+const NO_TITLE_ROUTES = ['/championships', '/login'];
+
 export const Header = () => {
   const { signed, Logout } = useAuth();
   const { user } = useAuth();
   const { pathname } = useLocation();
   const { currentChampionship } = useApp();
 
-  const isChampionshipRoute = useMemo(() => pathname === '/championships', [pathname]);
+  const untitledRoutes = useMemo(() => NO_TITLE_ROUTES.includes(pathname), [pathname]);
   const profile = user?.name.substring(0, 1);
 
   return (
@@ -20,7 +22,7 @@ export const Header = () => {
       py='15px'
       width='full'
       bg='gray.800'
-      alignItems='flex-end'
+      alignItems='center'
       justifyContent='space-between'
     >
       <Flex alignItems='flex-end'>
@@ -32,8 +34,8 @@ export const Header = () => {
         </Heading>
       </Flex>
       <Flex>
-        <Heading color='whiteAlpha.900'>
-          {!isChampionshipRoute ? currentChampionship?.name : null}
+        <Heading color='whiteAlpha.900' fontSize={20} fontWeight='500' textTransform='capitalize'>
+          {!untitledRoutes ? currentChampionship?.name : null}
         </Heading>
       </Flex>
 
