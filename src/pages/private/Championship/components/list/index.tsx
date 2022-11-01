@@ -12,7 +12,7 @@ import {
   Tooltip,
   VStack,
 } from '@chakra-ui/react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight, MapPin } from 'react-feather';
 import { Link as ReactRouter } from 'react-router-dom';
 
@@ -25,12 +25,14 @@ const resultType: { [key: string]: string } = {
 };
 
 const ListChampionship = () => {
+  const [currentTotal, setCurrentTotal] = useState<number>(0);
   const { ListPaginated, championshipsPages, page, limit, setPage, isLoading } =
     useChampionshipData();
 
   useEffect(() => {
     ListPaginated();
-  }, [ListPaginated]);
+    setCurrentTotal(championshipsPages.results?.length);
+  }, [ListPaginated, championshipsPages.results?.length]);
 
   const previousPage = () => {
     setPage(page - 1);
@@ -104,9 +106,18 @@ const ListChampionship = () => {
                 <ChevronLeft color={championshipsPages.previous ? 'black' : 'gray'} size={16} />
               </Button>
             </Tooltip>
-            <Text>
-              {page * limit - (limit - 1)} - {page * limit} de {championshipsPages.count}
-            </Text>
+            {page === 1 && (
+              <Text>
+                {page * limit - (limit - 1)} - {page * limit} de {championshipsPages.count}
+              </Text>
+            )}
+
+            {page !== 1 && (
+              <Text>
+                {page * limit - (limit - 1)} - {page * limit - limit + currentTotal} de{' '}
+                {championshipsPages.count}
+              </Text>
+            )}
 
             <Tooltip label='Próxima página' placement='top' hasArrow>
               <Button

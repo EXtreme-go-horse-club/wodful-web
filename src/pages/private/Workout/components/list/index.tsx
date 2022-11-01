@@ -16,7 +16,7 @@ import {
   Tooltip,
   Tr,
 } from '@chakra-ui/react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight, MoreHorizontal } from 'react-feather';
 
 interface IListWorkout {
@@ -24,11 +24,15 @@ interface IListWorkout {
 }
 
 const ListWorkout = ({ id }: IListWorkout) => {
+  const [currentTotal, setCurrentTotal] = useState<number>(0);
+
   const { ListPaginated, workoutsPages, page, limit, setLimit, setPage, isLoading } =
     useWorkoutData();
+
   useEffect(() => {
     ListPaginated(id);
-  }, [ListPaginated, id]);
+    setCurrentTotal(workoutsPages.results?.length);
+  }, [ListPaginated, id, workoutsPages.results?.length]);
 
   const previousPage = () => {
     setPage(page - 1);
@@ -102,9 +106,18 @@ const ListWorkout = ({ id }: IListWorkout) => {
             <Th>
               <Flex justify='end'>
                 <HStack>
-                  <Text>
-                    {page * limit - (limit - 1)} - {page * limit} de {workoutsPages.count}
-                  </Text>
+                  {page === 1 && (
+                    <Text>
+                      {page * limit - (limit - 1)} - {page * limit} de {workoutsPages.count}
+                    </Text>
+                  )}
+
+                  {page !== 1 && (
+                    <Text>
+                      {page * limit - (limit - 1)} - {page * limit - limit + currentTotal} de{' '}
+                      {workoutsPages.count}
+                    </Text>
+                  )}
                   <Tooltip label='Página anterior' placement='top' hasArrow>
                     <Button
                       disabled={!workoutsPages.previous || isLoading}

@@ -17,11 +17,13 @@ import {
   Tooltip,
   Tr,
 } from '@chakra-ui/react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight, MoreHorizontal } from 'react-feather';
 import { useParams } from 'react-router-dom';
 
 const ListTicket = () => {
+  const [currentTotal, setCurrentTotal] = useState<number>(0);
+
   const { ListPaginated, ticketsPages, page, limit, setLimit, setPage, isLoading } =
     useTicketData();
 
@@ -29,7 +31,8 @@ const ListTicket = () => {
 
   useEffect(() => {
     ListPaginated(id as string);
-  }, [ListPaginated, id]);
+    setCurrentTotal(ticketsPages.results?.length);
+  }, [ListPaginated, id, ticketsPages.results?.length]);
 
   const previousPage = () => {
     setPage(page - 1);
@@ -92,7 +95,6 @@ const ListTicket = () => {
                 onChange={(event) => {
                   setLimit(Number(event.target.value));
                   setPage(Number(1));
-                  ListPaginated(id as string);
                 }}
               >
                 <option value='5'>5</option>
@@ -101,12 +103,24 @@ const ListTicket = () => {
               </Select>
             </Th>
             <Th></Th>
-            <Th>
+            <Th></Th>
+            <Th></Th>
+            <Th></Th>
+            <Th maxW='100px'>
               <Flex justify='end'>
                 <HStack>
-                  <Text>
-                    {page * limit - (limit - 1)} - {page * limit} de {ticketsPages.count}
-                  </Text>
+                  {page === 1 && (
+                    <Text>
+                      {page * limit - (limit - 1)} - {page * limit} de {ticketsPages.count}
+                    </Text>
+                  )}
+
+                  {page !== 1 && (
+                    <Text>
+                      {page * limit - (limit - 1)} - {page * limit - limit + currentTotal} de{' '}
+                      {ticketsPages.count}
+                    </Text>
+                  )}
                   <Tooltip label='Página anterior' placement='top' hasArrow>
                     <Button
                       disabled={!ticketsPages.previous || isLoading}
