@@ -16,6 +16,8 @@ import { useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight, MapPin } from 'react-feather';
 import { Link as ReactRouter } from 'react-router-dom';
 
+import { IChampionship } from '@/data/interfaces/championship';
+import useApp from '@/hooks/useApp';
 import { default as useChampionshipData } from '@/hooks/useChampionshipData';
 import { formatDate } from '@/utils/formatDate';
 
@@ -28,6 +30,8 @@ const ListChampionship = () => {
   const [currentTotal, setCurrentTotal] = useState<number>(0);
   const { ListPaginated, championshipsPages, page, limit, setPage, isLoading } =
     useChampionshipData();
+
+  const { setCurrentChampionship } = useApp();
 
   useEffect(() => {
     ListPaginated();
@@ -54,7 +58,13 @@ const ListChampionship = () => {
             key={championship.id}
             cursor='pointer'
           >
-            <LinkOverlay as={ReactRouter} to={`${championship.id}/tickets`}>
+            <LinkOverlay
+              as={ReactRouter}
+              to={`${championship.id}/tickets`}
+              onClick={() => {
+                setCurrentChampionship(championship as IChampionship);
+              }}
+            >
               <Stack h='100px' overflow='hidden'>
                 <Image
                   borderTopRadius='lg'

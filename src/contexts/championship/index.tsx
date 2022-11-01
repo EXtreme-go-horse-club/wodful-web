@@ -8,7 +8,7 @@ import { createContext, useCallback, useState } from 'react';
 
 interface ChampionshipProps {
   children: React.ReactNode;
-  onClose: () => void;
+  onClose?: () => void;
 }
 
 export interface ChampionshipContextData {
@@ -38,6 +38,7 @@ const axios = new AxiosAdapter();
 
 export const ChampionshipProvider = ({ children, onClose }: ChampionshipProps) => {
   const toast = useToast();
+
   const [championshipsPages, setChampionshipsPages] = useState<IPageResponse<IChampionship>>(
     {} as IPageResponse<IChampionship>,
   );
