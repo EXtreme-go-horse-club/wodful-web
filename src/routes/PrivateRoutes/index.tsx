@@ -4,6 +4,7 @@ import { Header } from '@/components/Header';
 import { Navbar } from '@/components/Navbar';
 import Category from '@/pages/private/Category';
 import Championship from '@/pages/private/Championship';
+import Participants from '@/pages/private/Participants';
 import Ticket from '@/pages/private/Ticket';
 import Workout from '@/pages/private/Workout';
 
@@ -19,6 +20,7 @@ const PrivateRoutes = () => {
         <Route path='/login' element={<Navigate to='/championships' replace />} />
 
         <Route path='/championships/:id/' element={<Navbar />}>
+          <Route path='/championships/:id/participants' element={<Participants />} />
           <Route path='/championships/:id/categories' element={<Category />} />
           <Route path='/championships/:id/tickets' element={<Ticket />} />
           <Route path='/championships/:id/workouts' element={<Workout />} />
