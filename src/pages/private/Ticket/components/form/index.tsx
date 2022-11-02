@@ -18,11 +18,7 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 
-interface CreateModalProps {
-  onClose: () => void;
-}
-
-const FormTicket = ({ onClose }: CreateModalProps) => {
+const FormTicket = () => {
   const { List, categories } = useCategoryData();
   const { Create } = useTicketData();
   const { id } = useParams();
@@ -145,9 +141,6 @@ const FormTicket = ({ onClose }: CreateModalProps) => {
         <ButtonGroup flexDirection='column' alignItems='end' gap={6} w='100%'>
           <Button colorScheme='teal' w='100%' mt={4} type='submit' disabled={!isValid}>
             Adicionar
-          </Button>
-          <Button variant='outline' w='100%' onClick={onClose}>
-            Fechar
           </Button>
         </ButtonGroup>
       </VStack>

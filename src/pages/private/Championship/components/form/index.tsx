@@ -15,11 +15,7 @@ import {
 
 import { SubmitHandler, useForm } from 'react-hook-form';
 
-interface CreateModalProps {
-  onClose: () => void;
-}
-
-const FormChampionship = ({ onClose }: CreateModalProps) => {
+const FormChampionship = () => {
   const { Create } = useChampionshipData();
 
   const {
@@ -37,7 +33,7 @@ const FormChampionship = ({ onClose }: CreateModalProps) => {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <VStack pt={4} pb={4} align='start' spacing='24px'>
+        <VStack align='start' pb={4} spacing='24px'>
           <VStack align='start' w='100%' flexDirection='column' gap='24px'>
             <FormControl isInvalid={!!errors.name}>
               <FormLabel m={0}>Nome</FormLabel>
@@ -130,9 +126,6 @@ const FormChampionship = ({ onClose }: CreateModalProps) => {
             <ButtonGroup flexDirection='column' alignItems='end' gap='12px' w='100%'>
               <Button w='100%' isLoading={isSubmitting} colorScheme='teal' type='submit'>
                 Adicionar
-              </Button>
-              <Button w='100%' variant='outline' onClick={onClose}>
-                Fechar
               </Button>
             </ButtonGroup>
           </VStack>

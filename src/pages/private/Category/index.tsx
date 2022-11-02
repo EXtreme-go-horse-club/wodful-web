@@ -1,5 +1,5 @@
 import { Loader } from '@/components/Loader';
-import ComponentModal from '@/components/modal';
+import ComponentModal from '@/components/Modal';
 import { CategoryProvider } from '@/contexts/category';
 import { Box, Button, HStack, Text, useDisclosure } from '@chakra-ui/react';
 import { lazy, Suspense } from 'react';
@@ -25,7 +25,7 @@ const Category = () => {
             </Button>
           </HStack>
           <ComponentModal modalHeader='Criar categoria' size='lg' isOpen={isOpen} onClose={onClose}>
-            <FormCategory id={id as string} onClose={onClose} />
+            <FormCategory id={id as string} />
           </ComponentModal>
           <Box w='100%' marginTop={6}>
             <ListCategory id={id as string} />

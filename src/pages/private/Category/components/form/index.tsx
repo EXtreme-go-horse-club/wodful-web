@@ -16,10 +16,9 @@ import { useForm } from 'react-hook-form';
 
 interface CreateModalProps {
   id: string;
-  onClose: () => void;
 }
 
-const FormCategory = ({ onClose, id }: CreateModalProps) => {
+const FormCategory = ({ id }: CreateModalProps) => {
   const { Create } = useCategoryData();
   const {
     register,
@@ -35,7 +34,7 @@ const FormCategory = ({ onClose, id }: CreateModalProps) => {
   }
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <VStack align='start' w='100%' spacing={6} pt={6} pb={6} flexDirection='column'>
+      <VStack align='start' w='100%' spacing={6} pb={4} flexDirection='column'>
         <FormControl isInvalid={!!errors.name}>
           <FormLabel htmlFor='name' m={0}>
             Nome
@@ -88,9 +87,6 @@ const FormCategory = ({ onClose, id }: CreateModalProps) => {
         <ButtonGroup flexDirection='column' alignItems='end' gap={6} w='100%'>
           <Button colorScheme='teal' w='100%' mt={4} type='submit' disabled={!isValid}>
             Adicionar
-          </Button>
-          <Button variant='outline' w='100%' onClick={onClose}>
-            Fechar
           </Button>
         </ButtonGroup>
       </VStack>
