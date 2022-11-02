@@ -2,7 +2,7 @@ import { Box, Button, Center, Flex, Heading, useDisclosure } from '@chakra-ui/re
 import { lazy, Suspense } from 'react';
 
 import { Loader } from '@/components/Loader';
-import ComponentModal from '@/components/modal';
+import ComponentModal from '@/components/Modal';
 import { ChampionshipProvider } from '@/contexts/championship';
 
 const ListChampionship = lazy(() => import('./components/list'));
@@ -45,7 +45,7 @@ const Championship = () => {
               isOpen={isOpen}
               onClose={onClose}
             >
-              <FormChampionship onClose={onClose} />
+              <FormChampionship />
             </ComponentModal>
 
             <ListChampionship />

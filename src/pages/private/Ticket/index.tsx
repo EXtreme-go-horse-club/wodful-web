@@ -1,7 +1,7 @@
 import { Box, Button, HStack, Text, useDisclosure } from '@chakra-ui/react';
 import { lazy, Suspense } from 'react';
 
-import ComponentModal from '@/components/modal';
+import ComponentModal from '@/components/Modal';
 import { CategoryProvider } from '@/contexts/category';
 import { TicketProvider } from '@/contexts/ticket';
 
@@ -32,7 +32,7 @@ const Ticket = () => {
               isOpen={isOpen}
               onClose={onClose}
             >
-              <FormTicket onClose={onClose} />
+              <FormTicket />
             </ComponentModal>
             <Box w='100%' marginTop={6}>
               <ListTicket />

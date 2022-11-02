@@ -12,7 +12,7 @@ interface CreateChampionshipProps {
   modalHeader: string;
   children: React.ReactNode;
   size: 'sm' | 'md' | 'lg' | 'xl';
-  onClose: () => void;
+  onClose?: () => void;
 }
 
 const ComponentModal = ({
@@ -24,7 +24,7 @@ const ComponentModal = ({
 }: CreateChampionshipProps) => {
   return (
     <>
-      <Modal size={size} isOpen={isOpen} onClose={onClose}>
+      <Modal size={size} isOpen={isOpen} onClose={onClose as () => void}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>{modalHeader}</ModalHeader>
