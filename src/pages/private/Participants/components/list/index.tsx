@@ -1,24 +1,19 @@
 import {
   Avatar,
-  Button,
   Flex,
-  HStack,
-  Select,
   Table,
   TableContainer,
   Tbody,
   Td,
   Text,
-  Tfoot,
   Th,
   Thead,
-  Tooltip,
   Tr,
   Wrap,
   WrapItem,
 } from '@chakra-ui/react';
 import { useState } from 'react';
-import { ChevronLeft, ChevronRight, MoreHorizontal } from 'react-feather';
+import { MoreHorizontal } from 'react-feather';
 import { mockData } from './mockdata';
 
 const ListParticipants = () => {
@@ -64,7 +59,7 @@ const ListParticipants = () => {
             </Tr>
           ))}
         </Tbody>
-        <Tfoot>
+        {/* <Tfoot>
           <Tr>
             <Th display='flex' flexDirection='row'>
               <Flex align='center' mr={2}>
@@ -124,7 +119,7 @@ const ListParticipants = () => {
               </Flex>
             </Th>
           </Tr>
-        </Tfoot>
+        </Tfoot> */}
       </Table>
     </TableContainer>
   );
