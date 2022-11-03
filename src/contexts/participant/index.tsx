@@ -16,7 +16,7 @@ export interface ParticipantContextData {
   setLimit: (value: number) => void;
   page: number;
   setPage: (value: number) => void;
-  ListPaginated: (id: string, name: string) => Promise<void>;
+  ListPaginated: (id: string | null, name?: string) => Promise<void>;
 }
 
 const ParticipantContext = createContext({} as ParticipantContextData);
@@ -33,7 +33,7 @@ export const ParticipantProvider = ({ children }: TicketProviderProps) => {
   const [isError, setIsError] = useState<boolean>(false);
 
   const ListPaginated = useCallback(
-    async (id: string, name: string) => {
+    async (id: string | null, name?: string) => {
       setIsLoading(true);
       await new ParticipantsService(axios)
         .listAll(id, limit, page, name)

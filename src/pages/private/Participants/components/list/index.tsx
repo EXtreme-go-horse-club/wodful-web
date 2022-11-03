@@ -1,23 +1,52 @@
+import useParticipantData from '@/hooks/useParticipantData';
 import {
   Avatar,
+  Button,
   Flex,
+  HStack,
+  Select,
   Table,
   TableContainer,
   Tbody,
   Td,
   Text,
+  Tfoot,
   Th,
   Thead,
+  Tooltip,
   Tr,
   Wrap,
   WrapItem,
 } from '@chakra-ui/react';
-import { useState } from 'react';
-import { MoreHorizontal } from 'react-feather';
-import { mockData } from './mockdata';
+import { useEffect, useState } from 'react';
+import { ChevronLeft, ChevronRight, MoreHorizontal } from 'react-feather';
+import { useParams } from 'react-router-dom';
 
-const ListParticipants = () => {
-  const [limit, setLimit] = useState();
+interface listParticipants {
+  participantName: string | null;
+}
+
+const ListParticipants = ({ participantName }: listParticipants) => {
+  const [currentTotal, setCurrentTotal] = useState<number>(0);
+
+  const { ListPaginated, participantsPages, page, limit, setLimit, setPage, isLoading } =
+    useParticipantData();
+
+  const { id } = useParams();
+
+  useEffect(() => {
+    ListPaginated(id as string, participantName as string);
+
+    setCurrentTotal(participantsPages.results?.length);
+  }, [ListPaginated, id, participantName, participantsPages.results?.length]);
+
+  const previousPage = () => {
+    setPage(page - 1);
+  };
+
+  const nextPage = () => {
+    setPage(page + 1);
+  };
 
   return (
     <TableContainer border='1px' borderColor='gray.100' fontSize='sm' color='#2D3748'>
@@ -37,19 +66,19 @@ const ListParticipants = () => {
           </Tr>
         </Thead>
         <Tbody>
-          {mockData.map((participant) => (
+          {participantsPages.results?.map((participant) => (
             <Tr key={participant.id}>
               <Td p={6}>
                 <Wrap>
                   <WrapItem display='flex' justifyContent='center' alignItems='center' gap='16px'>
-                    <Avatar name={participant.participantName} />
-                    <Text>{participant.participantName}</Text>
+                    <Avatar name={participant.name} />
+                    <Text>{participant.name}</Text>
                   </WrapItem>
                 </Wrap>
               </Td>
 
               <Td p={6}>{participant.nickname}</Td>
-              <Td p={6}>{participant.category}</Td>
+              <Td p={6}>{participant.category.name}</Td>
 
               <Td p={6}>
                 <Flex justify='end'>
@@ -59,7 +88,7 @@ const ListParticipants = () => {
             </Tr>
           ))}
         </Tbody>
-        {/* <Tfoot>
+        <Tfoot>
           <Tr>
             <Th display='flex' flexDirection='row'>
               <Flex align='center' mr={2}>
@@ -80,46 +109,47 @@ const ListParticipants = () => {
             </Th>
             <Th></Th>
             <Th></Th>
-            <Th></Th>
-            <Th></Th>
             <Th maxW='100px'>
               <Flex justify='end'>
                 <HStack>
                   {page === 1 && (
                     <Text>
-                      {page * limit - (limit - 1)} - {page * limit} de {ticketsPages.count}
+                      {page * limit - (limit - 1)} - {page * limit} de {participantsPages.count}
                     </Text>
                   )}
 
                   {page !== 1 && (
                     <Text>
                       {page * limit - (limit - 1)} - {page * limit - limit + currentTotal} de{' '}
-                      {ticketsPages.count}
+                      {participantsPages.count}
                     </Text>
                   )}
                   <Tooltip label='Página anterior' placement='top' hasArrow>
                     <Button
-                      disabled={!ticketsPages.previous || isLoading}
+                      disabled={!participantsPages.previous || isLoading}
                       variant='link'
                       onClick={previousPage}
                     >
-                      <ChevronLeft color={ticketsPages.previous ? 'black' : 'gray'} size={16} />
+                      <ChevronLeft
+                        color={participantsPages.previous ? 'black' : 'gray'}
+                        size={16}
+                      />
                     </Button>
                   </Tooltip>
                   <Tooltip label='Próxima página' placement='top' hasArrow>
                     <Button
-                      disabled={!ticketsPages.next || isLoading}
+                      disabled={!participantsPages.next || isLoading}
                       variant='link'
                       onClick={nextPage}
                     >
-                      <ChevronRight color={ticketsPages.next ? 'black' : 'gray'} size={16} />
+                      <ChevronRight color={participantsPages.next ? 'black' : 'gray'} size={16} />
                     </Button>
                   </Tooltip>
                 </HStack>
               </Flex>
             </Th>
           </Tr>
-        </Tfoot> */}
+        </Tfoot>
       </Table>
     </TableContainer>
   );

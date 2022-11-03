@@ -9,16 +9,18 @@ export class ParticipantsService {
   ) {}
 
   async listAll(
-    id: string,
+    id: string | null,
     limit?: number,
     page?: number,
-    search?: string,
+    search?: string | null,
   ): Promise<IPageResponse<IParticipants> | IParticipants[]> {
+    let url = `championships/${id}${this.path}${limit && page && `?limit=${limit}&page=${page}`}`;
+
+    if (search !== null) url = `${url}&name=${search}`;
+
     const { statusCode, body } = await this.httpClient.request({
       method: 'get',
-      url: `${this.path}/${id}${limit && page && `?limit=${limit}&page=${page}`}${
-        search && `&name=${search}`
-      }`,
+      url: url,
     });
 
     switch (statusCode) {
