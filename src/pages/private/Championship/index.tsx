@@ -1,25 +1,29 @@
-import { Box, Button, Center, Flex, Heading, useDisclosure } from '@chakra-ui/react';
+import { Box, Button, Center, Flex, Heading, Text, useDisclosure } from '@chakra-ui/react';
 import { lazy, Suspense } from 'react';
 
 import { Loader } from '@/components/Loader';
 import ComponentModal from '@/components/Modal';
 import { ChampionshipProvider } from '@/contexts/championship';
 import useChampionshipData from '@/hooks/useChampionshipData';
+import { FolderPlus } from 'react-feather';
 
 const ListChampionship = lazy(() => import('./components/list'));
 const FormChampionship = lazy(() => import('./components/form'));
 
 const ChampionshipWithProvider = () => {
+  const { onClose } = useDisclosure();
+
   return (
-    <ChampionshipProvider>
+    <ChampionshipProvider onClose={onClose}>
       <Championship />
     </ChampionshipProvider>
   );
 };
 
 const Championship = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const { championshipsPages } = useChampionshipData();
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <Suspense fallback={<Loader title='Carregando ...' />}>
@@ -43,10 +47,11 @@ const Championship = () => {
                 Lista de campeonatos
               </Heading>
 
-              {/* ESCONDER O BOTÃO COM O championshipsPages.length */}
-              <Button size='lg' colorScheme='teal' onClick={onOpen}>
-                Criar campeonato
-              </Button>
+              {championshipsPages.results?.length !== 0 && (
+                <Button size='lg' colorScheme='teal' onClick={onOpen}>
+                  Criar campeonato
+                </Button>
+              )}
             </Flex>
           </Box>
 
@@ -59,7 +64,17 @@ const Championship = () => {
             <FormChampionship />
           </ComponentModal>
 
-          <ListChampionship />
+          {championshipsPages.results?.length !== 0 ? (
+            <ListChampionship />
+          ) : (
+            <Box display='flex' flexDirection='column' alignItems='center' gap='8px'>
+              <FolderPlus size={50} opacity='80%' />
+              <Text>Você não possui um campeonato ainda.</Text>
+              <Button width='100%' colorScheme='teal' onClick={onOpen}>
+                Crie um campeonato
+              </Button>
+            </Box>
+          )}
         </Box>
       </Center>
     </Suspense>

@@ -101,6 +101,8 @@ export const ChampionshipProvider = ({ children, onClose }: ChampionshipProps) =
           });
         })
         .finally(() => setIsLoading(false));
+      console.log(name, startDate, endDate, accessCode, banner, resultType, address, 'dale');
+      console.log('dale');
     },
     [onClose, toast, ListPaginated],
   );
