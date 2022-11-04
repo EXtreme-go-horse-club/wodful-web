@@ -13,7 +13,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { ChevronLeft, ChevronRight, MapPin } from 'react-feather';
+import { ChevronLeft, ChevronRight, FolderPlus, MapPin } from 'react-feather';
 import { Link as ReactRouter } from 'react-router-dom';
 
 import { IChampionship } from '@/data/interfaces/championship';
@@ -47,64 +47,80 @@ const ListChampionship = () => {
   };
   return (
     <>
-      <SimpleGrid maxW='1200px' w='100%' color='gray.600' columns={[null, 1, 2, 3]} spacing='24px'>
-        {championshipsPages.results?.map((championship) => (
-          <LinkBox
-            as='section'
-            maxW='384px'
-            borderWidth='1px'
-            borderColor='gray.200'
-            borderRadius='lg'
-            key={championship.id}
-            cursor='pointer'
-          >
-            <LinkOverlay
-              as={ReactRouter}
-              to={`${championship.id}/tickets`}
-              onClick={() => {
-                setCurrentChampionship(championship as IChampionship);
-              }}
+      {championshipsPages.results?.length !== 0 ? (
+        <SimpleGrid
+          maxW='1200px'
+          w='100%'
+          color='gray.600'
+          columns={[null, 1, 2, 3]}
+          spacing='24px'
+        >
+          {championshipsPages.results?.map((championship) => (
+            <LinkBox
+              as='section'
+              maxW='384px'
+              borderWidth='1px'
+              borderColor='gray.200'
+              borderRadius='lg'
+              key={championship.id}
+              cursor='pointer'
             >
-              <Stack h='100px' overflow='hidden'>
-                <Image
-                  borderTopRadius='lg'
-                  src={`${import.meta.env.VITE_BASE_SERVER_URL}/banner/${championship.banner}`}
-                />
-              </Stack>
-              <Box p={6}>
-                <VStack gap='8px' align='start'>
-                  <VStack align='start' spacing={1}>
-                    <Heading color='black' as='h4' size='md'>
-                      {championship.name}
-                    </Heading>
-                    <Text fontSize='14px'>
-                      {formatDate(`${championship.startDate}`)} até{' '}
-                      {formatDate(`${championship.endDate}`)}
-                    </Text>
+              <LinkOverlay
+                as={ReactRouter}
+                to={`${championship.id}/tickets`}
+                onClick={() => {
+                  setCurrentChampionship(championship as IChampionship);
+                }}
+              >
+                <Stack h='100px' overflow='hidden'>
+                  <Image
+                    borderTopRadius='lg'
+                    src={`${import.meta.env.VITE_BASE_SERVER_URL}/banner/${championship.banner}`}
+                  />
+                </Stack>
+                <Box p={6}>
+                  <VStack gap='8px' align='start'>
+                    <VStack align='start' spacing={1}>
+                      <Heading color='black' as='h4' size='md'>
+                        {championship.name}
+                      </Heading>
+                      <Text fontSize='14px'>
+                        {formatDate(`${championship.startDate}`)} até{' '}
+                        {formatDate(`${championship.endDate}`)}
+                      </Text>
+                    </VStack>
+
+                    <HStack fontSize='14px' align='start' gap='24px'>
+                      <VStack align='start' spacing={0}>
+                        <Text as='b'>Código de acesso</Text>
+                        <Text fontSize='sm'>{championship.accessCode}</Text>
+                      </VStack>
+                      <VStack align='start' spacing={0}>
+                        <Text as='b'>Tipo de resultado</Text>
+                        <Text>{resultType[championship.resultType]}</Text>
+                      </VStack>
+                    </HStack>
+                    <HStack fontSize='14px'>
+                      <MapPin size={16} />
+                      <Text>{championship.address}</Text>
+                    </HStack>
                   </VStack>
+                </Box>
+              </LinkOverlay>
+            </LinkBox>
+          ))}
+        </SimpleGrid>
+      ) : (
+        <Box display='flex' flexDirection='column' alignItems='center' gap='8px'>
+          <FolderPlus size={50} opacity='80%' />
+          <Text>Você não possui um campeonato ainda.</Text>
+          <Button width='100%' colorScheme='teal'>
+            Crie um campeonato
+          </Button>
+        </Box>
+      )}
 
-                  <HStack fontSize='14px' align='start' gap='24px'>
-                    <VStack align='start' spacing={0}>
-                      <Text as='b'>Código de acesso</Text>
-                      <Text fontSize='sm'>{championship.accessCode}</Text>
-                    </VStack>
-                    <VStack align='start' spacing={0}>
-                      <Text as='b'>Tipo de resultado</Text>
-                      <Text>{resultType[championship.resultType]}</Text>
-                    </VStack>
-                  </HStack>
-                  <HStack fontSize='14px'>
-                    <MapPin size={16} />
-                    <Text>{championship.address}</Text>
-                  </HStack>
-                </VStack>
-              </Box>
-            </LinkOverlay>
-          </LinkBox>
-        ))}
-      </SimpleGrid>
-
-      {championshipsPages.count && (
+      {(championshipsPages.count as number) > 0 && (
         <Box mt='24px'>
           <HStack>
             <Tooltip label='Página anterior' placement='top' hasArrow>
