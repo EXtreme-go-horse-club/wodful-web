@@ -10,19 +10,22 @@ import {
   InputRightElement,
   Text,
 } from '@chakra-ui/react';
-import { ChangeEvent, lazy, Suspense, useState } from 'react';
+import { ChangeEvent, lazy, Suspense, useEffect, useState } from 'react';
 import { Filter, Search, X } from 'react-feather';
 
 const ListParticipants = lazy(() => import('./components/list'));
 
 const Participants = () => {
-  const [participantName, setParticipantName] = useState<string | null>(null);
-  const [inputValue, setInputValue] = useState<string>('');
+  const [participantName, setParticipantName] = useState<string>('');
+  const [inputValue, setInputValue] = useState<string | null>(null);
 
   const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.value, 'event');
     return setInputValue(event.target.value);
   };
+
+  useEffect(() => {
+    setParticipantName('');
+  }, [inputValue]);
 
   return (
     <Suspense fallback={<Loader title='Carregando ...' />}>
@@ -43,7 +46,7 @@ const Participants = () => {
                   w='100%'
                   minW='320px'
                   placeholder='Buscar participante'
-                  value={inputValue as string}
+                  value={inputValue || ''}
                 />
                 {inputValue && (
                   <InputRightElement>
@@ -56,7 +59,7 @@ const Participants = () => {
                 leftIcon={<Filter size={14} />}
                 variant='outline'
                 colorScheme='gray'
-                onClick={() => setParticipantName(inputValue)}
+                onClick={() => setParticipantName(inputValue as string)}
               >
                 Filtrar
               </Button>
