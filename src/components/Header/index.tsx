@@ -1,6 +1,18 @@
 import useApp from '@/hooks/useApp';
 import useAuth from '@/hooks/useAuth';
-import { Box, Flex, Heading, Image, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
+import {
+  Avatar,
+  Box,
+  Flex,
+  Heading,
+  HStack,
+  Image,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  WrapItem,
+} from '@chakra-ui/react';
 import { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import Logo from '../../assets/icons/wodful-white-logo.svg';
@@ -14,7 +26,6 @@ export const Header = () => {
   const { currentChampionship } = useApp();
 
   const untitledRoutes = useMemo(() => NO_TITLE_ROUTES.includes(pathname), [pathname]);
-  const profile = user?.name.substring(0, 1);
 
   return (
     <Flex
@@ -41,20 +52,10 @@ export const Header = () => {
 
       <Flex>
         {signed ? (
-          <Flex>
-            <Flex
-              borderRadius='full'
-              bg='teal.500'
-              width='32px'
-              height='32px'
-              alignItems='center'
-              justifyContent='center'
-              marginRight='10px'
-            >
-              <Heading color='whiteAlpha.900' fontSize={16} fontWeight='500'>
-                {profile}
-              </Heading>
-            </Flex>
+          <HStack gap='8px'>
+            <WrapItem>
+              <Avatar name={user?.name} />
+            </WrapItem>
             <Menu isLazy>
               <MenuButton color='whiteAlpha.900' fontSize={16} fontWeight='700'>
                 Configurações
@@ -63,7 +64,7 @@ export const Header = () => {
                 <MenuItem onClick={Logout}>Logout</MenuItem>
               </MenuList>
             </Menu>
-          </Flex>
+          </HStack>
         ) : null}
       </Flex>
     </Flex>
