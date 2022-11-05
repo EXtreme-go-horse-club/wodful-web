@@ -1,5 +1,5 @@
 import { Box, Button, Center, Flex, Heading, Text, useDisclosure } from '@chakra-ui/react';
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useMemo } from 'react';
 
 import { Loader } from '@/components/Loader';
 import ComponentModal from '@/components/Modal';
@@ -25,9 +25,11 @@ const Championship = () => {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  const hasElements: boolean = useMemo(() => championshipsPages.count !== 0, [championshipsPages]);
+
   return (
     <Suspense fallback={<Loader title='Carregando ...' />}>
-      <Center>
+      <Center as='main' role='main'>
         <Box
           w='100%'
           display='flex'
@@ -43,14 +45,16 @@ const Championship = () => {
               align='center'
               justifyContent='space-between'
             >
-              <Heading as='h4' size='md'>
-                Lista de campeonatos
-              </Heading>
+              {hasElements ?? (
+                <>
+                  <Heading as='h4' size='md'>
+                    Lista de campeonatos
+                  </Heading>
 
-              {championshipsPages.results?.length !== 0 && (
-                <Button size='lg' colorScheme='teal' onClick={onOpen}>
-                  Criar campeonato
-                </Button>
+                  <Button size='lg' colorScheme='teal' onClick={onOpen}>
+                    Criar campeonato
+                  </Button>
+                </>
               )}
             </Flex>
           </Box>
@@ -61,15 +65,14 @@ const Championship = () => {
             isOpen={isOpen}
             onClose={onClose}
           >
-            <FormChampionship />
+            <FormChampionship onClose={onClose} />
           </ComponentModal>
 
-          {championshipsPages.results?.length !== 0 ? (
-            <ListChampionship />
-          ) : (
-            <Box display='flex' flexDirection='column' alignItems='center' gap='8px'>
+          {hasElements && <ListChampionship />}
+          {!hasElements && (
+            <Box display='flex' flexDirection='column' alignItems='center' gap='8px' mt='20%'>
               <FolderPlus size={50} opacity='80%' />
-              <Text>Você não possui um campeonato ainda.</Text>
+              <Text>Você não possui um campeonato ainda!</Text>
               <Button width='100%' colorScheme='teal' onClick={onOpen}>
                 Crie um campeonato
               </Button>
