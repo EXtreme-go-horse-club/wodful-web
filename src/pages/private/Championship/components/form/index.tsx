@@ -15,7 +15,11 @@ import {
 
 import { SubmitHandler, useForm } from 'react-hook-form';
 
-const FormChampionship = () => {
+interface IFormChampionshipProps {
+  onClose: () => void;
+}
+
+const FormChampionship = ({ onClose }: IFormChampionshipProps) => {
   const { Create } = useChampionshipData();
 
   const {
@@ -28,6 +32,7 @@ const FormChampionship = () => {
     const banner = championship.banner as FileList;
     championship.banner = banner[0];
     await Create(championship);
+    onClose();
   };
 
   return (
