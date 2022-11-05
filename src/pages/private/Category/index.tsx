@@ -1,5 +1,5 @@
 import { Loader } from '@/components/Loader';
-import ComponentModal from '@/components/Modal';
+import ComponentModal from '@/components/modal';
 import { CategoryProvider } from '@/contexts/category';
 import { Box, Button, HStack, Text, useDisclosure } from '@chakra-ui/react';
 import { lazy, Suspense } from 'react';
