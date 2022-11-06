@@ -11,6 +11,10 @@ export const Navbar = () => {
       path: `/championships/${params.id}/dashboard`,
     },
     {
+      label: 'Leaderboard',
+      path: `/championships/${params.id}/leaderboard`,
+    },
+    {
       label: 'Categorias',
       path: `/championships/${params.id}/categories`,
     },
