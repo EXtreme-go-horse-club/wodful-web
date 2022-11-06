@@ -12,17 +12,22 @@ import {
   Select,
   VStack,
 } from '@chakra-ui/react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
+interface SubscriptionProps {
+  step?: number;
+  participantsNumber?: number;
+}
 interface CreateModalProps {
   id: string;
-  openFormParticipants: (passStep: number) => void;
+  openFormParticipants: (step: number, participantsNumber: number) => void;
 }
 
 const FormSubscription = ({ id, openFormParticipants }: CreateModalProps) => {
   const { subscriptionData, setSubscriptionData } = useSubscriptionData();
   const { List, tickets } = useTicketData();
+  const [participantsNumber, setParticipantsNumber] = useState<number>(0);
   const {
     register,
     handleSubmit,
@@ -36,82 +41,96 @@ const FormSubscription = ({ id, openFormParticipants }: CreateModalProps) => {
   }, [List, id]);
 
   function onSubmit(subscription: ISubscriptionDTO) {
+    console.log(tickets[subscription.ticketIndex as number].id);
+    subscription.ticketId = tickets[subscription.ticketIndex as number].id;
+    console.log(tickets[subscription.ticketIndex as number]);
     console.log(subscription);
     setSubscriptionData(subscription);
-    console.log(subscriptionData);
-    openFormParticipants(1);
+    // delete subscription.ticketIndex;
+
+    openFormParticipants(1, tickets[subscription.ticketIndex as number].category?.members);
     // subscription.championshipId = id;
   }
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <VStack align='start' w='100%' spacing={6} pt={6} pb={6} flexDirection='column'>
-        <FormControl isInvalid={!!errors.name}>
-          <FormLabel htmlFor='name' m={0}>
+        <FormControl isInvalid={!!errors.responsibleName}>
+          <FormLabel htmlFor='responsibleName' m={0}>
             Nome
           </FormLabel>
           <Input
             as='input'
-            id='name'
+            id='responsibleName'
             placeholder='Nome do responsável'
-            {...register('name', {
+            {...register('responsibleName', {
               required: validationMessages['required'],
               minLength: { value: 4, message: validationMessages['minLength'] },
               maxLength: { value: 50, message: validationMessages['maxLengthSm'] },
             })}
           />
 
-          <FormErrorMessage>{errors.name && errors.name.message}</FormErrorMessage>
+          <FormErrorMessage>
+            {errors.responsibleName && errors.responsibleName.message}
+          </FormErrorMessage>
         </FormControl>
-        <FormControl isInvalid={!!errors.email}>
+        <FormControl isInvalid={!!errors.responsibleEmail}>
           <FormLabel htmlFor='email' m={0}>
             E-mail
           </FormLabel>
           <Input
             as='input'
-            id='email'
+            id='responsibleEmail'
             placeholder='E-mail do responsável'
-            {...register('email', {
+            {...register('responsibleEmail', {
               required: validationMessages['required'],
               minLength: { value: 4, message: validationMessages['minLength'] },
               maxLength: { value: 50, message: validationMessages['maxLengthSm'] },
             })}
           />
 
-          <FormErrorMessage>{errors.email && errors.email.message}</FormErrorMessage>
+          <FormErrorMessage>
+            {errors.responsibleEmail && errors.responsibleEmail.message}
+          </FormErrorMessage>
         </FormControl>
-        <FormControl isInvalid={!!errors.phone}>
-          <FormLabel htmlFor='phone' m={0}>
+        <FormControl isInvalid={!!errors.responsiblePhone}>
+          <FormLabel htmlFor='responsiblePhone' m={0}>
             Telefone
           </FormLabel>
           <Input
             as='input'
-            id='phone'
+            id='responsiblePhone'
             placeholder='Telefone do responsável'
-            {...register('phone', {
+            {...register('responsiblePhone', {
               required: validationMessages['required'],
             })}
           />
 
-          <FormErrorMessage>{errors.email && errors.email.message}</FormErrorMessage>
+          <FormErrorMessage>
+            {errors.responsiblePhone && errors.responsiblePhone.message}
+          </FormErrorMessage>
         </FormControl>
 
-        <FormControl isInvalid={!!errors.ticketId}>
+        <FormControl isInvalid={!!errors.ticketIndex}>
           <FormLabel>Ticket</FormLabel>
           <Select
             as='select'
             id='members'
             placeholder='Selecione o ticket da categoria'
-            {...register('ticketId', {
+            {...register('ticketIndex', {
               required: validationMessages['required'],
             })}
+            onChange={(event) => {
+              console.log(event.target.value);
+              // setParticipantsNumber(Number(event.target.value));
+            }}
           >
-            {tickets?.map((ticket) => (
-              <option key={ticket.id} value={ticket.id}>
+            {tickets?.map((ticket, index) => (
+              <option key={ticket.id} value={index}>
                 {ticket.name}
               </option>
             ))}
           </Select>
-          <FormErrorMessage>{errors.ticketId && errors.ticketId.message}</FormErrorMessage>
+          <FormErrorMessage>{errors.ticketIndex && errors.ticketIndex.message}</FormErrorMessage>
         </FormControl>
         <ButtonGroup flexDirection='column' alignItems='end' gap={6} w='100%'>
           <Button colorScheme='teal' w='100%' mt={4} type='submit' disabled={!isValid}>

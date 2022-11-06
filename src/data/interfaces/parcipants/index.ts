@@ -7,3 +7,11 @@ export interface IParticipants {
     name: string;
   };
 }
+
+export interface IParticipantDTO {
+  name: string;
+  identificationCode: string;
+  affiliation: string;
+  city: string;
+  tShirtSize: string;
+}

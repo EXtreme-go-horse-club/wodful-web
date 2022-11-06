@@ -7,6 +7,7 @@ import {
   FormLabel,
   HStack,
   Input,
+  Text,
   VStack,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
@@ -14,9 +15,10 @@ import { useForm } from 'react-hook-form';
 
 interface CreateModalProps {
   id: string;
+  participantsNumber: number;
 }
 
-const FormSubscriptionParticipants = ({ id }: CreateModalProps) => {
+const FormSubscriptionParticipants = ({ id, participantsNumber }: CreateModalProps) => {
   const [indexes, setIndexes] = useState<number[]>([]);
   const [counter, setCounter] = useState<number>(0);
   const {
@@ -28,10 +30,11 @@ const FormSubscriptionParticipants = ({ id }: CreateModalProps) => {
   });
 
   useEffect(() => {
-    for (let index = 0; index < 4; index++) {
+    console.log(participantsNumber);
+    for (let index = 1; index <= participantsNumber; index++) {
       setIndexes((indexes) => [...indexes, index]);
     }
-  }, []);
+  }, [participantsNumber]);
 
   function onSubmit(subscription: any) {
     console.log(subscription);
@@ -40,21 +43,32 @@ const FormSubscriptionParticipants = ({ id }: CreateModalProps) => {
   }
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      <VStack align='start' w='100%' spacing={6} pb={6} flexDirection='column'>
+        {indexes.length == 1 && <Text as='b'>Dados do participante</Text>}
+        <FormControl isInvalid={!!errors.nickname}>
+          <FormLabel htmlFor='nickname' m={0}>
+            {indexes.length > 1 ? 'Apelido' : 'Nome do time'}
+          </FormLabel>
+          <Input
+            as='input'
+            id='nickname'
+            placeholder='Nome do participante'
+            {...register('nickname', {
+              required: validationMessages['required'],
+            })}
+          />
+
+          <FormErrorMessage></FormErrorMessage>
+        </FormControl>
+        {indexes.length > 1 && <Text as='b'>Dados dos participantes</Text>}
+      </VStack>
       {indexes.map((index) => {
         const participants = `participants[${index}]`;
         return (
-          <VStack
-            key={index}
-            align='start'
-            w='100%'
-            spacing={6}
-            pt={6}
-            pb={6}
-            flexDirection='column'
-          >
+          <VStack key={index} align='start' w='100%' spacing={6} pb={6} flexDirection='column'>
             <FormControl isInvalid={!!errors.name}>
               <FormLabel htmlFor={`${participants}.name`} m={0}>
-                Atleta {index}
+                {indexes.length > 1 ? `Atleta ${index}` : 'nome'}
               </FormLabel>
               <Input
                 as='input'

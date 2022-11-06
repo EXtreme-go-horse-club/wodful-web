@@ -15,9 +15,10 @@ const Subscription = () => {
   const { id } = useParams();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [currentStep, setCurrentStep] = useState<number>(0);
+  const [participantsNumber, setParticipantsNumber] = useState<number>(0);
 
-  function handleSteps(step: number) {
-    console.log(step);
+  function handleSubscriptionInfo(step: number, participantsNumber: number) {
+    setParticipantsNumber(participantsNumber);
     setCurrentStep(step);
   }
 
@@ -41,9 +42,12 @@ const Subscription = () => {
               onClose={onClose}
             >
               {currentStep == 0 ? (
-                <FormSubscription id={id as string} openFormParticipants={handleSteps} />
+                <FormSubscription id={id as string} openFormParticipants={handleSubscriptionInfo} />
               ) : (
-                <FormSubscriptionParticipants id={id as string} />
+                <FormSubscriptionParticipants
+                  id={id as string}
+                  participantsNumber={participantsNumber as number}
+                />
               )}
             </ComponentModal>
             <Box w='100%' marginTop={6}>

@@ -1,20 +1,16 @@
+import { IParticipantDTO } from '../parcipants';
+
 export interface ISubscriptionDTO {
-  name?: string;
-  email?: string;
-  phone?: string;
+  responsibleName?: string;
+  responsibleEmail?: string;
+  responsiblePhone?: string;
+  nickname?: string;
   ticketId?: string;
-  participants?: IParticipant;
+  participants?: IParticipantDTO;
+  ticketIndex?: number;
 }
 export interface ISubscription {
   id: string;
   name: string;
   championshipId: string;
-}
-
-export interface IParticipant {
-  name: string;
-  identificationCode: string;
-  affiliation: string;
-  city: string;
-  tShirtSize: string;
 }
