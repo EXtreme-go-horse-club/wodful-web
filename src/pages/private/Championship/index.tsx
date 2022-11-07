@@ -1,11 +1,11 @@
-import { Box, Button, Center, Flex, Heading, Text, useDisclosure } from '@chakra-ui/react';
+import { Box, Button, Center, Flex, Heading, useDisclosure } from '@chakra-ui/react';
 import { lazy, Suspense, useMemo } from 'react';
 
 import { Loader } from '@/components/Loader';
 import ComponentModal from '@/components/Modal';
+import { NoHasElement } from '@/components/NoHasElement';
 import { ChampionshipProvider } from '@/contexts/championship';
 import useChampionshipData from '@/hooks/useChampionshipData';
-import { FolderPlus } from 'react-feather';
 
 const ListChampionship = lazy(() => import('./components/list'));
 const FormChampionship = lazy(() => import('./components/form'));
@@ -70,13 +70,11 @@ const Championship = () => {
 
           {hasElements && <ListChampionship />}
           {!hasElements && (
-            <Box display='flex' flexDirection='column' alignItems='center' gap='8px' mt='20%'>
-              <FolderPlus size={50} opacity='80%' />
-              <Text>Você não possui um campeonato ainda!</Text>
-              <Button width='100%' colorScheme='teal' onClick={onOpen}>
-                Crie um campeonato
-              </Button>
-            </Box>
+            <NoHasElement
+              text='Você não possui um campeonato ainda!'
+              contentButton=' Crie um campeonato'
+              onClose={onOpen}
+            />
           )}
         </Box>
       </Center>
