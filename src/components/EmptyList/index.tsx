@@ -2,7 +2,7 @@ import { Box, Button, Link, Text } from '@chakra-ui/react';
 import { FolderPlus } from 'react-feather';
 import { Link as RouterLink } from 'react-router-dom';
 
-interface NoHasElementProps {
+interface EmptyListProps {
   text: string;
   linkTo?: string;
   textLinkTo?: string;
@@ -10,13 +10,7 @@ interface NoHasElementProps {
   onClose?: () => void;
 }
 
-export const NoHasElement = ({
-  contentButton,
-  onClose,
-  text,
-  linkTo,
-  textLinkTo,
-}: NoHasElementProps) => {
+export const EmptyList = ({ contentButton, onClose, text, linkTo, textLinkTo }: EmptyListProps) => {
   return (
     <Box display='flex' flexDirection='column' alignItems='center' gap='8px' mt='20%'>
       <FolderPlus size={50} opacity='80%' />

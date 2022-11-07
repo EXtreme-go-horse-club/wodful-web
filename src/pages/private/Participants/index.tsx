@@ -1,5 +1,5 @@
+import { EmptyList } from '@/components/EmptyList';
 import { Loader } from '@/components/Loader';
-import { NoHasElement } from '@/components/NoHasElement';
 import { ParticipantProvider } from '@/contexts/participant';
 import useParticipantData from '@/hooks/useParticipantData';
 import { Box, Button, HStack, Input, InputGroup, InputLeftElement, Text } from '@chakra-ui/react';
@@ -73,7 +73,7 @@ const Participants = () => {
         )}
 
         {!hasElements && (
-          <NoHasElement
+          <EmptyList
             linkTo={`/championships/${id}/subscriptions`}
             text='Você não possui participantes.'
             textLinkTo='Crie inscrições para ter participantes.'

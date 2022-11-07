@@ -91,6 +91,7 @@ const FormTicket = ({ onClose }: IFormChampionshipProps) => {
           <FormControl isInvalid={!!errors.price}>
             <FormLabel>Valor</FormLabel>
             <Input
+              as='input'
               type='number'
               placeholder='Valor do ticket'
               {...register('price', {

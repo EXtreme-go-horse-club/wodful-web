@@ -1,6 +1,6 @@
+import { EmptyList } from '@/components/EmptyList';
 import { Loader } from '@/components/Loader';
 import ComponentModal from '@/components/Modal';
-import { NoHasElement } from '@/components/NoHasElement';
 import { CategoryProvider } from '@/contexts/category';
 import useCategoryData from '@/hooks/useCategoryData';
 import { Box, Button, HStack, Text, useDisclosure } from '@chakra-ui/react';
@@ -55,7 +55,7 @@ const Category = () => {
         )}
 
         {!hasElements && (
-          <NoHasElement
+          <EmptyList
             text='Você não possui categorias ainda!'
             contentButton='Crie uma categoria'
             onClose={onOpen}

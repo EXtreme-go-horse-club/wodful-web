@@ -1,9 +1,9 @@
 import { Box, Button, Center, Flex, Heading, useDisclosure } from '@chakra-ui/react';
 import { lazy, Suspense, useMemo } from 'react';
 
+import { EmptyList } from '@/components/EmptyList';
 import { Loader } from '@/components/Loader';
 import ComponentModal from '@/components/Modal';
-import { NoHasElement } from '@/components/NoHasElement';
 import { ChampionshipProvider } from '@/contexts/championship';
 import useChampionshipData from '@/hooks/useChampionshipData';
 
@@ -70,7 +70,7 @@ const Championship = () => {
 
           {hasElements && <ListChampionship />}
           {!hasElements && (
-            <NoHasElement
+            <EmptyList
               text='Você não possui um campeonato ainda!'
               contentButton=' Crie um campeonato'
               onClose={onOpen}

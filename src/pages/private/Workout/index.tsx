@@ -1,6 +1,6 @@
+import { EmptyList } from '@/components/EmptyList';
 import { Loader } from '@/components/Loader';
 import ComponentModal from '@/components/Modal';
-import { NoHasElement } from '@/components/NoHasElement';
 import { CategoryProvider } from '@/contexts/category';
 import { WorkoutProvider } from '@/contexts/workout';
 import useWorkoutData from '@/hooks/useWorkoutData';
@@ -58,7 +58,7 @@ const Workout = () => {
         )}
 
         {!hasElements && (
-          <NoHasElement
+          <EmptyList
             text='Você não possui provas ainda!'
             contentButton='Crie uma prova'
             onClose={onOpen}

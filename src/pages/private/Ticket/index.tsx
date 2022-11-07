@@ -5,8 +5,8 @@ import ComponentModal from '@/components/Modal';
 import { CategoryProvider } from '@/contexts/category';
 import { TicketProvider } from '@/contexts/ticket';
 
+import { EmptyList } from '@/components/EmptyList';
 import { Loader } from '@/components/Loader';
-import { NoHasElement } from '@/components/NoHasElement';
 import useTicketData from '@/hooks/useTicketData';
 
 const ListTicket = lazy(() => import('./components/list'));
@@ -57,7 +57,7 @@ const Ticket = () => {
         )}
 
         {!hasElements && (
-          <NoHasElement
+          <EmptyList
             text='Você não possui tickets ainda!'
             contentButton='Crie um ticket'
             onClose={onOpen}
