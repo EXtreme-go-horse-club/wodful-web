@@ -18,7 +18,11 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 
-const FormTicket = () => {
+interface IFormChampionshipProps {
+  onClose: () => void;
+}
+
+const FormTicket = ({ onClose }: IFormChampionshipProps) => {
   const { List, categories } = useCategoryData();
   const { Create } = useTicketData();
   const { id } = useParams();
@@ -36,6 +40,7 @@ const FormTicket = () => {
     ticket.price = Number(ticket.price);
     ticket.quantity = Number(ticket.quantity);
     Create(ticket);
+    onClose();
   }
 
   return (

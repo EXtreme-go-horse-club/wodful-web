@@ -32,7 +32,7 @@ const Category = () => {
     <Suspense fallback={<Loader title='Carregando ...' />}>
       <Box w='100%' display='flex' flexDirection='column' alignItems='center' p={6}>
         <HStack w='100%' justifyContent='space-between'>
-          {hasElements ?? (
+          {hasElements && (
             <>
               <Text fontSize='2xl' as='b'>
                 Lista de categorias

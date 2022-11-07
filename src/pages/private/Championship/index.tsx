@@ -45,7 +45,7 @@ const Championship = () => {
               align='center'
               justifyContent='space-between'
             >
-              {hasElements ?? (
+              {hasElements && (
                 <>
                   <Heading as='h4' size='md'>
                     Lista de campeonatos
