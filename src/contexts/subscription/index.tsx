@@ -1,6 +1,11 @@
 import { AxiosAdapter } from '@/adapters/AxiosAdapter';
 import { IPageResponse } from '@/data/interfaces/pageResponse';
-import { ISubscription, ISubscriptionDTO } from '@/data/interfaces/subscription';
+import {
+  IParticipantForm,
+  ISubscription,
+  ISubscriptionDTO,
+  ISubscriptionForm,
+} from '@/data/interfaces/subscription';
 import { SubscriptionService } from '@/services/Subscription';
 import { subscriptionMessages } from '@/utils/messages';
 import { useToast } from '@chakra-ui/react';
@@ -14,6 +19,10 @@ interface SubscriptionProviderProps {
 export interface SubscriptionContextData {
   subscriptionData: ISubscriptionDTO;
   setSubscriptionData: (value: ISubscriptionDTO) => void;
+  subscriptionForm: ISubscriptionForm;
+  setSubscriptionForm: (value: ISubscriptionForm) => void;
+  participantsForm: IParticipantForm;
+  setParticipantsForm: (value: IParticipantForm) => void;
   subscriptions: ISubscription[];
   subscriptionsPages: IPageResponse<ISubscription>;
   isLoading: boolean;
@@ -23,7 +32,7 @@ export interface SubscriptionContextData {
   setPage: (value: number) => void;
   List: (id: string) => Promise<void>;
   ListPaginated: (id: string) => Promise<void>;
-  Create: ({ name, email, participants, phone, ticketId }: ISubscriptionDTO) => Promise<void>;
+  Create: () => Promise<void>;
 }
 
 const SubscriptionContext = createContext({} as SubscriptionContextData);
@@ -34,6 +43,12 @@ export const SubscriptionProvider = ({ children, onClose }: SubscriptionProvider
   const toast = useToast();
   const [subscriptionsPages, setSubscriptionsPages] = useState<IPageResponse<ISubscription>>(
     {} as IPageResponse<ISubscription>,
+  );
+  const [subscriptionForm, setSubscriptionForm] = useState<ISubscriptionForm>(
+    {} as ISubscriptionForm,
+  );
+  const [participantsForm, setParticipantsForm] = useState<IParticipantForm>(
+    {} as IParticipantForm,
   );
   const [subscriptionData, setSubscriptionData] = useState<ISubscriptionDTO>(
     {} as ISubscriptionDTO,
@@ -66,37 +81,42 @@ export const SubscriptionProvider = ({ children, onClose }: SubscriptionProvider
     [limit, page],
   );
 
-  const Create = useCallback(
-    async ({ name, email, phone, ticketId }: ISubscriptionDTO) => {
-      setIsLoading(true);
-      await new SubscriptionService(axios)
-        .create({ name, email, phone, ticketId })
-        .then(() => {
-          toast({
-            title: subscriptionMessages['success'],
-            status: 'success',
-            isClosable: true,
-          });
-          // ListPaginated(championshipId);
-          onClose!();
-        })
-        .catch(() => {
-          toast({
-            title: subscriptionMessages['error'],
-            status: 'error',
-            isClosable: true,
-          });
-        })
-        .finally(() => setIsLoading(false));
-    },
-    [toast, ListPaginated, onClose],
-  );
+  const Create = useCallback(async () => {
+    // const tempSubscription = { ...subscriptionData };
+    // tempSubscription.nickname = subscription.nickname;
+    // tempSubscription.participants = subscription.participants;
+    // setSubscriptionData(tempSubscription);
+    setIsLoading(true);
+    await new SubscriptionService(axios)
+      .create(subscriptionData)
+      .then(() => {
+        toast({
+          title: subscriptionMessages['success'],
+          status: 'success',
+          isClosable: true,
+        });
+        // ListPaginated(championshipId);
+        onClose!();
+      })
+      .catch(() => {
+        toast({
+          title: subscriptionMessages['error'],
+          status: 'error',
+          isClosable: true,
+        });
+      })
+      .finally(() => setIsLoading(false));
+  }, [toast, ListPaginated, onClose]);
 
   return (
     <SubscriptionContext.Provider
       value={{
         subscriptionData,
         setSubscriptionData,
+        participantsForm,
+        setParticipantsForm,
+        subscriptionForm,
+        setSubscriptionForm,
         subscriptions,
         subscriptionsPages,
         isLoading,

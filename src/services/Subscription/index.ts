@@ -7,14 +7,14 @@ export class SubscriptionService {
     private readonly httpClient: HttpClient<
       IPageResponse<ISubscription> | ISubscription | ISubscription[]
     >,
-    private readonly path = '/categories',
+    private readonly path = '/subscriptions',
   ) {}
 
-  async create({ championshipId, name }: ISubscriptionDTO): Promise<ISubscription> {
+  async create(subscription: ISubscriptionDTO): Promise<ISubscription> {
     const { statusCode, body } = await this.httpClient.request({
       method: 'post',
       url: this.path,
-      body: { championshipId, name },
+      body: subscription,
     });
 
     switch (statusCode) {
@@ -30,7 +30,7 @@ export class SubscriptionService {
     limit?: number,
     page?: number,
   ): Promise<IPageResponse<ISubscription> | ISubscription[]> {
-    let url = `${this.path}/${id}`;
+    let url = `championships/${id}${this.path}`;
 
     if (limit !== undefined && page !== undefined) url = `${url}?limit=${limit}&page=${page}`;
 

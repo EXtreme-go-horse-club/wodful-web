@@ -3,6 +3,8 @@ export const validationMessages = {
   minLength: 'Tamanho mínimo é de quatro caracteres',
   maxLengthSm: 'Tamanho máximo é de cinquenta caracteres',
   maxLengthLg: 'Tamanho máximo é de duzentos e cinquenta caracteres',
+  invalidCode: 'Número de documento inválido',
+  invalidField: 'Campo inválido',
 };
 
 export const championshipMessages = {
@@ -30,4 +32,10 @@ export const subscriptionMessages = {
   error: 'Algo deu errado ao adicionar a inscrição',
   // successMember: 'Inscrição adicionada com sucesso',
   // error: 'Algo deu errado ao adicionar a inscrição',
+};
+
+export const subscriptionStatus = {
+  APPROVED: 'INSCRIÇÃO PAGA',
+  WAITING: 'AGUARDANDO',
+  DECLINED: 'RECUSADA',
 };

@@ -1,4 +1,4 @@
-import { ISubscriptionDTO } from '@/data/interfaces/subscription';
+import { ISubscriptionForm } from '@/data/interfaces/subscription';
 import useSubscriptionData from '@/hooks/useSubscriptionData';
 import useTicketData from '@/hooks/useTicketData';
 import { validationMessages } from '@/utils/messages';
@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-
+import InputMask from 'react-input-mask';
 interface SubscriptionProps {
   step?: number;
   participantsNumber?: number;
@@ -25,14 +25,14 @@ interface CreateModalProps {
 }
 
 const FormSubscription = ({ id, openFormParticipants }: CreateModalProps) => {
-  const { subscriptionData, setSubscriptionData } = useSubscriptionData();
+  const { setSubscriptionForm } = useSubscriptionData();
   const { List, tickets } = useTicketData();
   const [participantsNumber, setParticipantsNumber] = useState<number>(0);
   const {
     register,
     handleSubmit,
     formState: { errors, isValid },
-  } = useForm<ISubscriptionDTO>({
+  } = useForm<ISubscriptionForm>({
     mode: 'onChange',
   });
 
@@ -40,12 +40,12 @@ const FormSubscription = ({ id, openFormParticipants }: CreateModalProps) => {
     List(id);
   }, [List, id]);
 
-  function onSubmit(subscription: ISubscriptionDTO) {
+  function onSubmit(subscription: ISubscriptionForm) {
     console.log(tickets[subscription.ticketIndex as number].id);
     subscription.ticketId = tickets[subscription.ticketIndex as number].id;
     console.log(tickets[subscription.ticketIndex as number]);
     console.log(subscription);
-    setSubscriptionData(subscription);
+    setSubscriptionForm(subscription);
     // delete subscription.ticketIndex;
 
     openFormParticipants(1, tickets[subscription.ticketIndex as number].category?.members);
@@ -85,6 +85,10 @@ const FormSubscription = ({ id, openFormParticipants }: CreateModalProps) => {
               required: validationMessages['required'],
               minLength: { value: 4, message: validationMessages['minLength'] },
               maxLength: { value: 50, message: validationMessages['maxLengthSm'] },
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                message: validationMessages['invalidField'],
+              },
             })}
           />
 
@@ -97,7 +101,8 @@ const FormSubscription = ({ id, openFormParticipants }: CreateModalProps) => {
             Telefone
           </FormLabel>
           <Input
-            as='input'
+            mask={'+99 (99) 99999-9999'}
+            as={InputMask}
             id='responsiblePhone'
             placeholder='Telefone do responsável'
             {...register('responsiblePhone', {
@@ -119,10 +124,10 @@ const FormSubscription = ({ id, openFormParticipants }: CreateModalProps) => {
             {...register('ticketIndex', {
               required: validationMessages['required'],
             })}
-            onChange={(event) => {
-              console.log(event.target.value);
-              // setParticipantsNumber(Number(event.target.value));
-            }}
+            // onChange={(event) => {
+            //   console.log(event.target.value);
+            //   // setParticipantsNumber(Number(event.target.value));
+            // }}
           >
             {tickets?.map((ticket, index) => (
               <option key={ticket.id} value={index}>

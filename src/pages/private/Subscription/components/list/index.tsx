@@ -1,5 +1,7 @@
 import useSubscriptionData from '@/hooks/useSubscriptionData';
+import { subscriptionStatus } from '@/utils/messages';
 import {
+  Button,
   Flex,
   HStack,
   Select,
@@ -12,10 +14,11 @@ import {
   Tfoot,
   Th,
   Thead,
+  Tooltip,
   Tr,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { MoreHorizontal } from 'react-feather';
+import { ChevronLeft, ChevronRight, MoreHorizontal } from 'react-feather';
 interface IListSubscription {
   id: string;
 }
@@ -61,27 +64,35 @@ const ListSubscription = ({ id }: IListSubscription) => {
           </Tr>
         </Thead>
         <Tbody>
-          <Tr>
-            <Td p={6}>Segun Sue</Td>
-            <Td p={6}>Frangos</Td>
-            <Td p={6}>Fitness-Masculino</Td>
-            <Td p={6}>
-              <Tag
-                size='md'
-                key='md'
-                variant='solid'
-                colorScheme='teal'
-                // colorScheme={category.isTeam ? 'teal' : 'yellow'}
-              >
-                INSCRIÇÃO PAGA
-              </Tag>
-            </Td>
-            <Td p={6}>
-              <Flex justify='end'>
-                <MoreHorizontal cursor='pointer' size={18} />
-              </Flex>
-            </Td>
-          </Tr>
+          {subscriptionsPages.results?.map((subscription) => (
+            <Tr key={subscription.id}>
+              <Td p={6}>{subscription.responsibleName}</Td>
+              <Td p={6}>{subscription.nickname}</Td>
+              <Td p={6}>{subscription.category.name}</Td>
+              <Td p={6}>
+                <Tag
+                  size='md'
+                  key='md'
+                  variant='solid'
+                  // colorScheme='red'
+                  colorScheme={
+                    subscription.status == 'APPROVED'
+                      ? 'teal'
+                      : subscription.status == 'DECLINED'
+                      ? 'red'
+                      : 'yellow'
+                  }
+                >
+                  {subscriptionStatus[subscription.status]}
+                </Tag>
+              </Td>
+              <Td p={6}>
+                <Flex justify='end'>
+                  <MoreHorizontal cursor='pointer' size={18} />
+                </Flex>
+              </Td>
+            </Tr>
+          ))}
         </Tbody>
         <Tfoot>
           <Tr>
@@ -107,36 +118,39 @@ const ListSubscription = ({ id }: IListSubscription) => {
               <Flex justify='end'>
                 <HStack>
                   <Text>PAGINACAO</Text>
-                  {/* {page === 1 && (
+                  {page === 1 && (
                     <Text>
-                      {page * limit - (limit - 1)} - {page * limit} de {subscriptionPages.count}
+                      {page * limit - (limit - 1)} - {page * limit} de {subscriptionsPages.count}
                     </Text>
                   )}
 
                   {page !== 1 && (
                     <Text>
                       {page * limit - (limit - 1)} - {page * limit - limit + currentTotal} de{' '}
-                      {categoriesPages.count}
+                      {subscriptionsPages.count}
                     </Text>
-                  )} */}
-                  {/* <Tooltip label='Página anterior' placement='top' hasArrow>
+                  )}
+                  <Tooltip label='Página anterior' placement='top' hasArrow>
                     <Button
-                      disabled={!categoriesPages.previous || isLoading}
+                      disabled={!subscriptionsPages.previous || isLoading}
                       variant='link'
                       onClick={previousPage}
                     >
-                      <ChevronLeft color={categoriesPages.previous ? 'black' : 'gray'} size={16} />
+                      <ChevronLeft
+                        color={subscriptionsPages.previous ? 'black' : 'gray'}
+                        size={16}
+                      />
                     </Button>
                   </Tooltip>
                   <Tooltip label='Próxima página' placement='top' hasArrow>
                     <Button
-                      disabled={!categoriesPages.next || isLoading}
+                      disabled={!subscriptionsPages.next || isLoading}
                       variant='link'
                       onClick={nextPage}
                     >
-                      <ChevronRight color={categoriesPages.next ? 'black' : 'gray'} size={16} />
+                      <ChevronRight color={subscriptionsPages.next ? 'black' : 'gray'} size={16} />
                     </Button>
-                  </Tooltip> */}
+                  </Tooltip>
                 </HStack>
               </Flex>
             </Th>
