@@ -66,15 +66,21 @@ const ListSubscription = ({ id }: IListSubscription) => {
         <Tbody>
           {subscriptionsPages.results?.map((subscription) => (
             <Tr key={subscription.id}>
-              <Td p={6}>{subscription.responsibleName}</Td>
-              <Td p={6}>{subscription.nickname}</Td>
-              <Td p={6}>{subscription.category.name}</Td>
+              <Td p={6} textTransform='capitalize'>
+                {subscription.responsibleName}
+              </Td>
+              <Td p={6} textTransform='capitalize'>
+                {subscription.nickname}
+              </Td>
+              <Td p={6} textTransform='capitalize'>
+                {subscription.category.name}
+              </Td>
               <Td p={6}>
                 <Tag
                   size='md'
                   key='md'
+                  textTransform='capitalize'
                   variant='solid'
-                  // colorScheme='red'
                   colorScheme={
                     subscription.status == 'APPROVED'
                       ? 'teal'
