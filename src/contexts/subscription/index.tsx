@@ -10,6 +10,7 @@ import { SubscriptionService } from '@/services/Subscription';
 import { subscriptionMessages } from '@/utils/messages';
 import { useToast } from '@chakra-ui/react';
 import { createContext, useCallback, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 interface SubscriptionProviderProps {
   children: React.ReactNode;
@@ -17,12 +18,8 @@ interface SubscriptionProviderProps {
 }
 
 export interface SubscriptionContextData {
-  subscriptionData: ISubscriptionDTO;
-  setSubscriptionData: (value: ISubscriptionDTO) => void;
   subscriptionForm: ISubscriptionForm;
   setSubscriptionForm: (value: ISubscriptionForm) => void;
-  participantsForm: IParticipantForm;
-  setParticipantsForm: (value: IParticipantForm) => void;
   subscriptions: ISubscription[];
   subscriptionsPages: IPageResponse<ISubscription>;
   isLoading: boolean;
@@ -32,7 +29,7 @@ export interface SubscriptionContextData {
   setPage: (value: number) => void;
   List: (id: string) => Promise<void>;
   ListPaginated: (id: string) => Promise<void>;
-  Create: () => Promise<void>;
+  Create: (participants: IParticipantForm) => Promise<void>;
 }
 
 const SubscriptionContext = createContext({} as SubscriptionContextData);
@@ -40,18 +37,13 @@ const SubscriptionContext = createContext({} as SubscriptionContextData);
 const axios = new AxiosAdapter();
 
 export const SubscriptionProvider = ({ children, onClose }: SubscriptionProviderProps) => {
+  const { id } = useParams();
   const toast = useToast();
   const [subscriptionsPages, setSubscriptionsPages] = useState<IPageResponse<ISubscription>>(
     {} as IPageResponse<ISubscription>,
   );
   const [subscriptionForm, setSubscriptionForm] = useState<ISubscriptionForm>(
     {} as ISubscriptionForm,
-  );
-  const [participantsForm, setParticipantsForm] = useState<IParticipantForm>(
-    {} as IParticipantForm,
-  );
-  const [subscriptionData, setSubscriptionData] = useState<ISubscriptionDTO>(
-    {} as ISubscriptionDTO,
   );
   const [limit, setLimit] = useState<number>(5);
   const [page, setPage] = useState<number>(1);
@@ -81,40 +73,43 @@ export const SubscriptionProvider = ({ children, onClose }: SubscriptionProvider
     [limit, page],
   );
 
-  const Create = useCallback(async () => {
-    // const tempSubscription = { ...subscriptionData };
-    // tempSubscription.nickname = subscription.nickname;
-    // tempSubscription.participants = subscription.participants;
-    // setSubscriptionData(tempSubscription);
-    setIsLoading(true);
-    await new SubscriptionService(axios)
-      .create(subscriptionData)
-      .then(() => {
-        toast({
-          title: subscriptionMessages['success'],
-          status: 'success',
-          isClosable: true,
-        });
-        // ListPaginated(championshipId);
-        onClose!();
-      })
-      .catch(() => {
-        toast({
-          title: subscriptionMessages['error'],
-          status: 'error',
-          isClosable: true,
-        });
-      })
-      .finally(() => setIsLoading(false));
-  }, [toast, ListPaginated, onClose]);
+  const Create = useCallback(
+    async (participants: IParticipantForm) => {
+      const subscriptionDTO: ISubscriptionDTO = {
+        nickname: participants.nickname,
+        participants: participants.participants,
+        responsibleEmail: subscriptionForm.responsibleEmail,
+        responsibleName: subscriptionForm.responsibleName,
+        responsiblePhone: subscriptionForm.responsiblePhone,
+        ticketId: subscriptionForm.ticketId,
+      };
+      setIsLoading(true);
+      await new SubscriptionService(axios)
+        .create(subscriptionDTO)
+        .then(() => {
+          toast({
+            title: subscriptionMessages['success'],
+            status: 'success',
+            isClosable: true,
+          });
+          ListPaginated(id as string);
+          onClose!();
+        })
+        .catch(() => {
+          toast({
+            title: subscriptionMessages['error'],
+            status: 'error',
+            isClosable: true,
+          });
+        })
+        .finally(() => setIsLoading(false));
+    },
+    [subscriptionForm, toast, onClose],
+  );
 
   return (
     <SubscriptionContext.Provider
       value={{
-        subscriptionData,
-        setSubscriptionData,
-        participantsForm,
-        setParticipantsForm,
         subscriptionForm,
         setSubscriptionForm,
         subscriptions,

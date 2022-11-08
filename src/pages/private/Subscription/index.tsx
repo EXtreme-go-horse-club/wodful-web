@@ -36,7 +36,7 @@ const Subscription = () => {
               </Button>
             </HStack>
             <ComponentModal
-              modalHeader='Criar categoria'
+              modalHeader='Adicionar inscrição'
               size='lg'
               isOpen={isOpen}
               onClose={onClose}
@@ -44,10 +44,7 @@ const Subscription = () => {
               {currentStep == 0 ? (
                 <FormSubscription id={id as string} openFormParticipants={handleSubscriptionInfo} />
               ) : (
-                <FormSubscriptionParticipants
-                  id={id as string}
-                  participantsNumber={participantsNumber as number}
-                />
+                <FormSubscriptionParticipants participantsNumber={participantsNumber as number} />
               )}
             </ComponentModal>
             <Box w='100%' marginTop={6}>

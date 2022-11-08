@@ -12,13 +12,9 @@ import {
   Select,
   VStack,
 } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import InputMask from 'react-input-mask';
-interface SubscriptionProps {
-  step?: number;
-  participantsNumber?: number;
-}
 interface CreateModalProps {
   id: string;
   openFormParticipants: (step: number, participantsNumber: number) => void;
@@ -27,7 +23,6 @@ interface CreateModalProps {
 const FormSubscription = ({ id, openFormParticipants }: CreateModalProps) => {
   const { setSubscriptionForm } = useSubscriptionData();
   const { List, tickets } = useTicketData();
-  const [participantsNumber, setParticipantsNumber] = useState<number>(0);
   const {
     register,
     handleSubmit,
@@ -41,16 +36,11 @@ const FormSubscription = ({ id, openFormParticipants }: CreateModalProps) => {
   }, [List, id]);
 
   function onSubmit(subscription: ISubscriptionForm) {
-    console.log(tickets[subscription.ticketIndex as number].id);
     subscription.ticketId = tickets[subscription.ticketIndex as number].id;
-    console.log(tickets[subscription.ticketIndex as number]);
-    console.log(subscription);
-    setSubscriptionForm(subscription);
-    // delete subscription.ticketIndex;
-
+    setSubscriptionForm(subscription as ISubscriptionForm);
     openFormParticipants(1, tickets[subscription.ticketIndex as number].category?.members);
-    // subscription.championshipId = id;
   }
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <VStack align='start' w='100%' spacing={6} pt={6} pb={6} flexDirection='column'>
@@ -124,10 +114,6 @@ const FormSubscription = ({ id, openFormParticipants }: CreateModalProps) => {
             {...register('ticketIndex', {
               required: validationMessages['required'],
             })}
-            // onChange={(event) => {
-            //   console.log(event.target.value);
-            //   // setParticipantsNumber(Number(event.target.value));
-            // }}
           >
             {tickets?.map((ticket, index) => (
               <option key={ticket.id} value={index}>

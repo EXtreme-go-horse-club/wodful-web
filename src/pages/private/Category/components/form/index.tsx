@@ -61,7 +61,7 @@ const FormCategory = ({ id }: CreateModalProps) => {
             {...register('description', {
               required: validationMessages['required'],
               minLength: { value: 4, message: validationMessages['minLength'] },
-              maxLength: { value: 250, message: validationMessages['maxLengthLg'] },
+              maxLength: { value: 250, message: validationMessages['maxLengthSm'] },
             })}
           />
           <FormErrorMessage>{errors.description && errors.description.message}</FormErrorMessage>

@@ -4,6 +4,7 @@ import { validationMessages } from '@/utils/messages';
 import {
   Button,
   ButtonGroup,
+  Divider,
   FormControl,
   FormErrorMessage,
   FormLabel,
@@ -16,15 +17,12 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 interface CreateModalProps {
-  id: string;
   participantsNumber: number;
 }
 
-const FormSubscriptionParticipants = ({ id, participantsNumber }: CreateModalProps) => {
-  const { subscriptionData, setSubscriptionData, Create, setParticipantsForm } =
-    useSubscriptionData();
+const FormSubscriptionParticipants = ({ participantsNumber }: CreateModalProps) => {
+  const { Create } = useSubscriptionData();
   const [indexes, setIndexes] = useState<number[]>([]);
-  // const [counter, setCounter] = useState<number>(0);
   const {
     register,
     handleSubmit,
@@ -55,17 +53,13 @@ const FormSubscriptionParticipants = ({ id, participantsNumber }: CreateModalPro
   }
 
   useEffect(() => {
-    console.log(participantsNumber);
     for (let index = 0; index < participantsNumber; index++) {
       setIndexes((indexes) => [...indexes, index]);
     }
   }, [participantsNumber]);
 
-  function onSubmit(subscription: any) {
-    console.log(subscription);
-    setParticipantsForm(subscription);
-    // subscription.championshipId = id;
-    Create();
+  function onSubmit(subscription: IParticipantForm) {
+    Create(subscription);
   }
 
   return (
@@ -93,12 +87,11 @@ const FormSubscriptionParticipants = ({ id, participantsNumber }: CreateModalPro
       </VStack>
       {indexes.map((index) => {
         const participants = `participants[${index}]`;
-        console.log(errors);
         return (
-          <VStack key={index} align='start' w='100%' spacing={6} pb={6} flexDirection='column'>
-            <FormControl isInvalid={!!`${errors}.${participants}.name`}>
+          <VStack key={index} w='100%' spacing={6} pb={6} flexDirection='column'>
+            <FormControl isInvalid={!!errors.participants && !!errors.participants![index]?.name}>
               <FormLabel htmlFor={`${participants}.name`} mb={2}>
-                {indexes.length > 1 ? `Atleta ${index + 1}` : 'nome'}
+                {indexes.length > 1 ? `Atleta ${index + 1}` : 'Nome'}
               </FormLabel>
               <Input
                 as='input'
@@ -117,28 +110,37 @@ const FormSubscriptionParticipants = ({ id, participantsNumber }: CreateModalPro
                   errors.participants![index]?.name?.message}
               </FormErrorMessage>
             </FormControl>
-            <HStack>
-              <FormControl isInvalid={!!`${errors}.${participants}.identificationCode`}>
+            <HStack width='100%' align='baseline' gap={4}>
+              <FormControl
+                isInvalid={
+                  !!errors.participants && !!errors.participants![index]?.identificationCode
+                }
+              >
                 <FormLabel htmlFor={`${participants}.identificationCode`} mb={2}>
                   Documento
                 </FormLabel>
                 <Input
                   as='input'
                   id={`${participants}.identificationCode`}
-                  placeholder='Informe o RG ou CPF'
+                  placeholder='Informe o CPF'
                   {...register(`participants.${index}.identificationCode`, {
                     required: validationMessages['required'],
                     minLength: { value: 9, message: validationMessages['minLength'] },
-                    maxLength: { value: 11, message: validationMessages['maxLengthSm'] },
+                    maxLength: { value: 20, message: validationMessages['maxLengthSm'] },
                     validate: (value) => isValidCPF(value) || validationMessages['invalidCode'],
                   })}
                 />
 
                 <FormErrorMessage>
-                  {errors.participants && errors.participants[index]?.identificationCode?.message}
+                  {errors.participants &&
+                    errors.participants![index]?.identificationCode &&
+                    errors.participants[index]?.identificationCode?.message}
                 </FormErrorMessage>
               </FormControl>
-              <FormControl isInvalid={!!`${errors}.${participants}.tShirtSize`} w='50%'>
+              <FormControl
+                isInvalid={!!errors.participants && !!errors.participants![index]?.tShirtSize}
+                w='50%'
+              >
                 <FormLabel htmlFor={`${participants}.tShirtSize`} mb={2}>
                   Camiseta
                 </FormLabel>
@@ -154,12 +156,14 @@ const FormSubscriptionParticipants = ({ id, participantsNumber }: CreateModalPro
                 />
 
                 <FormErrorMessage>
-                  {errors.participants && errors.participants[index]?.tShirtSize?.message}
+                  {errors.participants &&
+                    errors.participants![index]?.tShirtSize &&
+                    errors.participants[index]?.tShirtSize?.message}
                 </FormErrorMessage>
               </FormControl>
             </HStack>
-            <HStack>
-              <FormControl isInvalid={!!`${errors}.${participants}.city`}>
+            <HStack width='100%' align='baseline' gap={4}>
+              <FormControl isInvalid={!!errors.participants && !!errors.participants![index]?.city}>
                 <FormLabel htmlFor={`${participants}.city`} mb={2}>
                   Cidade
                 </FormLabel>
@@ -175,10 +179,14 @@ const FormSubscriptionParticipants = ({ id, participantsNumber }: CreateModalPro
                 />
 
                 <FormErrorMessage>
-                  {errors.participants && errors.participants[index]?.city?.message}
+                  {errors.participants &&
+                    errors.participants![index]?.city &&
+                    errors.participants[index]?.city?.message}
                 </FormErrorMessage>
               </FormControl>
-              <FormControl isInvalid={!!`${errors}.${participants}.affiliation`}>
+              <FormControl
+                isInvalid={!!errors.participants && !!errors.participants![index]?.affiliation}
+              >
                 <FormLabel htmlFor={`${participants}.affiliation`} mb={2}>
                   Box
                 </FormLabel>
@@ -194,15 +202,19 @@ const FormSubscriptionParticipants = ({ id, participantsNumber }: CreateModalPro
                 />
 
                 <FormErrorMessage>
-                  {errors.participants && errors.participants[index]?.affiliation?.message}
+                  {errors.participants &&
+                    errors.participants![index]?.affiliation &&
+                    errors.participants[index]?.affiliation?.message}
                 </FormErrorMessage>
               </FormControl>
             </HStack>
+
+            {index + 1 != indexes.length && <Divider />}
           </VStack>
         );
       })}
       <ButtonGroup flexDirection='column' alignItems='end' gap={6} w='100%'>
-        <Button colorScheme='teal' w='100%' mt={4} type='submit' disabled={!isValid}>
+        <Button colorScheme='teal' w='100%' mt={4} mb={4} type='submit' disabled={!isValid}>
           Próximo
         </Button>
       </ButtonGroup>
