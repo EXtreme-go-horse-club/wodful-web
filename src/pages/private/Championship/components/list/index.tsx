@@ -104,7 +104,7 @@ const ListChampionship = () => {
         ))}
       </SimpleGrid>
 
-      {championshipsPages.count && (
+      {(championshipsPages.count as number) > 0 && (
         <Box mt='24px'>
           <HStack>
             <Tooltip label='Página anterior' placement='top' hasArrow>

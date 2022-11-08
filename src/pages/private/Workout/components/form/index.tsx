@@ -16,11 +16,12 @@ import {
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
-interface CreateModalProps {
+interface IFormChampionshipProps {
   id: string;
+  onClose: () => void;
 }
 
-const FormWorkout = ({ id }: CreateModalProps) => {
+const FormWorkout = ({ id, onClose }: IFormChampionshipProps) => {
   const { Create } = useWorkoutData();
   const { List, categories } = useCategoryData();
   useEffect(() => {
@@ -36,6 +37,7 @@ const FormWorkout = ({ id }: CreateModalProps) => {
   function onSubmit(workout: IWorkoutDTO) {
     workout.championshipId = id;
     Create(workout);
+    onClose();
   }
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
