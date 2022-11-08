@@ -18,7 +18,11 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 
-const FormTicket = () => {
+interface IFormChampionshipProps {
+  onClose: () => void;
+}
+
+const FormTicket = ({ onClose }: IFormChampionshipProps) => {
   const { List, categories } = useCategoryData();
   const { Create } = useTicketData();
   const { id } = useParams();
@@ -36,6 +40,7 @@ const FormTicket = () => {
     ticket.price = Number(ticket.price);
     ticket.quantity = Number(ticket.quantity);
     Create(ticket);
+    onClose();
   }
 
   return (
@@ -82,10 +87,11 @@ const FormTicket = () => {
           <FormErrorMessage>{errors.description && errors.description.message}</FormErrorMessage>
         </FormControl>
 
-        <HStack>
+        <HStack width='100%'>
           <FormControl isInvalid={!!errors.price}>
             <FormLabel>Valor</FormLabel>
             <Input
+              as='input'
               type='number'
               placeholder='Valor do ticket'
               {...register('price', {
@@ -112,7 +118,7 @@ const FormTicket = () => {
           </FormControl>
         </HStack>
 
-        <HStack>
+        <HStack width='100%'>
           <FormControl isInvalid={!!errors.startDate}>
             <FormLabel>Data de início</FormLabel>
             <Input
