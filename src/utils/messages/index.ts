@@ -29,8 +29,6 @@ export const workoutMessages = {
 export const subscriptionMessages = {
   success: 'Inscrição adicionada com sucesso',
   error: 'Algo deu errado ao adicionar a inscrição',
-  // successMember: 'Inscrição adicionada com sucesso',
-  // error: 'Algo deu errado ao adicionar a inscrição',
 };
 
 export const subscriptionStatus = {
