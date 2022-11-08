@@ -68,11 +68,13 @@ const ListLeaderboard = () => {
                 {leaderboard.nickname}
               </Td>
               <Td p={6}>{leaderboard.category.name}</Td>
-              <Td p={6}>{leaderboard.ranking}° Posição</Td>
+              <Td p={6}>{leaderboard.ranking}° Lugar</Td>
               <Td p={6}>
                 {leaderboard.generalScore === 0
                   ? 'Sem pontuação'
-                  : `${leaderboard.generalScore} Pontos`}
+                  : `${leaderboard.generalScore} ${
+                      leaderboard.generalScore === 1 ? 'Ponto' : 'Pontos'
+                    }`}
               </Td>
               <Td p={6}>
                 <Flex justify='end'>

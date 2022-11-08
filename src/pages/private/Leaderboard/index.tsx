@@ -1,11 +1,14 @@
-import { Suspense } from 'react';
+import { lazy, Suspense } from 'react';
 
 import { Loader } from '@/components/Loader';
 import ComponentModal from '@/components/Modal';
 import { CategoryProvider } from '@/contexts/category';
 import { LeaderboardProvider } from '@/contexts/leaderboard';
+import { WorkoutProvider } from '@/contexts/workout';
 import { Box, Button, Flex, HStack, Select, Text, useDisclosure } from '@chakra-ui/react';
-import ListLeaderboard from './components/list';
+
+const ResultForm = lazy(() => import('./components/result/form'));
+const ListLeaderboard = lazy(() => import('./components/list'));
 
 const PrivateLeaderboardWithProvider = () => {
   const { onClose } = useDisclosure();
@@ -13,7 +16,9 @@ const PrivateLeaderboardWithProvider = () => {
   return (
     <LeaderboardProvider onClose={onClose}>
       <CategoryProvider>
-        <Leaderboard />
+        <WorkoutProvider>
+          <Leaderboard />
+        </WorkoutProvider>
       </CategoryProvider>
     </LeaderboardProvider>
   );
@@ -21,7 +26,6 @@ const PrivateLeaderboardWithProvider = () => {
 
 const Leaderboard = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  // const {} = useCategoryData();
   return (
     <Suspense fallback={<Loader title='Carregando ...' />}>
       <Box
@@ -64,7 +68,7 @@ const Leaderboard = () => {
           isOpen={isOpen}
           onClose={onClose}
         >
-          test
+          <ResultForm />
         </ComponentModal>
         <Box as='section' w='100%' marginTop={6}>
           <ListLeaderboard />
