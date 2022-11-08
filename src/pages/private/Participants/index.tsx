@@ -29,8 +29,6 @@ const Participants = () => {
     return name >= 3 ? setParticipantName(event.target.value) : setParticipantName('');
   };
 
-  console.log(id, 'id');
-
   return (
     <Suspense fallback={<Loader title='Carregando ...' />}>
       <Box w='100%' display='flex' flexDirection='column' alignItems='center' p={6}>

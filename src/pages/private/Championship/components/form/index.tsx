@@ -53,7 +53,7 @@ const FormChampionship = ({ onClose }: IFormChampionshipProps) => {
               <FormErrorMessage>{errors.name && errors.name.message}</FormErrorMessage>
             </FormControl>
 
-            <HStack>
+            <HStack width='100%'>
               <FormControl alignItems='start' isInvalid={!!errors.startDate}>
                 <FormLabel m={0}>Data de início</FormLabel>
                 <Input

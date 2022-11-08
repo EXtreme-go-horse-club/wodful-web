@@ -30,7 +30,6 @@ const Workout = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const hasElements: boolean = useMemo(() => workoutsPages.count !== 0, [workoutsPages]);
-  console.log(!hasElements);
 
   return (
     <Suspense fallback={<Loader title='Carregando ...' />}>

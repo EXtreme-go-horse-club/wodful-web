@@ -87,7 +87,7 @@ const FormTicket = ({ onClose }: IFormChampionshipProps) => {
           <FormErrorMessage>{errors.description && errors.description.message}</FormErrorMessage>
         </FormControl>
 
-        <HStack>
+        <HStack width='100%'>
           <FormControl isInvalid={!!errors.price}>
             <FormLabel>Valor</FormLabel>
             <Input
@@ -118,7 +118,7 @@ const FormTicket = ({ onClose }: IFormChampionshipProps) => {
           </FormControl>
         </HStack>
 
-        <HStack>
+        <HStack width='100%'>
           <FormControl isInvalid={!!errors.startDate}>
             <FormLabel>Data de início</FormLabel>
             <Input
