@@ -36,9 +36,13 @@ export class TicketService {
     limit?: number,
     page?: number,
   ): Promise<IPageResponse<ITicket> | ITicket[]> {
+    let url = `${this.path}/${id}`;
+
+    if (limit && page) url = `${url}?limit=${limit}&page=${page}`;
+
     const { statusCode, body } = await this.httpClient.request({
       method: 'get',
-      url: `${this.path}/${id}${limit && page && `?limit=${limit}&page=${page}`}`,
+      url: url,
     });
 
     switch (statusCode) {

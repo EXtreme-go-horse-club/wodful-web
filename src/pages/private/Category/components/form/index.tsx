@@ -14,11 +14,12 @@ import {
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 
-interface CreateModalProps {
+interface IFormChampionshipProps {
   id: string;
+  onClose: () => void;
 }
 
-const FormCategory = ({ id }: CreateModalProps) => {
+const FormCategory = ({ id, onClose }: IFormChampionshipProps) => {
   const { Create } = useCategoryData();
   const {
     register,
@@ -31,6 +32,7 @@ const FormCategory = ({ id }: CreateModalProps) => {
     category.championshipId = id;
     category.members = Number(category.members);
     Create(category);
+    onClose();
   }
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -61,7 +63,7 @@ const FormCategory = ({ id }: CreateModalProps) => {
             {...register('description', {
               required: validationMessages['required'],
               minLength: { value: 4, message: validationMessages['minLength'] },
-              maxLength: { value: 250, message: validationMessages['maxLengthLg'] },
+              maxLength: { value: 250, message: validationMessages['maxLengthSm'] },
             })}
           />
           <FormErrorMessage>{errors.description && errors.description.message}</FormErrorMessage>

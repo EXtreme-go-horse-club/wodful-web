@@ -15,7 +15,11 @@ import {
 
 import { SubmitHandler, useForm } from 'react-hook-form';
 
-const FormChampionship = () => {
+interface IFormChampionshipProps {
+  onClose: () => void;
+}
+
+const FormChampionship = ({ onClose }: IFormChampionshipProps) => {
   const { Create } = useChampionshipData();
 
   const {
@@ -28,6 +32,7 @@ const FormChampionship = () => {
     const banner = championship.banner as FileList;
     championship.banner = banner[0];
     await Create(championship);
+    onClose();
   };
 
   return (
@@ -48,7 +53,7 @@ const FormChampionship = () => {
               <FormErrorMessage>{errors.name && errors.name.message}</FormErrorMessage>
             </FormControl>
 
-            <HStack>
+            <HStack width='100%'>
               <FormControl alignItems='start' isInvalid={!!errors.startDate}>
                 <FormLabel m={0}>Data de início</FormLabel>
                 <Input
