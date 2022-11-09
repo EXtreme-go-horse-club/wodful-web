@@ -22,7 +22,7 @@ const PrivateRoutes = () => {
         <Route path='/login' element={<Navigate to='/championships' replace />} />
 
         <Route path='/championships/:id/' element={<Navbar />}>
-          <Route path='/championships/:id/leaderboard' element={<PrivateLeaderboard />} />
+          <Route path='/championships/:id/leaderboards' element={<PrivateLeaderboard />} />
           <Route path='/championships/:id/participants' element={<Participants />} />
           <Route path='/championships/:id/categories' element={<Category />} />
           <Route path='/championships/:id/tickets' element={<Ticket />} />

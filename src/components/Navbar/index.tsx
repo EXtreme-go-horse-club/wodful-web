@@ -8,7 +8,7 @@ export const Navbar = () => {
   const NavItems = [
     {
       label: 'Leaderboard',
-      path: `/championships/${params.id}/leaderboard`,
+      path: `/championships/${params.id}/leaderboards`,
     },
     {
       label: 'Categorias',
