@@ -1,8 +1,13 @@
 import { AxiosAdapter } from '@/adapters/AxiosAdapter';
 import { ILeaderboard } from '@/data/interfaces/leaderboard';
 import { IPageResponse } from '@/data/interfaces/pageResponse';
+import { ICreateResultRequestDTO } from '@/data/interfaces/result';
 import { LeaderboardService } from '@/services/Leaderboard';
+import { ResultService } from '@/services/Result';
+import { resultMessages } from '@/utils/messages';
+import { useToast } from '@chakra-ui/react';
 import { createContext, useCallback, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 interface LeaderboardProps {
   children: React.ReactNode;
@@ -17,13 +22,16 @@ export interface LeaderboardContextData {
   ListPaginated: (id: string) => void;
   setLimit: (value: number) => void;
   setPage: (value: number) => void;
+  Create: (data: ICreateResultRequestDTO) => void;
 }
 
 const LeaderboardContext = createContext({} as LeaderboardContextData);
 
 const axios = new AxiosAdapter();
 
-export const LeaderboardProvider = ({ children }: LeaderboardProps) => {
+export const LeaderboardProvider = ({ children, onClose }: LeaderboardProps) => {
+  const { id } = useParams();
+  const toast = useToast();
   const [leaderboardPages, setLeaderboardsPages] = useState<IPageResponse<ILeaderboard>>(
     {} as IPageResponse<ILeaderboard>,
   );
@@ -44,10 +52,37 @@ export const LeaderboardProvider = ({ children }: LeaderboardProps) => {
     [limit, page],
   );
 
+  const Create = useCallback(
+    async ({ workoutId, subscriptionId, result }: ICreateResultRequestDTO) => {
+      setIsLoading(true);
+      await new ResultService(axios)
+        .create({ workoutId, subscriptionId, result })
+        .then(() => {
+          toast({
+            title: resultMessages['success'],
+            status: 'success',
+            isClosable: true,
+          });
+          ListPaginated(String(id));
+          onClose!();
+        })
+        .catch(() => {
+          toast({
+            title: resultMessages['error'],
+            status: 'error',
+            isClosable: true,
+          });
+        })
+        .finally(() => setIsLoading(false));
+    },
+    [ListPaginated, id, onClose, toast],
+  );
+
   return (
     <LeaderboardContext.Provider
       value={{
         isLoading,
+        Create,
         limit,
         page,
         leaderboardPages,

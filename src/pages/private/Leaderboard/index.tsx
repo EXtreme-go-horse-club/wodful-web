@@ -71,7 +71,7 @@ const Leaderboard = () => {
           isOpen={isOpen}
           onClose={onClose}
         >
-          <ResultForm />
+          <ResultForm onClose={onClose} />
         </ComponentModal>
         <Box as='section' w='100%' marginTop={6}>
           <ListLeaderboard />

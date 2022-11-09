@@ -6,3 +6,9 @@ export interface IResult {
     name: string;
   };
 }
+
+export interface ICreateResultRequestDTO {
+  workoutId: string;
+  subscriptionId: string;
+  result: string;
+}

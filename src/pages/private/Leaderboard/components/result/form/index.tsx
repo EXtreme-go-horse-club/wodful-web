@@ -1,4 +1,5 @@
 import useCategoryData from '@/hooks/useCategoryData';
+import useLeaderboardData from '@/hooks/useLeaderboardData';
 import useSubscriptionData from '@/hooks/useSubscriptionData';
 import useWorkoutData from '@/hooks/useWorkoutData';
 import { validationMessages } from '@/utils/messages';
@@ -23,13 +24,18 @@ interface ResultFormProps {
   result: string;
 }
 
-const ResultForm = () => {
+interface IFormResultProps {
+  onClose: () => void;
+}
+
+const ResultForm = ({ onClose }: IFormResultProps) => {
   const { id } = useParams();
   const { List: CategoryList, categories } = useCategoryData();
   const { ListAllByCategory, subscriptions } = useSubscriptionData();
   const { workouts, ListByCategory } = useWorkoutData();
   const [isTeam, setIsTeam] = useState(false);
   const [workoutType, setWorkoutType] = useState('AMRAP');
+  const { Create } = useLeaderboardData();
 
   useEffect(() => {
     if (id) CategoryList(id);
@@ -43,9 +49,13 @@ const ResultForm = () => {
     mode: 'onChange',
   });
 
-  const onSubmit = useCallback((formResult: ResultFormProps) => {
-    console.log(formResult);
-  }, []);
+  const onSubmit = useCallback(
+    ({ subscription: subscriptionId, workout: workoutId, result }: ResultFormProps) => {
+      Create({ subscriptionId, workoutId, result });
+      onClose();
+    },
+    [Create, onClose],
+  );
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
