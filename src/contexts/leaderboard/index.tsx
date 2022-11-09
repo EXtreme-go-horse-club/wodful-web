@@ -19,7 +19,7 @@ export interface LeaderboardContextData {
   isLoading: boolean;
   page: number;
   limit: number;
-  ListPaginated: (id: string) => void;
+  ListPaginated: (id: string, categoryId: string) => void;
   setLimit: (value: number) => void;
   setPage: (value: number) => void;
   Create: (data: ICreateResultRequestDTO) => void;
@@ -40,10 +40,10 @@ export const LeaderboardProvider = ({ children, onClose }: LeaderboardProps) => 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const ListPaginated = useCallback(
-    async (id: string) => {
+    async (champId: string, categoryId: string) => {
       setIsLoading(true);
       await new LeaderboardService(axios)
-        .list(id, '911644ff-cd7a-4b58-9010-31272cf60c3f', limit, page)
+        .list(champId, categoryId, limit, page)
         .then((paginatedLeaderboards) => {
           setLeaderboardsPages(paginatedLeaderboards as IPageResponse<ILeaderboard>);
         })
@@ -53,17 +53,17 @@ export const LeaderboardProvider = ({ children, onClose }: LeaderboardProps) => 
   );
 
   const Create = useCallback(
-    async ({ workoutId, subscriptionId, result }: ICreateResultRequestDTO) => {
+    async ({ workoutId, subscriptionId, result, categoryId }: ICreateResultRequestDTO) => {
       setIsLoading(true);
       await new ResultService(axios)
-        .create({ workoutId, subscriptionId, result })
+        .create({ workoutId, subscriptionId, result, categoryId })
         .then(() => {
           toast({
             title: resultMessages['success'],
             status: 'success',
             isClosable: true,
           });
-          ListPaginated(String(id));
+          ListPaginated(String(id), categoryId);
           onClose!();
         })
         .catch(() => {

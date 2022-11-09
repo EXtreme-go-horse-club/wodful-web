@@ -23,15 +23,13 @@ const ListLeaderboard = () => {
   const { id } = useParams();
   const [currentTotal, setCurrentTotal] = useState<number>(0);
 
-  const { ListPaginated, leaderboardPages, page, limit, setLimit, setPage, isLoading } =
-    useLeaderboardData();
+  const { leaderboardPages, page, limit, setLimit, setPage, isLoading } = useLeaderboardData();
 
   useEffect(() => {
     if (id) {
-      ListPaginated(id);
       setCurrentTotal(leaderboardPages.results?.length);
     }
-  }, [ListPaginated, id, leaderboardPages.results?.length]);
+  }, [id, leaderboardPages.results?.length]);
 
   const previousPage = () => {
     setPage(page - 1);
@@ -103,8 +101,9 @@ const ListLeaderboard = () => {
                 <option value='20'>20</option>
               </Select>
             </Th>
-            <Th></Th>
-            <Th></Th>
+            <Th />
+            <Th />
+            <Th />
             <Th>
               <Flex justify='end'>
                 <HStack>

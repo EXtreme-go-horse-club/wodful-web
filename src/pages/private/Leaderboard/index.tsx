@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 
 import { Loader } from '@/components/Loader';
 import ComponentModal from '@/components/Modal';
@@ -6,7 +6,10 @@ import { CategoryProvider } from '@/contexts/category';
 import { LeaderboardProvider } from '@/contexts/leaderboard';
 import { SubscriptionProvider } from '@/contexts/subscription';
 import { WorkoutProvider } from '@/contexts/workout';
+import useCategoryData from '@/hooks/useCategoryData';
+import useLeaderboardData from '@/hooks/useLeaderboardData';
 import { Box, Button, Flex, HStack, Select, Text, useDisclosure } from '@chakra-ui/react';
+import { useParams } from 'react-router-dom';
 
 const ResultForm = lazy(() => import('./components/result/form'));
 const ListLeaderboard = lazy(() => import('./components/list'));
@@ -28,7 +31,16 @@ const PrivateLeaderboardWithProvider = () => {
 };
 
 const Leaderboard = () => {
+  const { id } = useParams();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { List: CategoryList, categories } = useCategoryData();
+  const [selectedCategory, setSelectedCategory] = useState<string>('Sem categoria');
+  const { ListPaginated } = useLeaderboardData();
+
+  useEffect(() => {
+    if (id) CategoryList(id);
+  }, [CategoryList, id]);
+
   return (
     <Suspense fallback={<Loader title='Carregando ...' />}>
       <Box
@@ -54,12 +66,31 @@ const Leaderboard = () => {
               borderColor='gray.500'
               borderRadius='4px'
               padding='2px 8px'
+              textTransform='capitalize'
             >
-              Categoria: Amador masculino
+              Categoria: {selectedCategory}
             </Text>
           </Flex>
           <Flex as='article' gap='1rem'>
-            <Select minW='320px' variant='outline' placeholder='Outline' />
+            <Select
+              as='select'
+              id='category'
+              placeholder='Selecione a categoria'
+              onChange={(event) => {
+                if (event.target.value) {
+                  ListPaginated(String(id), event.target.value);
+                  setSelectedCategory(
+                    categories.find((selected) => selected.id === event.target.value)!.name,
+                  );
+                }
+              }}
+            >
+              {categories?.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </Select>
             <Button minW='170px' colorScheme='teal' size='md' onClick={onOpen}>
               Adicionar resultado
             </Button>

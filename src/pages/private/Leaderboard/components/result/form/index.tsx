@@ -13,9 +13,8 @@ import {
   Select,
   VStack,
 } from '@chakra-ui/react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useParams } from 'react-router-dom';
 
 interface ResultFormProps {
   category: string;
@@ -29,17 +28,12 @@ interface IFormResultProps {
 }
 
 const ResultForm = ({ onClose }: IFormResultProps) => {
-  const { id } = useParams();
-  const { List: CategoryList, categories } = useCategoryData();
+  const { categories } = useCategoryData();
   const { ListAllByCategory, subscriptions } = useSubscriptionData();
   const { workouts, ListByCategory } = useWorkoutData();
   const [isTeam, setIsTeam] = useState(false);
   const [workoutType, setWorkoutType] = useState('AMRAP');
   const { Create } = useLeaderboardData();
-
-  useEffect(() => {
-    if (id) CategoryList(id);
-  }, [CategoryList, id]);
 
   const {
     register,
@@ -50,8 +44,13 @@ const ResultForm = ({ onClose }: IFormResultProps) => {
   });
 
   const onSubmit = useCallback(
-    ({ subscription: subscriptionId, workout: workoutId, result }: ResultFormProps) => {
-      Create({ subscriptionId, workoutId, result });
+    ({
+      subscription: subscriptionId,
+      workout: workoutId,
+      result,
+      category: categoryId,
+    }: ResultFormProps) => {
+      Create({ subscriptionId, workoutId, result, categoryId });
       onClose();
     },
     [Create, onClose],

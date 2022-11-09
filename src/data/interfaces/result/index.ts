@@ -10,5 +10,6 @@ export interface IResult {
 export interface ICreateResultRequestDTO {
   workoutId: string;
   subscriptionId: string;
+  categoryId: string;
   result: string;
 }
