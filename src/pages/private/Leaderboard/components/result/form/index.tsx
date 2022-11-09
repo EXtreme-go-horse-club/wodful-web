@@ -1,4 +1,5 @@
 import useCategoryData from '@/hooks/useCategoryData';
+import useSubscriptionData from '@/hooks/useSubscriptionData';
 import useWorkoutData from '@/hooks/useWorkoutData';
 import { validationMessages } from '@/utils/messages';
 import {
@@ -11,7 +12,7 @@ import {
   Select,
   VStack,
 } from '@chakra-ui/react';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 
@@ -24,9 +25,11 @@ interface ResultFormProps {
 
 const ResultForm = () => {
   const { id } = useParams();
-  const { Create } = useWorkoutData();
   const { List: CategoryList, categories } = useCategoryData();
+  const { ListAllByCategory, subscriptions } = useSubscriptionData();
   const { workouts, ListByCategory } = useWorkoutData();
+  const [isTeam, setIsTeam] = useState(false);
+  const [workoutType, setWorkoutType] = useState('AMRAP');
 
   useEffect(() => {
     if (id) CategoryList(id);
@@ -55,7 +58,13 @@ const ResultForm = () => {
             placeholder='Selecione a categoria'
             {...register('category', {
               required: validationMessages['required'],
-              onChange: (e) => ListByCategory(e.target.value),
+              onChange: (e) => {
+                setIsTeam(
+                  categories.find((selected) => selected.id === e.target.value)?.isTeam || false,
+                );
+                ListAllByCategory(e.target.value);
+                ListByCategory(e.target.value);
+              },
             })}
           >
             {categories?.map((category) => (
@@ -74,6 +83,12 @@ const ResultForm = () => {
             placeholder='Selecione a prova'
             {...register('workout', {
               required: validationMessages['required'],
+              onChange: (event) => {
+                setWorkoutType(
+                  workouts.find((selected) => selected.id === event.target.value)?.workoutType ||
+                    'AMRAP',
+                );
+              },
             })}
           >
             {workouts?.map((workout) => (
@@ -82,7 +97,25 @@ const ResultForm = () => {
               </option>
             ))}
           </Select>
-          <FormErrorMessage>{errors.category && errors.category.message}</FormErrorMessage>
+          <FormErrorMessage>{errors.workout && errors.workout.message}</FormErrorMessage>
+        </FormControl>
+        <FormControl isInvalid={!!errors.subscription}>
+          <FormLabel>{isTeam ? 'Equipe' : 'Atleta'}</FormLabel>
+          <Select
+            as='select'
+            id='subscription'
+            placeholder={isTeam ? 'Selecione uma equipe' : 'Selecione um atleta'}
+            {...register('subscription', {
+              required: validationMessages['required'],
+            })}
+          >
+            {subscriptions?.map((subscription) => (
+              <option key={subscription.id} value={subscription.id}>
+                {subscription.nickname}
+              </option>
+            ))}
+          </Select>
+          <FormErrorMessage>{errors.subscription && errors.subscription.message}</FormErrorMessage>
         </FormControl>
         <FormControl isInvalid={!!errors.result}>
           <FormLabel htmlFor='result' m={0}>
@@ -91,6 +124,7 @@ const ResultForm = () => {
           <Input
             as='input'
             id='result'
+            type={`${workoutType === 'AMRAP' ? 'number' : 'time'}`}
             placeholder='Resultado'
             {...register('result', {
               required: validationMessages['required'],

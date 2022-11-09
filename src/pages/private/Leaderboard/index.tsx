@@ -4,6 +4,7 @@ import { Loader } from '@/components/Loader';
 import ComponentModal from '@/components/Modal';
 import { CategoryProvider } from '@/contexts/category';
 import { LeaderboardProvider } from '@/contexts/leaderboard';
+import { SubscriptionProvider } from '@/contexts/subscription';
 import { WorkoutProvider } from '@/contexts/workout';
 import { Box, Button, Flex, HStack, Select, Text, useDisclosure } from '@chakra-ui/react';
 
@@ -17,7 +18,9 @@ const PrivateLeaderboardWithProvider = () => {
     <LeaderboardProvider onClose={onClose}>
       <CategoryProvider>
         <WorkoutProvider>
-          <Leaderboard />
+          <SubscriptionProvider>
+            <Leaderboard />
+          </SubscriptionProvider>
         </WorkoutProvider>
       </CategoryProvider>
     </LeaderboardProvider>
