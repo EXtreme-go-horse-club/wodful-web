@@ -17,4 +17,21 @@ const wodfulApiPrivate = axios.create({
   );
 });
 
+[wodfulApiPrivate].forEach((instance) => {
+  instance.interceptors.response.use(
+    (config) => {
+      return config;
+    },
+    async function (error) {
+      const originalRequest = error.config;
+
+      if (error.response.status === 400 && !originalRequest._retry) {
+        localStorage.removeItem('@Wodful:usr');
+        localStorage.removeItem('@Wodful:tkn');
+      }
+      return Promise.reject(error);
+    },
+  );
+});
+
 export default wodfulApiPrivate;
