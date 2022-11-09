@@ -7,10 +7,6 @@ export const Navbar = () => {
 
   const NavItems = [
     {
-      label: 'Dashboard',
-      path: `/championships/${params.id}/dashboard`,
-    },
-    {
       label: 'Leaderboard',
       path: `/championships/${params.id}/leaderboard`,
     },
@@ -19,12 +15,12 @@ export const Navbar = () => {
       path: `/championships/${params.id}/categories`,
     },
     {
-      label: 'Provas',
-      path: `/championships/${params.id}/workouts`,
-    },
-    {
       label: 'Tickets',
       path: `/championships/${params.id}/tickets`,
+    },
+    {
+      label: 'Provas',
+      path: `/championships/${params.id}/workouts`,
     },
     {
       label: 'Inscrições',

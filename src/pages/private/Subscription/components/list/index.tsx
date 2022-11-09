@@ -119,11 +119,12 @@ const ListSubscription = ({ id }: IListSubscription) => {
                 <option value='20'>20</option>
               </Select>
             </Th>
-            <Th></Th>
+            <Th />
+            <Th />
+            <Th />
             <Th>
               <Flex justify='end'>
                 <HStack>
-                  <Text>PAGINACAO</Text>
                   {page === 1 && (
                     <Text>
                       {page * limit - (limit - 1)} - {page * limit} de {subscriptionsPages.count}

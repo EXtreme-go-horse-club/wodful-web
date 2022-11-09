@@ -60,7 +60,7 @@ const ListChampionship = () => {
           >
             <LinkOverlay
               as={ReactRouter}
-              to={`${championship.id}/tickets`}
+              to={`${championship.id}/leaderboard`}
               onClick={() => {
                 setCurrentChampionship(championship as IChampionship);
               }}
