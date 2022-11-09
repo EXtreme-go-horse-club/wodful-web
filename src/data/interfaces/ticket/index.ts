@@ -7,6 +7,10 @@ export interface ITicket {
   enabled: boolean;
   price: string;
   quantity: number;
+  category: {
+    members: number;
+    name: string;
+  };
 }
 
 export interface TicketDTO {

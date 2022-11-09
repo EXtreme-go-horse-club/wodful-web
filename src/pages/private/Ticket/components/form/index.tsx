@@ -81,7 +81,7 @@ const FormTicket = ({ onClose }: IFormChampionshipProps) => {
             {...register('description', {
               required: validationMessages['required'],
               minLength: { value: 4, message: validationMessages['minLength'] },
-              maxLength: { value: 250, message: validationMessages['maxLengthLg'] },
+              maxLength: { value: 250, message: validationMessages['maxLengthSm'] },
             })}
           />
           <FormErrorMessage>{errors.description && errors.description.message}</FormErrorMessage>
@@ -97,7 +97,7 @@ const FormTicket = ({ onClose }: IFormChampionshipProps) => {
               {...register('price', {
                 required: validationMessages['required'],
                 minLength: { value: 1, message: validationMessages['minLength'] },
-                maxLength: { value: 15, message: validationMessages['maxLengthLg'] },
+                maxLength: { value: 15, message: validationMessages['maxLengthSm'] },
               })}
             />
             <FormErrorMessage>{errors.price && errors.price.message}</FormErrorMessage>
@@ -111,7 +111,7 @@ const FormTicket = ({ onClose }: IFormChampionshipProps) => {
               {...register('quantity', {
                 required: validationMessages['required'],
                 minLength: { value: 1, message: validationMessages['minLength'] },
-                maxLength: { value: 5, message: validationMessages['maxLengthLg'] },
+                maxLength: { value: 5, message: validationMessages['maxLengthSm'] },
               })}
             />
             <FormErrorMessage>{errors.quantity && errors.quantity.message}</FormErrorMessage>
