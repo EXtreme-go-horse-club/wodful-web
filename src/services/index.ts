@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { redirect } from 'react-router-dom';
 
 const wodfulApiPrivate = axios.create({
   baseURL: `${import.meta.env.VITE_BASE_API_URL}`,
@@ -23,11 +24,11 @@ const wodfulApiPrivate = axios.create({
       return config;
     },
     async function (error) {
-      const originalRequest = error.config;
-
-      if (error.response.status === 400 && !originalRequest._retry) {
+      const errorReponseMessage = error.response.data.message;
+      if (error.response.status === 400 && errorReponseMessage === 'Invalid token') {
         localStorage.removeItem('@Wodful:usr');
         localStorage.removeItem('@Wodful:tkn');
+        redirect('/login');
       }
       return Promise.reject(error);
     },
