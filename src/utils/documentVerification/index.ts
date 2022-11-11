@@ -1,9 +1,12 @@
-export function isValidCPF(value: string) {
+export function isValidDocument(value: string) {
   if (typeof value !== 'string') {
     return false;
   }
 
   value = value.replace(/[^\d]+/g, '');
+  if (value.length == 9 && !value.match(/(\d)\1{10}/)) {
+    return true;
+  }
 
   if (value.length !== 11 || !!value.match(/(\d)\1{10}/)) {
     return false;

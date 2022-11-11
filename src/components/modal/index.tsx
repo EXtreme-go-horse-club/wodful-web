@@ -26,7 +26,15 @@ const ComponentModal = ({
     <>
       <Modal size={size} isOpen={isOpen} onClose={onClose as () => void}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent
+          maxH='80%'
+          overflow={'auto'}
+          css={{
+            '&::-webkit-scrollbar': {
+              display: 'none',
+            },
+          }}
+        >
           <ModalHeader>{modalHeader}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>{children}</ModalBody>
