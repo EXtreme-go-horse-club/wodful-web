@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { redirect } from 'react-router-dom';
+
+const removeTokenMessage = ['Invalid token', 'Token is missing'];
 
 const wodfulApiPrivate = axios.create({
   baseURL: `${import.meta.env.VITE_BASE_API_URL}`,
@@ -25,10 +26,10 @@ const wodfulApiPrivate = axios.create({
     },
     async function (error) {
       const errorReponseMessage = error.response.data.message;
-      if (error.response.status === 400 && errorReponseMessage === 'Invalid token') {
+      if (error.response.status === 400 && removeTokenMessage.includes(errorReponseMessage)) {
         localStorage.removeItem('@Wodful:usr');
         localStorage.removeItem('@Wodful:tkn');
-        redirect('/login');
+        window.location.href = '/login';
       }
       return Promise.reject(error);
     },
