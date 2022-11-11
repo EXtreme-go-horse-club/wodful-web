@@ -1,6 +1,6 @@
 import { HttpClient, HttpStatusCode } from '@/data/interfaces/http';
 import { IPageResponse } from '@/data/interfaces/pageResponse';
-import { ICreateResultRequestDTO, IResult } from '@/data/interfaces/result';
+import { ICreateResultRequestDTO, IResult, IResultByCategory } from '@/data/interfaces/result';
 
 export class ResultService {
   constructor(
@@ -22,6 +22,30 @@ export class ResultService {
     switch (statusCode) {
       case HttpStatusCode.created:
         return body! as IResult;
+      default:
+        throw new Error();
+    }
+  }
+  async listByCategory(
+    categoryId: string,
+    limit?: number,
+    page?: number,
+  ): Promise<IPageResponse<IResultByCategory>> {
+    let url = `categories/${categoryId}${this.path}`;
+
+    if (limit && page) url = `${url}?limit=${limit}&page=${page}`;
+
+    const { statusCode, body } = await this.httpClient.request({
+      method: 'get',
+      url,
+      body: {
+        categoryId,
+      },
+    });
+
+    switch (statusCode) {
+      case HttpStatusCode.ok:
+        return body! as IPageResponse<IResultByCategory>;
       default:
         throw new Error();
     }
