@@ -17,9 +17,7 @@ const wodfulApiPrivate = axios.create({
     },
     (error) => Promise.reject(error),
   );
-});
 
-[wodfulApiPrivate].forEach((instance) => {
   instance.interceptors.response.use(
     (config) => {
       return config;
