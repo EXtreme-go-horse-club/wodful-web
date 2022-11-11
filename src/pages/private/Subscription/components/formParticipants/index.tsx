@@ -1,6 +1,6 @@
 import { IParticipantForm } from '@/data/interfaces/subscription';
 import useSubscriptionData from '@/hooks/useSubscriptionData';
-import { isValidCPF } from '@/utils/documentVerification';
+import { isValidDocument } from '@/utils/documentVerification';
 import { validationMessages } from '@/utils/messages';
 import {
   Button,
@@ -107,7 +107,8 @@ const FormSubscriptionParticipants = ({ participantsNumber }: CreateModalProps) 
                     required: validationMessages['required'],
                     minLength: { value: 9, message: validationMessages['minLength'] },
                     maxLength: { value: 20, message: validationMessages['maxLengthSm'] },
-                    validate: (value) => isValidCPF(value) || validationMessages['invalidCode'],
+                    validate: (value) =>
+                      isValidDocument(value) || validationMessages['invalidCode'],
                   })}
                 />
 
@@ -193,9 +194,17 @@ const FormSubscriptionParticipants = ({ participantsNumber }: CreateModalProps) 
           </VStack>
         );
       })}
-      <ButtonGroup flexDirection='column' alignItems='end' gap={6} w='100%'>
+      <ButtonGroup
+        backgroundColor={'white'}
+        flexDirection='column'
+        alignItems='end'
+        gap={6}
+        w='100%'
+        position='sticky'
+        bottom={0}
+      >
         <Button colorScheme='teal' w='100%' mt={4} mb={4} type='submit' disabled={!isValid}>
-          Próximo
+          Adicionar
         </Button>
       </ButtonGroup>
     </form>
