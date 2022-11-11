@@ -26,6 +26,11 @@ export const workoutMessages = {
   error: 'Algo deu errado ao adicionar a prova',
 };
 
+export const resultMessages = {
+  success: 'Resultado adicionado com sucesso',
+  error: 'Algo deu errado ao adicionar um resultado',
+};
+
 export const subscriptionMessages = {
   success: 'Inscrição adicionada com sucesso',
   error: 'Algo deu errado ao adicionar a inscrição',

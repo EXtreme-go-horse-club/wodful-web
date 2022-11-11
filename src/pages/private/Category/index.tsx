@@ -1,6 +1,6 @@
 import { EmptyList } from '@/components/EmptyList';
 import { Loader } from '@/components/Loader';
-import ComponentModal from '@/components/modal';
+import ComponentModal from '@/components/Modal';
 import { CategoryProvider } from '@/contexts/category';
 import useCategoryData from '@/hooks/useCategoryData';
 import { Box, Button, HStack, Text, useDisclosure } from '@chakra-ui/react';

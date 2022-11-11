@@ -8,7 +8,7 @@ import { createContext, useCallback, useState } from 'react';
 
 interface WorkoutProviderProps {
   children: React.ReactNode;
-  onClose: () => void;
+  onClose?: () => void;
 }
 
 export interface WorkoutContextData {
@@ -20,6 +20,7 @@ export interface WorkoutContextData {
   page: number;
   setPage: (value: number) => void;
   List: (id: string) => Promise<void>;
+  ListByCategory: (id: string) => Promise<void>;
   ListPaginated: (id: string) => Promise<void>;
   Create: ({
     name,
@@ -67,6 +68,16 @@ export const WorkoutProvider = ({ children, onClose }: WorkoutProviderProps) => 
     [limit, page],
   );
 
+  const ListByCategory = useCallback(async (categoryId: string) => {
+    setIsLoading(true);
+    await new WorkoutService(axios)
+      .listByCategory(categoryId)
+      .then((allWorkouts) => {
+        setWorkouts(allWorkouts as IWorkout[]);
+      })
+      .finally(() => setIsLoading(false));
+  }, []);
+
   const Create = useCallback(
     async ({ name, description, workoutType, championshipId, categoryId }: IWorkoutDTO) => {
       setIsLoading(true);
@@ -79,7 +90,7 @@ export const WorkoutProvider = ({ children, onClose }: WorkoutProviderProps) => 
             isClosable: true,
           });
           ListPaginated(championshipId);
-          onClose();
+          onClose!();
         })
         .catch(() => {
           toast({
@@ -106,6 +117,7 @@ export const WorkoutProvider = ({ children, onClose }: WorkoutProviderProps) => 
         Create,
         List,
         ListPaginated,
+        ListByCategory,
       }}
     >
       {children}

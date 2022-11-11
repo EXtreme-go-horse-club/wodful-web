@@ -46,4 +46,23 @@ export class SubscriptionService {
         throw new Error();
     }
   }
+
+  async listAllByCategory(
+    id: string,
+    categoryId: string,
+  ): Promise<IPageResponse<ISubscription> | ISubscription[]> {
+    const url = `championships/${id}${this.path}?category=${categoryId}`;
+
+    const { statusCode, body } = await this.httpClient.request({
+      method: 'get',
+      url: url,
+    });
+
+    switch (statusCode) {
+      case HttpStatusCode.ok:
+        return body! as IPageResponse<ISubscription> | ISubscription[];
+      default:
+        throw new Error();
+    }
+  }
 }

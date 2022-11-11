@@ -29,6 +29,7 @@ export interface SubscriptionContextData {
   setPage: (value: number) => void;
   List: (id: string) => Promise<void>;
   ListPaginated: (id: string) => Promise<void>;
+  ListAllByCategory: (categoryId: string) => Promise<void>;
   Create: (participants: IParticipantForm) => Promise<void>;
 }
 
@@ -59,6 +60,19 @@ export const SubscriptionProvider = ({ children, onClose }: SubscriptionProvider
       })
       .finally(() => setIsLoading(false));
   }, []);
+
+  const ListAllByCategory = useCallback(
+    async (categoryId: string) => {
+      setIsLoading(true);
+      await new SubscriptionService(axios)
+        .listAllByCategory(String(id), categoryId)
+        .then((allSubs) => {
+          setSubscriptions(allSubs as ISubscription[]);
+        })
+        .finally(() => setIsLoading(false));
+    },
+    [id],
+  );
 
   const ListPaginated = useCallback(
     async (id: string) => {
@@ -122,6 +136,7 @@ export const SubscriptionProvider = ({ children, onClose }: SubscriptionProvider
         Create,
         List,
         ListPaginated,
+        ListAllByCategory,
       }}
     >
       {children}
