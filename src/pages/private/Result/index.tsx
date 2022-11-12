@@ -10,9 +10,9 @@ import useCategoryData from '@/hooks/useCategoryData';
 import useResultData from '@/hooks/useResultData';
 import { Box, Button, Flex, HStack, Select, Text, useDisclosure } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
-import ListResults from './components/list';
 
 const ResultForm = lazy(() => import('./components/form'));
+const ListResults = lazy(() => import('./components/list'));
 
 const ResultWithProvider = () => {
   const { onClose } = useDisclosure();
@@ -35,6 +35,7 @@ const Result = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { List: CategoryList, categories } = useCategoryData();
   const [selectedCategory, setSelectedCategory] = useState<string>('Sem categoria');
+  const [categoryId, setCategoryId] = useState<string>('');
   const { ListPaginated } = useResultData();
 
   useEffect(() => {
@@ -79,6 +80,7 @@ const Result = () => {
               onChange={(event) => {
                 if (event.target.value) {
                   ListPaginated(event.target.value);
+                  setCategoryId(event.target.value);
                   setSelectedCategory(
                     categories.find((selected) => selected.id === event.target.value)!.name,
                   );
@@ -105,7 +107,7 @@ const Result = () => {
           <ResultForm onClose={onClose} />
         </ComponentModal>
         <Box as='section' w='100%' marginTop={6}>
-          <ListResults />
+          <ListResults id={categoryId as string} />
         </Box>
       </Box>
     </Suspense>

@@ -17,19 +17,23 @@ import {
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight, MoreHorizontal } from 'react-feather';
-import { useParams } from 'react-router-dom';
 
-const ListResults = () => {
-  const { id } = useParams();
+interface IListResults {
+  id: string;
+}
+
+const ListResults = ({ id }: IListResults) => {
   const [currentTotal, setCurrentTotal] = useState<number>(0);
 
-  const { resultPages, page, limit, setLimit, setPage, isLoading } = useResultData();
+  const { ListPaginated, resultPages, page, limit, setLimit, setPage, isLoading } = useResultData();
 
   useEffect(() => {
     if (id) {
-      setCurrentTotal(resultPages.results?.length);
+      ListPaginated(id);
+      console.log('eu');
     }
-  }, [id, resultPages.results?.length]);
+    setCurrentTotal(resultPages.results?.length);
+  }, []);
 
   const previousPage = () => {
     setPage(page - 1);
@@ -45,7 +49,7 @@ const ListResults = () => {
         <Thead bg='gray.50' border='1px' borderColor='gray.100'>
           <Tr>
             <Th>
-              <Text as='b'>APELIDO</Text>
+              <Text as='b'>PARTICIPANTES</Text>
             </Th>
             <Th>
               <Text as='b'>PROVA</Text>

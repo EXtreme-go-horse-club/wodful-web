@@ -1,24 +1,20 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
 
 import { Loader } from '@/components/Loader';
-import ComponentModal from '@/components/Modal';
 import { CategoryProvider } from '@/contexts/category';
 import { LeaderboardProvider } from '@/contexts/leaderboard';
 import { SubscriptionProvider } from '@/contexts/subscription';
 import { WorkoutProvider } from '@/contexts/workout';
 import useCategoryData from '@/hooks/useCategoryData';
 import useLeaderboardData from '@/hooks/useLeaderboardData';
-import { Box, Button, Flex, HStack, Select, Text, useDisclosure } from '@chakra-ui/react';
+import { Box, Flex, HStack, Select, Text } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 
-const ResultForm = lazy(() => import('./components/result/form'));
 const ListLeaderboard = lazy(() => import('./components/list'));
 
 const PrivateLeaderboardWithProvider = () => {
-  const { onClose } = useDisclosure();
-
   return (
-    <LeaderboardProvider onClose={onClose}>
+    <LeaderboardProvider>
       <CategoryProvider>
         <WorkoutProvider>
           <SubscriptionProvider>
@@ -32,7 +28,6 @@ const PrivateLeaderboardWithProvider = () => {
 
 const Leaderboard = () => {
   const { id } = useParams();
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const { List: CategoryList, categories } = useCategoryData();
   const [selectedCategory, setSelectedCategory] = useState<string>('Sem categoria');
   const { ListPaginated } = useLeaderboardData();
@@ -91,19 +86,8 @@ const Leaderboard = () => {
                 </option>
               ))}
             </Select>
-            <Button minW='170px' colorScheme='teal' size='md' onClick={onOpen}>
-              Adicionar resultado
-            </Button>
           </Flex>
         </HStack>
-        <ComponentModal
-          modalHeader='Adicionar resultado'
-          size='lg'
-          isOpen={isOpen}
-          onClose={onClose}
-        >
-          <ResultForm onClose={onClose} />
-        </ComponentModal>
         <Box as='section' w='100%' marginTop={6}>
           <ListLeaderboard />
         </Box>

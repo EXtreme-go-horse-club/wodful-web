@@ -19,6 +19,7 @@ import {
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight, MoreHorizontal } from 'react-feather';
+
 interface IListSubscription {
   id: string;
 }
