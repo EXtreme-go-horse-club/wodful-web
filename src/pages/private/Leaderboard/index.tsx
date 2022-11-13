@@ -30,6 +30,7 @@ const Leaderboard = () => {
   const { id } = useParams();
   const { List: CategoryList, categories } = useCategoryData();
   const [selectedCategory, setSelectedCategory] = useState<string>('Sem categoria');
+  const [categoryId, setCategoryId] = useState<string>('');
   const { ListPaginated } = useLeaderboardData();
 
   useEffect(() => {
@@ -74,6 +75,7 @@ const Leaderboard = () => {
               onChange={(event) => {
                 if (event.target.value) {
                   ListPaginated(String(id), event.target.value);
+                  setCategoryId(event.target.value);
                   setSelectedCategory(
                     categories.find((selected) => selected.id === event.target.value)!.name,
                   );
@@ -89,7 +91,7 @@ const Leaderboard = () => {
           </Flex>
         </HStack>
         <Box as='section' w='100%' marginTop={6}>
-          <ListLeaderboard />
+          <ListLeaderboard category={categoryId as string} champ={id as string} />
         </Box>
       </Box>
     </Suspense>

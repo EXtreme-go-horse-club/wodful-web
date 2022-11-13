@@ -52,8 +52,7 @@ const ListSubscription = ({ id }: IListSubscription) => {
               <Text as='b'>RESPONSÁVEL</Text>
             </Th>
             <Th>
-              {/* APLICAR LOGICA DEPENDENDO DO TICKET */}
-              <Text as='b'>TIME/APELIDO</Text>
+              <Text as='b'>PARTICIPANTE</Text>
             </Th>
             <Th>
               <Text as='b'>CATEGORIA</Text>

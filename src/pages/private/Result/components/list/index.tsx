@@ -30,10 +30,9 @@ const ListResults = ({ id }: IListResults) => {
   useEffect(() => {
     if (id) {
       ListPaginated(id);
-      console.log('eu');
+      setCurrentTotal(resultPages.results?.length);
     }
-    setCurrentTotal(resultPages.results?.length);
-  }, []);
+  }, [ListPaginated, id, resultPages.results?.length]);
 
   const previousPage = () => {
     setPage(page - 1);
