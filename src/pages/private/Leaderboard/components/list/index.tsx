@@ -70,9 +70,13 @@ const ListLeaderboard = ({ champ, category }: IListLeaderboard) => {
               <Td p={6} textTransform='capitalize'>
                 {leaderboard.nickname}
               </Td>
-              <Td p={6}>{leaderboard.category.name}</Td>
-              <Td p={6}>{leaderboard.ranking}° Lugar</Td>
-              <Td p={6}>
+              <Td p={6} textTransform='capitalize'>
+                {leaderboard.category.name}
+              </Td>
+              <Td p={6} textTransform='capitalize'>
+                {leaderboard.ranking === 0 ? 'Sem ranking' : `${leaderboard.ranking}° Lugar`}
+              </Td>
+              <Td p={6} textTransform='capitalize'>
                 {leaderboard.generalScore === 0
                   ? 'Sem pontuação'
                   : `${leaderboard.generalScore} ${
