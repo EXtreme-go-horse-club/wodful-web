@@ -17,19 +17,24 @@ import {
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight, MoreHorizontal } from 'react-feather';
-import { useParams } from 'react-router-dom';
 
-const ListLeaderboard = () => {
-  const { id } = useParams();
+interface IListLeaderboard {
+  champ: string;
+  category: string;
+}
+
+const ListLeaderboard = ({ champ, category }: IListLeaderboard) => {
   const [currentTotal, setCurrentTotal] = useState<number>(0);
 
-  const { leaderboardPages, page, limit, setLimit, setPage, isLoading } = useLeaderboardData();
+  const { ListPaginated, leaderboardPages, page, limit, setLimit, setPage, isLoading } =
+    useLeaderboardData();
 
   useEffect(() => {
-    if (id) {
+    if (champ && category) {
+      ListPaginated(champ, category);
       setCurrentTotal(leaderboardPages.results?.length);
     }
-  }, [id, leaderboardPages.results?.length]);
+  }, [ListPaginated, category, champ, leaderboardPages.results?.length]);
 
   const previousPage = () => {
     setPage(page - 1);
@@ -61,13 +66,17 @@ const ListLeaderboard = () => {
         </Thead>
         <Tbody>
           {leaderboardPages.results?.map((leaderboard) => (
-            <Tr key={leaderboard.ranking}>
+            <Tr key={`${leaderboard.nickname}_${leaderboard.generalScore}`}>
               <Td p={6} textTransform='capitalize'>
                 {leaderboard.nickname}
               </Td>
-              <Td p={6}>{leaderboard.category.name}</Td>
-              <Td p={6}>{leaderboard.ranking}° Lugar</Td>
-              <Td p={6}>
+              <Td p={6} textTransform='capitalize'>
+                {leaderboard.category.name}
+              </Td>
+              <Td p={6} textTransform='capitalize'>
+                {leaderboard.ranking === 0 ? 'Sem ranking' : `${leaderboard.ranking}° Lugar`}
+              </Td>
+              <Td p={6} textTransform='capitalize'>
                 {leaderboard.generalScore === 0
                   ? 'Sem pontuação'
                   : `${leaderboard.generalScore} ${

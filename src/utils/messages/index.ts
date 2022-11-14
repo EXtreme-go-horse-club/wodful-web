@@ -13,6 +13,8 @@ export const championshipMessages = {
 
 export const categoryMessages = {
   success: 'Categoria adicionada com sucesso',
+  remove: 'Categoria removida com sucesso',
+  remove_err: 'Algo deu errado ao remover a categoria',
   error: 'Algo deu errado ao adicionar a categoria',
 };
 
