@@ -5,6 +5,7 @@ import { CategoryService } from '@/services/Category';
 import { categoryMessages } from '@/utils/messages';
 import { useToast } from '@chakra-ui/react';
 import { createContext, useCallback, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 interface CategoryProviderProps {
   children: React.ReactNode;
@@ -20,6 +21,7 @@ export interface CategoryContextData {
   setLimit: (value: number) => void;
   page: number;
   setPage: (value: number) => void;
+  Delete: (id: string) => Promise<void>;
   List: (id: string) => Promise<void>;
   ListPaginated: (id: string) => Promise<void>;
   Create: ({ championshipId, description, members, name }: ICategoryDTO) => Promise<void>;
@@ -30,6 +32,7 @@ const CategoryContext = createContext({} as CategoryContextData);
 const axios = new AxiosAdapter();
 
 export const CategoryProvider = ({ children, onClose }: CategoryProviderProps) => {
+  const { id } = useParams();
   const toast = useToast();
   const [categoriesPages, setCategoriesPages] = useState<IPageResponse<ICategory>>(
     {} as IPageResponse<ICategory>,
@@ -89,6 +92,31 @@ export const CategoryProvider = ({ children, onClose }: CategoryProviderProps) =
     [toast, ListPaginated, onClose],
   );
 
+  const Delete = useCallback(
+    async (idCat: string) => {
+      setIsLoading(true);
+      await new CategoryService(axios)
+        .delete(idCat)
+        .then(() => {
+          toast({
+            title: categoryMessages['remove'],
+            status: 'success',
+            isClosable: true,
+          });
+          ListPaginated(String(id));
+        })
+        .catch(() => {
+          toast({
+            title: categoryMessages['remove_err'],
+            status: 'error',
+            isClosable: true,
+          });
+        })
+        .finally(() => setIsLoading(false));
+    },
+    [ListPaginated, id, toast],
+  );
+
   return (
     <CategoryContext.Provider
       value={{
@@ -98,6 +126,7 @@ export const CategoryProvider = ({ children, onClose }: CategoryProviderProps) =
         isError,
         limit,
         page,
+        Delete,
         setLimit,
         setPage,
         Create,

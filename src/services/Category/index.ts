@@ -23,6 +23,20 @@ export class CategoryService {
     }
   }
 
+  async delete(id: string): Promise<ICategory> {
+    const { statusCode, body } = await this.httpClient.request({
+      method: 'delete',
+      url: `${this.path}/${id}`,
+    });
+
+    switch (statusCode) {
+      case HttpStatusCode.noContent:
+        return body! as ICategory;
+      default:
+        throw new Error();
+    }
+  }
+
   async listAll(
     id: string,
     limit?: number,
