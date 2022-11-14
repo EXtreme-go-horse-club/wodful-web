@@ -4,7 +4,7 @@ import { ITicket, TicketDTO } from '@/data/interfaces/ticket';
 
 export class TicketService {
   constructor(
-    private readonly httpClient: HttpClient<IPageResponse<ITicket> | ITicket[] | ITicket>,
+    private readonly httpClient: HttpClient<IPageResponse<ITicket> | ITicket[] | ITicket | void>,
     private readonly path = '/tickets/',
   ) {}
 
@@ -26,6 +26,20 @@ export class TicketService {
     switch (statusCode) {
       case HttpStatusCode.created:
         return body! as ITicket;
+      default:
+        throw new Error();
+    }
+  }
+
+  async delete(id: string): Promise<void> {
+    const { statusCode, body } = await this.httpClient.request({
+      method: 'delete',
+      url: `${this.path}/${id}`,
+    });
+
+    switch (statusCode) {
+      case HttpStatusCode.noContent:
+        return body! as unknown as void;
       default:
         throw new Error();
     }
