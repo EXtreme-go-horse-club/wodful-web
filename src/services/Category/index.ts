@@ -4,7 +4,9 @@ import { IPageResponse } from '@/data/interfaces/pageResponse';
 
 export class CategoryService {
   constructor(
-    private readonly httpClient: HttpClient<IPageResponse<ICategory> | ICategory | ICategory[]>,
+    private readonly httpClient: HttpClient<
+      IPageResponse<ICategory> | ICategory | ICategory[] | void
+    >,
     private readonly path = '/categories',
   ) {}
 
@@ -18,6 +20,20 @@ export class CategoryService {
     switch (statusCode) {
       case HttpStatusCode.created:
         return body! as ICategory;
+      default:
+        throw new Error();
+    }
+  }
+
+  async delete(id: string): Promise<void> {
+    const { statusCode, body } = await this.httpClient.request({
+      method: 'delete',
+      url: `${this.path}/${id}`,
+    });
+
+    switch (statusCode) {
+      case HttpStatusCode.noContent:
+        return body! as unknown as void;
       default:
         throw new Error();
     }
