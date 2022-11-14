@@ -23,6 +23,10 @@ export const Navbar = () => {
       path: `/championships/${params.id}/workouts`,
     },
     {
+      label: 'Resultados',
+      path: `/championships/${params.id}/results`,
+    },
+    {
       label: 'Inscrições',
       path: `/championships/${params.id}/subscriptions`,
     },

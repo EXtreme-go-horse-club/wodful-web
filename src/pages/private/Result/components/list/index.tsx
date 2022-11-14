@@ -1,5 +1,4 @@
-import useSubscriptionData from '@/hooks/useSubscriptionData';
-import { subscriptionStatus } from '@/utils/messages';
+import useResultData from '@/hooks/useResultData';
 import {
   Button,
   Flex,
@@ -7,7 +6,6 @@ import {
   Select,
   Table,
   TableContainer,
-  Tag,
   Tbody,
   Td,
   Text,
@@ -20,20 +18,21 @@ import {
 import { useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight, MoreHorizontal } from 'react-feather';
 
-interface IListSubscription {
+interface IListResults {
   id: string;
 }
 
-const ListSubscription = ({ id }: IListSubscription) => {
+const ListResults = ({ id }: IListResults) => {
   const [currentTotal, setCurrentTotal] = useState<number>(0);
 
-  const { ListPaginated, subscriptionsPages, page, limit, setLimit, setPage, isLoading } =
-    useSubscriptionData();
+  const { ListPaginated, resultPages, page, limit, setLimit, setPage, isLoading } = useResultData();
 
   useEffect(() => {
-    ListPaginated(id);
-    setCurrentTotal(subscriptionsPages.results?.length);
-  }, [ListPaginated, subscriptionsPages.results?.length, id]);
+    if (id) {
+      ListPaginated(id);
+      setCurrentTotal(resultPages.results?.length);
+    }
+  }, [ListPaginated, id, resultPages.results?.length]);
 
   const previousPage = () => {
     setPage(page - 1);
@@ -49,48 +48,32 @@ const ListSubscription = ({ id }: IListSubscription) => {
         <Thead bg='gray.50' border='1px' borderColor='gray.100'>
           <Tr>
             <Th>
-              <Text as='b'>RESPONSÁVEL</Text>
+              <Text as='b'>PARTICIPANTES</Text>
             </Th>
             <Th>
-              <Text as='b'>PARTICIPANTE</Text>
+              <Text as='b'>PROVA</Text>
             </Th>
             <Th>
-              <Text as='b'>CATEGORIA</Text>
+              <Text as='b'>COLOCAÇÃO</Text>
             </Th>
             <Th>
-              <Text as='b'>STATUS</Text>
+              <Text as='b'>PONTOS</Text>
             </Th>
             <Th></Th>
           </Tr>
         </Thead>
         <Tbody>
-          {subscriptionsPages.results?.map((subscription) => (
-            <Tr key={subscription.id}>
+          {resultPages.results?.map((result) => (
+            <Tr key={result.id}>
               <Td p={6} textTransform='capitalize'>
-                {subscription.responsibleName}
+                {result.nickname}
               </Td>
-              <Td p={6} textTransform='capitalize'>
-                {subscription.nickname}
-              </Td>
-              <Td p={6} textTransform='capitalize'>
-                {subscription.category.name}
-              </Td>
+              <Td p={6}>{result.workout.name}</Td>
+              <Td p={6}>{result.classification}° Lugar</Td>
               <Td p={6}>
-                <Tag
-                  size='md'
-                  key='md'
-                  textTransform='capitalize'
-                  variant='solid'
-                  colorScheme={
-                    subscription.status == 'APPROVED'
-                      ? 'teal'
-                      : subscription.status == 'DECLINED'
-                      ? 'red'
-                      : 'yellow'
-                  }
-                >
-                  {subscriptionStatus[subscription.status]}
-                </Tag>
+                {Number(result.points) === 0
+                  ? 'Sem pontuação'
+                  : `${Number(result.points)} ${Number(result.points) === 1 ? 'Ponto' : 'Pontos'}`}
               </Td>
               <Td p={6}>
                 <Flex justify='end'>
@@ -127,35 +110,32 @@ const ListSubscription = ({ id }: IListSubscription) => {
                 <HStack>
                   {page === 1 && (
                     <Text>
-                      {page * limit - (limit - 1)} - {page * limit} de {subscriptionsPages.count}
+                      {page * limit - (limit - 1)} - {page * limit} de {resultPages.count}
                     </Text>
                   )}
 
                   {page !== 1 && (
                     <Text>
                       {page * limit - (limit - 1)} - {page * limit - limit + currentTotal} de{' '}
-                      {subscriptionsPages.count}
+                      {resultPages.count}
                     </Text>
                   )}
                   <Tooltip label='Página anterior' placement='top' hasArrow>
                     <Button
-                      disabled={!subscriptionsPages.previous || isLoading}
+                      disabled={!resultPages.previous || isLoading}
                       variant='link'
                       onClick={previousPage}
                     >
-                      <ChevronLeft
-                        color={subscriptionsPages.previous ? 'black' : 'gray'}
-                        size={16}
-                      />
+                      <ChevronLeft color={resultPages.previous ? 'black' : 'gray'} size={16} />
                     </Button>
                   </Tooltip>
                   <Tooltip label='Próxima página' placement='top' hasArrow>
                     <Button
-                      disabled={!subscriptionsPages.next || isLoading}
+                      disabled={!resultPages.next || isLoading}
                       variant='link'
                       onClick={nextPage}
                     >
-                      <ChevronRight color={subscriptionsPages.next ? 'black' : 'gray'} size={16} />
+                      <ChevronRight color={resultPages.next ? 'black' : 'gray'} size={16} />
                     </Button>
                   </Tooltip>
                 </HStack>
@@ -168,4 +148,4 @@ const ListSubscription = ({ id }: IListSubscription) => {
   );
 };
 
-export default ListSubscription;
+export default ListResults;

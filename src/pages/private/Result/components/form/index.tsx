@@ -1,5 +1,5 @@
 import useCategoryData from '@/hooks/useCategoryData';
-import useLeaderboardData from '@/hooks/useLeaderboardData';
+import useResultData from '@/hooks/useResultData';
 import useSubscriptionData from '@/hooks/useSubscriptionData';
 import useWorkoutData from '@/hooks/useWorkoutData';
 import { validationMessages } from '@/utils/messages';
@@ -33,7 +33,7 @@ const ResultForm = ({ onClose }: IFormResultProps) => {
   const { workouts, ListByCategory } = useWorkoutData();
   const [isTeam, setIsTeam] = useState(false);
   const [workoutType, setWorkoutType] = useState('AMRAP');
-  const { Create } = useLeaderboardData();
+  const { Create } = useResultData();
 
   const {
     register,

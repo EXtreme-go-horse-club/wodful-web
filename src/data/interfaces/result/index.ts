@@ -7,6 +7,17 @@ export interface IResult {
   };
 }
 
+export interface IResultByCategory {
+  id: string;
+  nickname: string;
+  workout: {
+    name: string;
+  };
+  result: string;
+  classification: string;
+  points: string;
+}
+
 export interface ICreateResultRequestDTO {
   workoutId: string;
   subscriptionId: string;
