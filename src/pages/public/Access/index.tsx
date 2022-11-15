@@ -3,6 +3,7 @@ import {
   Button,
   Center,
   FormControl,
+  FormErrorMessage,
   Heading,
   Image,
   Input,
@@ -11,8 +12,19 @@ import {
 } from '@chakra-ui/react';
 
 import wodfulBlackLogo from '@/assets/icons/wodful-black-logo.svg';
+import useAuth from '@/hooks/useAuth';
+import { useCallback, useMemo, useState } from 'react';
 
 const Access = () => {
+  const { Access, isError, isLoading } = useAuth();
+  const [accessCode, setAccessCode] = useState('');
+
+  const handlePublicAccess = useCallback(() => {
+    Access(accessCode);
+  }, [Access, accessCode]);
+
+  const isEmpty = useMemo(() => !accessCode.length, [accessCode]);
+
   return (
     <Box>
       <Center px={5} h='90vh'>
@@ -31,12 +43,25 @@ const Access = () => {
             </Stack>
 
             <Stack gap='2' w='100%'>
-              <FormControl>
+              <FormControl isInvalid={isError}>
                 <Stack gap='2'>
-                  <Input type='email' placeholder='Código do campeonato' />
+                  <Input
+                    type='text'
+                    placeholder='Código do Campeonato'
+                    onChange={(event) => {
+                      setAccessCode(event?.target.value.toUpperCase());
+                    }}
+                  />
                 </Stack>
+                {isError && <FormErrorMessage>Código incorreto ou inválido</FormErrorMessage>}
               </FormControl>
-              <Button colorScheme='teal' size='lg'>
+              <Button
+                colorScheme='teal'
+                size='lg'
+                onClick={handlePublicAccess}
+                isLoading={isLoading}
+                disabled={isEmpty || isLoading}
+              >
                 Continuar
               </Button>
             </Stack>

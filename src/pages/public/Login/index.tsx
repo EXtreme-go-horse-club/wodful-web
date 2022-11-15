@@ -14,6 +14,7 @@ import {
 
 import wodfulBlackLogo from '@/assets/icons/wodful-black-logo.svg';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
   const { Login, isError, isLoading } = useAuth();
@@ -69,7 +70,11 @@ const Login = () => {
               >
                 Continuar
               </Button>
-              <Button variant='link'>Acessar campeonato com código</Button>
+              <Stack as='article' justify='center' align='center'>
+                <Link to='/access'>
+                  <Button variant='link'>Acessar campeonato com código</Button>
+                </Link>
+              </Stack>
             </Stack>
           </Stack>
         </Center>

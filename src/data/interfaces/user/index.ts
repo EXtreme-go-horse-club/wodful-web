@@ -8,6 +8,10 @@ export interface AuthenticatedUser {
   user: IUserData;
 }
 
+export interface PublicUser {
+  code: string;
+}
+
 export interface IAuthenticateUserRequest {
   email: string;
   password: string;
