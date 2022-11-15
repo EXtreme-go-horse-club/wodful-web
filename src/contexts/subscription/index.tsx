@@ -27,7 +27,9 @@ export interface SubscriptionContextData {
   setLimit: (value: number) => void;
   page: number;
   setPage: (value: number) => void;
+  Delete: (id: string) => Promise<void>;
   List: (id: string) => Promise<void>;
+  UpdateStatus: (id: string, status: string) => Promise<void>;
   ListPaginated: (id: string) => Promise<void>;
   ListAllByCategory: (categoryId: string) => Promise<void>;
   Create: (participants: IParticipantForm) => Promise<void>;
@@ -121,6 +123,58 @@ export const SubscriptionProvider = ({ children, onClose }: SubscriptionProvider
     [subscriptionForm, toast, onClose],
   );
 
+  const Delete = useCallback(
+    async (idSub: string) => {
+      setIsLoading(true);
+      await new SubscriptionService(axios)
+        .delete(idSub)
+        .then(() => {
+          toast({
+            title: subscriptionMessages['remove'],
+            status: 'success',
+            isClosable: true,
+          });
+          ListPaginated(String(id));
+        })
+        .catch(() => {
+          toast({
+            title: subscriptionMessages['remove_err'],
+            status: 'error',
+            isClosable: true,
+          });
+        })
+        .finally(() => setIsLoading(false));
+    },
+    [ListPaginated, id, toast],
+  );
+
+  const UpdateStatus = useCallback(
+    async (idSub: string, status: string) => {
+      setIsLoading(true);
+      await new SubscriptionService(axios)
+        .updateStatus(idSub, status)
+        .then(() => {
+          console.log('then');
+          toast({
+            title: subscriptionMessages['status_update'],
+            status: 'success',
+            isClosable: true,
+          });
+          ListPaginated(String(id));
+        })
+        .catch(() => {
+          console.log('catch');
+          toast({
+            title: subscriptionMessages['status_update_err'],
+            status: 'error',
+            isClosable: true,
+          });
+        })
+        .finally(() => setIsLoading(false));
+    },
+    [ListPaginated, id, toast],
+  );
+
   return (
     <SubscriptionContext.Provider
       value={{
@@ -134,6 +188,8 @@ export const SubscriptionProvider = ({ children, onClose }: SubscriptionProvider
         setLimit,
         setPage,
         Create,
+        Delete,
+        UpdateStatus,
         List,
         ListPaginated,
         ListAllByCategory,

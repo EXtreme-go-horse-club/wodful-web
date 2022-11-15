@@ -40,6 +40,10 @@ export const resultMessages = {
 export const subscriptionMessages = {
   success: 'Inscrição adicionada com sucesso',
   error: 'Algo deu errado ao adicionar a inscrição',
+  remove: 'Inscrição removida com sucesso',
+  remove_err: 'Algo deu errado ao remover a inscrição',
+  status_update: 'Status da inscrição alterado com sucesso',
+  status_update_err: 'Algo deu errado ao alterar o status da inscrição',
 };
 
 export const subscriptionStatus = {
