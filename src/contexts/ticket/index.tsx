@@ -21,6 +21,7 @@ export interface TicketContextData {
   setLimit: (value: number) => void;
   page: number;
   setPage: (value: number) => void;
+  Delete: (id: string) => Promise<void>;
   ListPaginated: (id: string) => Promise<void>;
   List: (id: string) => Promise<void>;
   Create: ({
@@ -110,6 +111,31 @@ export const TicketProvider = ({ children, onClose }: TicketProviderProps) => {
     [ListPaginated, onClose, toast, id],
   );
 
+  const Delete = useCallback(
+    async (idCat: string) => {
+      setIsLoading(true);
+      await new TicketService(axios)
+        .delete(idCat)
+        .then(() => {
+          toast({
+            title: ticketMessages['remove'],
+            status: 'success',
+            isClosable: true,
+          });
+          ListPaginated(String(id));
+        })
+        .catch(() => {
+          toast({
+            title: ticketMessages['remove_err'],
+            status: 'error',
+            isClosable: true,
+          });
+        })
+        .finally(() => setIsLoading(false));
+    },
+    [ListPaginated, id, toast],
+  );
+
   return (
     <TicketContext.Provider
       value={{
@@ -121,6 +147,7 @@ export const TicketProvider = ({ children, onClose }: TicketProviderProps) => {
         page,
         setLimit,
         setPage,
+        Delete,
         Create,
         List,
         ListPaginated,

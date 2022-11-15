@@ -31,6 +31,20 @@ export class TicketService {
     }
   }
 
+  async delete(id: string): Promise<ITicket> {
+    const { statusCode, body } = await this.httpClient.request({
+      method: 'delete',
+      url: `${this.path}/${id}`,
+    });
+
+    switch (statusCode) {
+      case HttpStatusCode.noContent:
+        return body! as ITicket;
+      default:
+        throw new Error();
+    }
+  }
+
   async listAll(
     id: string,
     limit?: number,
