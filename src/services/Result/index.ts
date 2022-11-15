@@ -26,6 +26,7 @@ export class ResultService {
         throw new Error();
     }
   }
+
   async listByCategory(
     categoryId: string,
     limit?: number,
@@ -46,6 +47,20 @@ export class ResultService {
     switch (statusCode) {
       case HttpStatusCode.ok:
         return body! as IPageResponse<IResultByCategory>;
+      default:
+        throw new Error();
+    }
+  }
+
+  async delete(id: string): Promise<IResultByCategory> {
+    const { statusCode, body } = await this.httpClient.request({
+      method: 'delete',
+      url: `${this.path}/${id}`,
+    });
+
+    switch (statusCode) {
+      case HttpStatusCode.noContent:
+        return body! as IResultByCategory;
       default:
         throw new Error();
     }

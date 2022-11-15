@@ -35,6 +35,8 @@ export const workoutMessages = {
 export const resultMessages = {
   success: 'Resultado adicionado com sucesso',
   error: 'Algo deu errado ao adicionar um resultado',
+  remove: 'Resultado removido com sucesso',
+  remove_err: 'Algo deu errado ao remover o Resultado',
 };
 
 export const subscriptionMessages = {
