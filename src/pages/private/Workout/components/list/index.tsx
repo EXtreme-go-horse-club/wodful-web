@@ -3,6 +3,11 @@ import {
   Button,
   Flex,
   HStack,
+  IconButton,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Select,
   Table,
   TableContainer,
@@ -26,7 +31,7 @@ interface IListWorkout {
 const ListWorkout = ({ id }: IListWorkout) => {
   const [currentTotal, setCurrentTotal] = useState<number>(0);
 
-  const { ListPaginated, workoutsPages, page, limit, setLimit, setPage, isLoading } =
+  const { ListPaginated, workoutsPages, page, limit, setLimit, setPage, isLoading, Delete } =
     useWorkoutData();
 
   useEffect(() => {
@@ -40,6 +45,10 @@ const ListWorkout = ({ id }: IListWorkout) => {
 
   const nextPage = () => {
     setPage(page + 1);
+  };
+
+  const deleteWorkout = (id: string) => {
+    Delete(id);
   };
 
   return (
@@ -76,7 +85,17 @@ const ListWorkout = ({ id }: IListWorkout) => {
               <Td p={6}>{workout.categoryName}</Td>
               <Td p={6}>
                 <Flex justify='end'>
-                  <MoreHorizontal cursor='pointer' size={18} />
+                  <Menu>
+                    <MenuButton
+                      as={IconButton}
+                      aria-label='Options'
+                      icon={<MoreHorizontal />}
+                      variant='none'
+                    />
+                    <MenuList>
+                      <MenuItem onClick={() => deleteWorkout(workout.id)}>Deletar</MenuItem>
+                    </MenuList>
+                  </Menu>
                 </Flex>
               </Td>
             </Tr>

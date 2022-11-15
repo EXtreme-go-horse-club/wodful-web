@@ -28,6 +28,8 @@ export const ticketMessages = {
 export const workoutMessages = {
   success: 'Prova adicionada com sucesso',
   error: 'Algo deu errado ao adicionar a prova',
+  remove: 'Prova removida com sucesso',
+  remove_err: 'Algo deu errado ao remover a Prova',
 };
 
 export const resultMessages = {
