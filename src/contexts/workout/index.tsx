@@ -5,6 +5,7 @@ import { WorkoutService } from '@/services/Workout';
 import { workoutMessages } from '@/utils/messages';
 import { useToast } from '@chakra-ui/react';
 import { createContext, useCallback, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 interface WorkoutProviderProps {
   children: React.ReactNode;
@@ -19,6 +20,7 @@ export interface WorkoutContextData {
   setLimit: (value: number) => void;
   page: number;
   setPage: (value: number) => void;
+  Delete: (id: string) => Promise<void>;
   List: (id: string) => Promise<void>;
   ListByCategory: (id: string) => Promise<void>;
   ListPaginated: (id: string) => Promise<void>;
@@ -44,6 +46,8 @@ export const WorkoutProvider = ({ children, onClose }: WorkoutProviderProps) => 
   const [page, setPage] = useState<number>(1);
   const [workouts, setWorkouts] = useState<IWorkout[]>([] as IWorkout[]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const { id } = useParams();
 
   const List = useCallback(async (id: string) => {
     setIsLoading(true);
@@ -104,10 +108,29 @@ export const WorkoutProvider = ({ children, onClose }: WorkoutProviderProps) => 
     [ListPaginated, onClose, toast],
   );
 
+  const Delete = useCallback(
+    async (idCat: string) => {
+      setIsLoading(true);
+      await new WorkoutService(axios)
+        .delete(idCat)
+        .then(() => {
+          toast({
+            title: workoutMessages['remove'],
+            status: 'success',
+            isClosable: true,
+          });
+          ListPaginated(id as string);
+        })
+        .finally(() => setIsLoading(false));
+    },
+    [ListPaginated, id, toast],
+  );
+
   return (
     <WorkoutContext.Provider
       value={{
         workouts,
+        Delete,
         workoutsPages,
         isLoading,
         limit,

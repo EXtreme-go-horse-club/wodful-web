@@ -72,4 +72,18 @@ export class WorkoutService {
         throw new Error();
     }
   }
+
+  async delete(id: string): Promise<IWorkout> {
+    const { statusCode, body } = await this.httpClient.request({
+      method: 'delete',
+      url: `${this.path}/${id}`,
+    });
+
+    switch (statusCode) {
+      case HttpStatusCode.noContent:
+        return body! as IWorkout;
+      default:
+        throw new Error();
+    }
+  }
 }
