@@ -23,6 +23,20 @@ export class CategoryService {
     }
   }
 
+  async delete(id: string): Promise<ICategory> {
+    const { statusCode, body } = await this.httpClient.request({
+      method: 'delete',
+      url: `${this.path}/${id}`,
+    });
+
+    switch (statusCode) {
+      case HttpStatusCode.noContent:
+        return body! as ICategory;
+      default:
+        throw new Error();
+    }
+  }
+
   async listAll(
     id: string,
     limit?: number,
@@ -30,7 +44,7 @@ export class CategoryService {
   ): Promise<IPageResponse<ICategory> | ICategory[]> {
     let url = `${this.path}/${id}`;
 
-    if (limit !== undefined && page !== undefined) url = `${url}?limit=${limit}&page=${page}`;
+    if (limit && page) url = `${url}?limit=${limit}&page=${page}`;
 
     const { statusCode, body } = await this.httpClient.request({
       method: 'get',

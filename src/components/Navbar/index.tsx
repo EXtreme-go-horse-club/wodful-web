@@ -7,20 +7,24 @@ export const Navbar = () => {
 
   const NavItems = [
     {
-      label: 'Dashboard',
-      path: `/championships/${params.id}/dashboard`,
+      label: 'Leaderboard',
+      path: `/championships/${params.id}/leaderboards`,
     },
     {
       label: 'Categorias',
       path: `/championships/${params.id}/categories`,
     },
     {
+      label: 'Tickets',
+      path: `/championships/${params.id}/tickets`,
+    },
+    {
       label: 'Provas',
       path: `/championships/${params.id}/workouts`,
     },
     {
-      label: 'Tickets',
-      path: `/championships/${params.id}/tickets`,
+      label: 'Resultados',
+      path: `/championships/${params.id}/results`,
     },
     {
       label: 'Inscrições',

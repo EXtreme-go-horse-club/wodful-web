@@ -3,6 +3,11 @@ import {
   Button,
   Flex,
   HStack,
+  IconButton,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Select,
   Table,
   TableContainer,
@@ -25,7 +30,7 @@ interface IListCategory {
 const ListCategory = ({ id }: IListCategory) => {
   const [currentTotal, setCurrentTotal] = useState<number>(0);
 
-  const { ListPaginated, categoriesPages, page, limit, setLimit, setPage, isLoading } =
+  const { ListPaginated, categoriesPages, page, limit, setLimit, setPage, isLoading, Delete } =
     useCategoryData();
 
   useEffect(() => {
@@ -35,6 +40,10 @@ const ListCategory = ({ id }: IListCategory) => {
 
   const previousPage = () => {
     setPage(page - 1);
+  };
+
+  const deleteCategory = (id: string) => {
+    Delete(id);
   };
 
   const nextPage = () => {
@@ -71,7 +80,17 @@ const ListCategory = ({ id }: IListCategory) => {
               </Td>
               <Td p={6}>
                 <Flex justify='end'>
-                  <MoreHorizontal cursor='pointer' size={18} />
+                  <Menu>
+                    <MenuButton
+                      as={IconButton}
+                      aria-label='Options'
+                      icon={<MoreHorizontal />}
+                      variant='none'
+                    />
+                    <MenuList>
+                      <MenuItem onClick={() => deleteCategory(category.id)}>Deletar</MenuItem>
+                    </MenuList>
+                  </Menu>
                 </Flex>
               </Td>
             </Tr>

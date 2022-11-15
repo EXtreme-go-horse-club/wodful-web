@@ -31,14 +31,32 @@ export class TicketService {
     }
   }
 
+  async delete(id: string): Promise<ITicket> {
+    const { statusCode, body } = await this.httpClient.request({
+      method: 'delete',
+      url: `${this.path}/${id}`,
+    });
+
+    switch (statusCode) {
+      case HttpStatusCode.noContent:
+        return body! as ITicket;
+      default:
+        throw new Error();
+    }
+  }
+
   async listAll(
     id: string,
     limit?: number,
     page?: number,
   ): Promise<IPageResponse<ITicket> | ITicket[]> {
+    let url = `${this.path}/${id}`;
+
+    if (limit && page) url = `${url}?limit=${limit}&page=${page}`;
+
     const { statusCode, body } = await this.httpClient.request({
       method: 'get',
-      url: `${this.path}/${id}${limit && page && `?limit=${limit}&page=${page}`}`,
+      url: url,
     });
 
     switch (statusCode) {

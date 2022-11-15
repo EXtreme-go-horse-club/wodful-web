@@ -12,6 +12,7 @@ const PublicRoutes = () => {
 
         <Route path='/' element={<Navigate to='/login' replace />} />
         <Route path='/championships' element={<Navigate to='/login' replace />} />
+        <Route path='/championships/:id/*' element={<Navigate to='/login' replace />} />
         <Route path='/access' element={<Access />} />
       </Routes>
     </BrowserRouter>

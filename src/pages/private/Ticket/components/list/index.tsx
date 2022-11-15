@@ -5,6 +5,11 @@ import {
   Button,
   Flex,
   HStack,
+  IconButton,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Select,
   Table,
   TableContainer,
@@ -24,7 +29,7 @@ import { useParams } from 'react-router-dom';
 const ListTicket = () => {
   const [currentTotal, setCurrentTotal] = useState<number>(0);
 
-  const { ListPaginated, ticketsPages, page, limit, setLimit, setPage, isLoading } =
+  const { ListPaginated, ticketsPages, page, limit, setLimit, setPage, isLoading, Delete } =
     useTicketData();
 
   const { id } = useParams();
@@ -36,6 +41,10 @@ const ListTicket = () => {
 
   const previousPage = () => {
     setPage(page - 1);
+  };
+
+  const deleteTicket = (id: string) => {
+    Delete(id);
   };
 
   const nextPage = () => {
@@ -77,7 +86,17 @@ const ListTicket = () => {
 
               <Td p={6}>
                 <Flex justify='end'>
-                  <MoreHorizontal cursor='pointer' size={18} />
+                  <Menu>
+                    <MenuButton
+                      as={IconButton}
+                      aria-label='Options'
+                      icon={<MoreHorizontal />}
+                      variant='none'
+                    />
+                    <MenuList>
+                      <MenuItem onClick={() => deleteTicket(ticket.id)}>Deletar</MenuItem>
+                    </MenuList>
+                  </Menu>
                 </Flex>
               </Td>
             </Tr>
