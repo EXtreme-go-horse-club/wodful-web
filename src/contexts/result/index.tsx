@@ -5,6 +5,7 @@ import { ResultService } from '@/services/Result';
 import { resultMessages } from '@/utils/messages';
 import { useToast } from '@chakra-ui/react';
 import { createContext, useCallback, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 interface ResultProps {
   children: React.ReactNode;
@@ -19,6 +20,7 @@ export interface ResultContextData {
   ListPaginated: (categoryId: string) => void;
   setLimit: (value: number) => void;
   setPage: (value: number) => void;
+  Delete: (id: string) => Promise<void>;
   Create: (data: ICreateResultRequestDTO) => void;
 }
 
@@ -34,6 +36,8 @@ export const ResultProvider = ({ children, onClose }: ResultProps) => {
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(5);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const { id } = useParams();
 
   const ListPaginated = useCallback(
     async (categoryId: string) => {
@@ -74,11 +78,30 @@ export const ResultProvider = ({ children, onClose }: ResultProps) => {
     [ListPaginated, onClose, toast],
   );
 
+  const Delete = useCallback(
+    async (idCat: string) => {
+      setIsLoading(true);
+      await new ResultService(axios)
+        .delete(idCat)
+        .then(() => {
+          toast({
+            title: resultMessages['remove'],
+            status: 'success',
+            isClosable: true,
+          });
+          ListPaginated(id as string);
+        })
+        .finally(() => setIsLoading(false));
+    },
+    [ListPaginated, id, toast],
+  );
+
   return (
     <ResultContext.Provider
       value={{
         isLoading,
         Create,
+        Delete,
         limit,
         page,
         resultPages,
