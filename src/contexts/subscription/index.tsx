@@ -154,7 +154,6 @@ export const SubscriptionProvider = ({ children, onClose }: SubscriptionProvider
       await new SubscriptionService(axios)
         .updateStatus(idSub, status)
         .then(() => {
-          console.log('then');
           toast({
             title: subscriptionMessages['status_update'],
             status: 'success',
@@ -163,7 +162,6 @@ export const SubscriptionProvider = ({ children, onClose }: SubscriptionProvider
           ListPaginated(String(id));
         })
         .catch(() => {
-          console.log('catch');
           toast({
             title: subscriptionMessages['status_update_err'],
             status: 'error',
