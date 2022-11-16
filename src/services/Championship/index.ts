@@ -42,6 +42,20 @@ export class ChampionshipService {
     }
   }
 
+  async delete(id: string): Promise<IChampionship> {
+    const { statusCode, body } = await this.httpClient.request({
+      method: 'delete',
+      url: `${this.path}/${id}`,
+    });
+
+    switch (statusCode) {
+      case HttpStatusCode.noContent:
+        return body! as IChampionship;
+      default:
+        throw new Error();
+    }
+  }
+
   async listAll(
     limit?: number,
     page?: number,
