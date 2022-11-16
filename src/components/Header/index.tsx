@@ -3,6 +3,7 @@ import useAuth from '@/hooks/useAuth';
 import {
   Avatar,
   Box,
+  Button,
   Flex,
   Heading,
   HStack,
@@ -20,7 +21,7 @@ import Logo from '../../assets/icons/wodful-white-logo.svg';
 const NO_TITLE_ROUTES = ['/championships', '/login'];
 
 export const Header = () => {
-  const { signed, Logout } = useAuth();
+  const { signed, Logout, Reset } = useAuth();
   const { user } = useAuth();
   const { pathname } = useLocation();
   const { currentChampionship } = useApp();
@@ -65,7 +66,13 @@ export const Header = () => {
               </MenuList>
             </Menu>
           </HStack>
-        ) : null}
+        ) : (
+          pathname !== '/access' && (
+            <Button color='white' variant='link' onClick={Reset}>
+              Voltar
+            </Button>
+          )
+        )}
       </Flex>
     </Flex>
   );
