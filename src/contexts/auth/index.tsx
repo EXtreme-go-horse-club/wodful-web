@@ -66,6 +66,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const Reset = useCallback(() => {
     localStorage.removeItem('@Wodful:access');
+    window.location.href = '/access';
   }, []);
 
   useEffect(() => {

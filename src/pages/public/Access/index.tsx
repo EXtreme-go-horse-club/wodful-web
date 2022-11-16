@@ -28,7 +28,7 @@ const Access = () => {
   return (
     <Box>
       <Center px={5} h='90vh'>
-        <Center maxW='512px' maxH='md' boxShadow='md' p='6' rounded='md'>
+        <Center maxW='512px' maxH='md' boxShadow={['none', 'md']} p='6' rounded='md'>
           <Stack gap='4' align='center' justify='center'>
             <Image boxSize='48px' src={wodfulBlackLogo} alt='wodfull black logo' />
 
