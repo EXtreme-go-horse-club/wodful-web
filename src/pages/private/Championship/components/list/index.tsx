@@ -3,17 +3,23 @@ import {
   Button,
   Heading,
   HStack,
+  IconButton,
   Image,
   LinkBox,
   LinkOverlay,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   SimpleGrid,
+  Spacer,
   Stack,
   Text,
   Tooltip,
   VStack,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { ChevronLeft, ChevronRight, MapPin } from 'react-feather';
+import { ChevronLeft, ChevronRight, MapPin, MoreHorizontal } from 'react-feather';
 import { Link as ReactRouter } from 'react-router-dom';
 
 import { IChampionship } from '@/data/interfaces/championship';
@@ -28,7 +34,7 @@ const resultType: { [key: string]: string } = {
 
 const ListChampionship = () => {
   const [currentTotal, setCurrentTotal] = useState<number>(0);
-  const { ListPaginated, championshipsPages, page, limit, setPage, isLoading } =
+  const { ListPaginated, championshipsPages, page, limit, setPage, isLoading, Delete } =
     useChampionshipData();
 
   const { setCurrentChampionship } = useApp();
@@ -37,6 +43,10 @@ const ListChampionship = () => {
     ListPaginated();
     setCurrentTotal(championshipsPages.results?.length);
   }, [ListPaginated, championshipsPages.results?.length]);
+
+  const deleteChampionship = (id: string) => {
+    Delete(id);
+  };
 
   const previousPage = () => {
     setPage(page - 1);
@@ -71,8 +81,16 @@ const ListChampionship = () => {
                   src={`${import.meta.env.VITE_BASE_SERVER_URL}/banner/${championship.banner}`}
                 />
               </Stack>
-              <Box p={6}>
-                <VStack gap='8px' align='start'>
+            </LinkOverlay>
+            <Box p={6}>
+              <VStack gap='8px' align='start'>
+                <LinkOverlay
+                  as={ReactRouter}
+                  to={`${championship.id}/leaderboards`}
+                  onClick={() => {
+                    setCurrentChampionship(championship as IChampionship);
+                  }}
+                >
                   <VStack align='start' spacing={1}>
                     <Heading color='black' as='h4' size='md'>
                       {championship.name}
@@ -93,13 +111,27 @@ const ListChampionship = () => {
                       <Text>{resultType[championship.resultType]}</Text>
                     </VStack>
                   </HStack>
-                  <HStack fontSize='14px'>
-                    <MapPin size={16} />
-                    <Text>{championship.address}</Text>
-                  </HStack>
-                </VStack>
-              </Box>
-            </LinkOverlay>
+                </LinkOverlay>
+                <HStack fontSize='14px' width='100%'>
+                  <MapPin size={16} />
+                  <Text>{championship.address}</Text>
+                  <Spacer />
+                  <Menu>
+                    <MenuButton
+                      as={IconButton}
+                      aria-label='Options'
+                      icon={<MoreHorizontal />}
+                      variant='none'
+                    />
+                    <MenuList>
+                      <MenuItem onClick={() => deleteChampionship(championship.id)}>
+                        Deletar
+                      </MenuItem>
+                    </MenuList>
+                  </Menu>
+                </HStack>
+              </VStack>
+            </Box>
           </LinkBox>
         ))}
       </SimpleGrid>

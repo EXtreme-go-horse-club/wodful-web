@@ -20,6 +20,7 @@ export interface ChampionshipContextData {
   limit: number;
   setPage: (value: number) => void;
   ListPaginated: () => void;
+  Delete: (id: string) => Promise<void>;
   List: () => Promise<void>;
   Create({
     name,
@@ -105,6 +106,31 @@ export const ChampionshipProvider = ({ children, onClose }: ChampionshipProps) =
     [onClose, toast, ListPaginated],
   );
 
+  const Delete = useCallback(
+    async (idChamp: string) => {
+      setIsLoading(true);
+      await new ChampionshipService(axios)
+        .delete(idChamp)
+        .then(() => {
+          toast({
+            title: championshipMessages['remove'],
+            status: 'success',
+            isClosable: true,
+          });
+          ListPaginated();
+        })
+        .catch(() => {
+          toast({
+            title: championshipMessages['remove_err'],
+            status: 'error',
+            isClosable: true,
+          });
+        })
+        .finally(() => setIsLoading(false));
+    },
+    [ListPaginated, toast],
+  );
+
   return (
     <ChampionshipContext.Provider
       value={{
@@ -116,6 +142,7 @@ export const ChampionshipProvider = ({ children, onClose }: ChampionshipProps) =
         page,
         setPage,
         Create,
+        Delete,
         List,
         ListPaginated,
       }}

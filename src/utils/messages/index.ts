@@ -9,6 +9,8 @@ export const validationMessages = {
 export const championshipMessages = {
   success: 'Campeonato adicionado com sucesso',
   error: 'Algo deu errado ao adicionar o campeonato',
+  remove: 'Campeonato removido com sucesso',
+  remove_err: 'Algo deu errado ao remover o campeonato',
 };
 
 export const categoryMessages = {
