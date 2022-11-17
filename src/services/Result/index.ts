@@ -31,10 +31,13 @@ export class ResultService {
     categoryId: string,
     limit?: number,
     page?: number,
+    search?: string | null,
   ): Promise<IPageResponse<IResultByCategory>> {
-    let url = `categories/${categoryId}${this.path}`;
+    let url = `categories/${categoryId}${this.path}${
+      limit && page && `?limit=${limit}&page=${page}`
+    }`;
 
-    if (limit && page) url = `${url}?limit=${limit}&page=${page}`;
+    if (search !== null) url = `${url}&name=${search}`;
 
     const { statusCode, body } = await this.httpClient.request({
       method: 'get',
