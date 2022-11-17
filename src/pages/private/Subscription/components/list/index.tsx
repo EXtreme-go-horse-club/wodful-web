@@ -4,6 +4,11 @@ import {
   Button,
   Flex,
   HStack,
+  IconButton,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Select,
   Table,
   TableContainer,
@@ -27,13 +32,30 @@ interface IListSubscription {
 const ListSubscription = ({ id }: IListSubscription) => {
   const [currentTotal, setCurrentTotal] = useState<number>(0);
 
-  const { ListPaginated, subscriptionsPages, page, limit, setLimit, setPage, isLoading } =
-    useSubscriptionData();
+  const {
+    ListPaginated,
+    subscriptionsPages,
+    page,
+    limit,
+    setLimit,
+    setPage,
+    isLoading,
+    Delete,
+    UpdateStatus,
+  } = useSubscriptionData();
 
   useEffect(() => {
     ListPaginated(id);
     setCurrentTotal(subscriptionsPages.results?.length);
   }, [ListPaginated, subscriptionsPages.results?.length, id]);
+
+  const deleteSubscription = (id: string) => {
+    Delete(id);
+  };
+
+  const changeSubscriptionStatus = (id: string, status: string) => {
+    UpdateStatus(id, status);
+  };
 
   const previousPage = () => {
     setPage(page - 1);
@@ -94,7 +116,29 @@ const ListSubscription = ({ id }: IListSubscription) => {
               </Td>
               <Td p={6}>
                 <Flex justify='end'>
-                  <MoreHorizontal cursor='pointer' size={18} />
+                  <Menu>
+                    <MenuButton
+                      as={IconButton}
+                      aria-label='Options'
+                      icon={<MoreHorizontal />}
+                      variant='none'
+                    />
+                    <MenuList>
+                      <MenuItem
+                        onClick={() => changeSubscriptionStatus(subscription.id, 'approve')}
+                      >
+                        Aprovar
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => changeSubscriptionStatus(subscription.id, 'decline')}
+                      >
+                        Recusar
+                      </MenuItem>
+                      <MenuItem onClick={() => deleteSubscription(subscription.id)}>
+                        Deletar
+                      </MenuItem>
+                    </MenuList>
+                  </Menu>
                 </Flex>
               </Td>
             </Tr>
