@@ -47,6 +47,34 @@ export class SubscriptionService {
     }
   }
 
+  async delete(id: string): Promise<ISubscription> {
+    const { statusCode, body } = await this.httpClient.request({
+      method: 'delete',
+      url: `${this.path}/${id}`,
+    });
+
+    switch (statusCode) {
+      case HttpStatusCode.noContent:
+        return body! as ISubscription;
+      default:
+        throw new Error();
+    }
+  }
+
+  async updateStatus(id: string, status: string): Promise<ISubscription> {
+    const { statusCode, body } = await this.httpClient.request({
+      method: 'put',
+      url: `${this.path}/${id}/${status}`,
+    });
+
+    switch (statusCode) {
+      case HttpStatusCode.ok:
+        return body! as ISubscription;
+      default:
+        throw new Error();
+    }
+  }
+
   async listAllByCategory(
     id: string,
     categoryId: string,
