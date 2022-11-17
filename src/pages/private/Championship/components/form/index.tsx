@@ -31,6 +31,7 @@ const FormChampionship = ({ onClose }: IFormChampionshipProps) => {
   const onSubmit: SubmitHandler<ChampionshipDTO> = async (championship) => {
     const banner = championship.banner as FileList;
     championship.banner = banner[0];
+    championship.accessCode = championship.accessCode.toUpperCase();
     await Create(championship);
     onClose();
   };
@@ -95,6 +96,7 @@ const FormChampionship = ({ onClose }: IFormChampionshipProps) => {
             <FormControl isInvalid={!!errors.accessCode}>
               <FormLabel m={0}>Código do campeonato</FormLabel>
               <Input
+                textTransform='uppercase'
                 placeholder='Código'
                 {...register('accessCode', {
                   required: validationMessages['required'],
