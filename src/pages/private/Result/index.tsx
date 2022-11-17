@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from 'react';
+import { ChangeEvent, lazy, Suspense, useEffect, useState } from 'react';
 
 import { Loader } from '@/components/Loader';
 import ComponentModal from '@/components/Modal';
@@ -8,7 +8,19 @@ import { SubscriptionProvider } from '@/contexts/subscription';
 import { WorkoutProvider } from '@/contexts/workout';
 import useCategoryData from '@/hooks/useCategoryData';
 import useResultData from '@/hooks/useResultData';
-import { Box, Button, Flex, HStack, Select, Text, useDisclosure } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Flex,
+  HStack,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  Select,
+  Text,
+  useDisclosure,
+} from '@chakra-ui/react';
+import { Search } from 'react-feather';
 import { useParams } from 'react-router-dom';
 
 const ResultForm = lazy(() => import('./components/form'));
@@ -32,15 +44,21 @@ const ResultWithProvider = () => {
 
 const Result = () => {
   const { id } = useParams();
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const { List: CategoryList, categories } = useCategoryData();
+  const [participantsName, setParticipantsName] = useState<string>('');
   const [selectedCategory, setSelectedCategory] = useState<string>('Sem categoria');
   const [categoryId, setCategoryId] = useState<string>('');
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { List: CategoryList, categories } = useCategoryData();
   const { ListPaginated } = useResultData();
 
   useEffect(() => {
     if (id) CategoryList(id);
   }, [CategoryList, id]);
+
+  const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const name = event.target.value.length;
+    return name >= 3 ? setParticipantsName(event.target.value) : setParticipantsName('');
+  };
 
   return (
     <Suspense fallback={<Loader title='Carregando ...' />}>
@@ -73,6 +91,18 @@ const Result = () => {
             </Text>
           </Flex>
           <Flex as='article' gap='1rem'>
+            <InputGroup>
+              <InputLeftElement>
+                <Search size={20} color='gray' />
+              </InputLeftElement>
+              <Input
+                onChange={handleOnChange}
+                as='input'
+                w='100%'
+                minW='320px'
+                placeholder='Buscar participantes'
+              />
+            </InputGroup>
             <Select
               as='select'
               id='category'
@@ -107,7 +137,7 @@ const Result = () => {
           <ResultForm onClose={onClose} />
         </ComponentModal>
         <Box as='section' w='100%' marginTop={6}>
-          <ListResults id={categoryId as string} />
+          <ListResults participantsName={participantsName} id={categoryId as string} />
         </Box>
       </Box>
     </Suspense>

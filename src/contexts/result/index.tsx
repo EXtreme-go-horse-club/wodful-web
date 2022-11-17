@@ -17,7 +17,7 @@ export interface ResultContextData {
   isLoading: boolean;
   page: number;
   limit: number;
-  ListPaginated: (categoryId: string) => void;
+  ListPaginated: (categoryId: string, name?: string) => void;
   setLimit: (value: number) => void;
   setPage: (value: number) => void;
   Delete: (id: string) => Promise<void>;
@@ -40,10 +40,10 @@ export const ResultProvider = ({ children, onClose }: ResultProps) => {
   const { id } = useParams();
 
   const ListPaginated = useCallback(
-    async (categoryId: string) => {
+    async (categoryId: string, name?: string) => {
       setIsLoading(true);
       await new ResultService(axios)
-        .listByCategory(categoryId, limit, page)
+        .listByCategory(categoryId, limit, page, name)
         .then((paginatedResults) => {
           setResultPages(paginatedResults as IPageResponse<IResultByCategory>);
         })

@@ -25,9 +25,10 @@ import { ChevronLeft, ChevronRight, MoreHorizontal } from 'react-feather';
 
 interface IListResults {
   id: string;
+  participantsName: string;
 }
 
-const ListResults = ({ id }: IListResults) => {
+const ListResults = ({ id, participantsName }: IListResults) => {
   const [currentTotal, setCurrentTotal] = useState<number>(0);
 
   const { ListPaginated, resultPages, page, limit, setLimit, setPage, isLoading, Delete } =
@@ -35,10 +36,10 @@ const ListResults = ({ id }: IListResults) => {
 
   useEffect(() => {
     if (id) {
-      ListPaginated(id);
+      ListPaginated(id, participantsName);
       setCurrentTotal(resultPages.results?.length);
     }
-  }, [ListPaginated, id, resultPages.results?.length]);
+  }, [ListPaginated, id, participantsName, resultPages.results?.length]);
 
   const previousPage = () => {
     setPage(page - 1);
