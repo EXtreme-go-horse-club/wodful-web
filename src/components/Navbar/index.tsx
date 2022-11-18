@@ -36,7 +36,7 @@ export const Navbar = () => {
     },
     {
       label: 'Cronograma',
-      path: `/championships/${params.id}/workouts`,
+      path: `/championships/${params.id}/schedules`,
     },
   ];
 

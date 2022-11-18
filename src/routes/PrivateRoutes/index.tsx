@@ -7,6 +7,7 @@ import Championship from '@/pages/private/Championship';
 import PrivateLeaderboard from '@/pages/private/Leaderboard';
 import Participants from '@/pages/private/Participants';
 import Result from '@/pages/private/Result';
+import Schedule from '@/pages/private/Schedule';
 import Subscription from '@/pages/private/Subscription';
 import Ticket from '@/pages/private/Ticket';
 import Workout from '@/pages/private/Workout';
@@ -30,6 +31,7 @@ const PrivateRoutes = () => {
           <Route path='/championships/:id/workouts' element={<Workout />} />
           <Route path='/championships/:id/results' element={<Result />} />
           <Route path='/championships/:id/subscriptions' element={<Subscription />} />
+          <Route path='/championships/:id/schedules' element={<Schedule />} />
         </Route>
       </Routes>
     </BrowserRouter>
