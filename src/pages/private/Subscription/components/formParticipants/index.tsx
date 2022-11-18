@@ -12,16 +12,17 @@ import {
   HStack,
   Input,
   Text,
-  VStack,
+  VStack
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 interface CreateModalProps {
   participantsNumber: number;
+  onClose: () => void;
 }
 
-const FormSubscriptionParticipants = ({ participantsNumber }: CreateModalProps) => {
+const FormSubscriptionParticipants = ({ participantsNumber, onClose }: CreateModalProps) => {
   const { Create } = useSubscriptionData();
   const [indexes, setIndexes] = useState<number[]>([]);
   const {
@@ -40,6 +41,7 @@ const FormSubscriptionParticipants = ({ participantsNumber }: CreateModalProps) 
 
   function onSubmit(subscription: IParticipantForm) {
     Create(subscription);
+    onClose();
   }
 
   return (

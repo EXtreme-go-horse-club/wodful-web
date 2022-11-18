@@ -59,7 +59,10 @@ const Subscription = () => {
           {currentStep == 0 ? (
             <FormSubscription id={id as string} openFormParticipants={handleSubscriptionInfo} />
           ) : (
-            <FormSubscriptionParticipants participantsNumber={participantsNumber as number} />
+            <FormSubscriptionParticipants
+              participantsNumber={participantsNumber as number}
+              onClose={onClose}
+            />
           )}
         </ComponentModal>
         {hasElements && (

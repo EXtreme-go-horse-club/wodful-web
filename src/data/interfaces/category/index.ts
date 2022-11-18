@@ -12,3 +12,8 @@ export interface ICategory {
   members: number;
   championshipId: string;
 }
+
+export interface IPublicCategory {
+  id: string;
+  name: string;
+}

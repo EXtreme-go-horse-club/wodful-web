@@ -1,7 +1,8 @@
 import { AxiosAdapter } from '@/adapters/AxiosAdapter';
-import { ILeaderboard } from '@/data/interfaces/leaderboard';
+import { ILeaderboard, IPublicLeaderboard } from '@/data/interfaces/leaderboard';
 import { IPageResponse } from '@/data/interfaces/pageResponse';
 import { LeaderboardService } from '@/services/Leaderboard';
+import { PublicLeaderboardService } from '@/services/Public/Leaderboard';
 import { createContext, useCallback, useState } from 'react';
 
 interface LeaderboardProps {
@@ -10,9 +11,11 @@ interface LeaderboardProps {
 
 export interface LeaderboardContextData {
   leaderboardPages: IPageResponse<ILeaderboard>;
+  publicLeaderboards: IPublicLeaderboard[];
   isLoading: boolean;
   page: number;
   limit: number;
+  ListPublic: (id: string) => void;
   ListPaginated: (id: string, categoryId: string) => void;
   setLimit: (value: number) => void;
   setPage: (value: number) => void;
@@ -26,6 +29,10 @@ export const LeaderboardProvider = ({ children }: LeaderboardProps) => {
   const [leaderboardPages, setLeaderboardsPages] = useState<IPageResponse<ILeaderboard>>(
     {} as IPageResponse<ILeaderboard>,
   );
+  const [publicLeaderboards, setPublicLeaderboards] = useState<IPublicLeaderboard[]>(
+    [] as IPublicLeaderboard[],
+  );
+
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(5);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -43,6 +50,16 @@ export const LeaderboardProvider = ({ children }: LeaderboardProps) => {
     [limit, page],
   );
 
+  const ListPublic = useCallback(async (id: string) => {
+    setIsLoading(true);
+    await new PublicLeaderboardService(axios)
+      .list(id)
+      .then((leaderboards) => {
+        setPublicLeaderboards(leaderboards as IPublicLeaderboard[]);
+      })
+      .finally(() => setIsLoading(false));
+  }, []);
+
   return (
     <LeaderboardContext.Provider
       value={{
@@ -50,6 +67,8 @@ export const LeaderboardProvider = ({ children }: LeaderboardProps) => {
         limit,
         page,
         leaderboardPages,
+        ListPublic,
+        publicLeaderboards,
         ListPaginated,
         setLimit,
         setPage,
