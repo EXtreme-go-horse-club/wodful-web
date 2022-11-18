@@ -1,28 +1,19 @@
 export interface ISchedule {
-  category: {
-    name: string;
-  };
-  workout: {
-    name: string;
-  };
-  startDate: Date;
-  itsHappening: boolean | null;
-}
-
-export interface IScheduleByCategory {
   id: string;
-  workout: {
-    name: string;
-  };
   category: {
     name: string;
   };
-  startDate: Date;
+  workout: {
+    name: string;
+  };
+  date: Date;
+  hour: string;
+  isLive: boolean | null;
 }
-
 export interface ICreateScheduleRequestDTO {
-  workoutId: string;
+  date: Date;
+  hour: string;
   categoryId: string;
-  startDate: Date;
+  workoutId: string;
   laneQuantity: number;
 }

@@ -1,21 +1,29 @@
 import { HttpClient, HttpStatusCode } from '@/data/interfaces/http';
 import { IPageResponse } from '@/data/interfaces/pageResponse';
-import {
-  ICreateScheduleRequestDTO,
-  ISchedule,
-  IScheduleByCategory,
-} from '@/data/interfaces/schedule';
+import { ICreateScheduleRequestDTO, ISchedule } from '@/data/interfaces/schedule';
 
 export class SheduleService {
-  constructor(private readonly httpClient: HttpClient<any>, private readonly path = '/schedule') {}
+  constructor(
+    private readonly httpClient: HttpClient<IPageResponse<ISchedule> | ISchedule[] | ISchedule>,
+    private readonly path = '/schedule',
+  ) {}
 
-  async create({ workoutId, categoryId }: ICreateScheduleRequestDTO): Promise<ISchedule> {
+  async create({
+    date,
+    hour,
+    categoryId,
+    workoutId,
+    laneQuantity,
+  }: ICreateScheduleRequestDTO): Promise<ISchedule> {
     const { statusCode, body } = await this.httpClient.request({
       method: 'post',
       url: this.path,
       body: {
-        workoutId,
+        date,
+        hour,
         categoryId,
+        workoutId,
+        laneQuantity,
       },
     });
 
@@ -27,35 +35,31 @@ export class SheduleService {
     }
   }
 
-  async listByCategory(
+  async list(
+    id: string,
     categoryId: string,
-    limit?: number,
-    page?: number,
-    search?: string | null,
-  ): Promise<IPageResponse<IScheduleByCategory>> {
-    let url = `categories/${categoryId}${this.path}${
-      limit && page && `?limit=${limit}&page=${page}`
-    }`;
+    limit: number,
+    page: number,
+  ): Promise<IPageResponse<ISchedule>> {
+    let url = `${this.path}/${id}/schedule`;
 
-    if (search !== null) url = `${url}&name=${search}`;
+    if (limit && page && categoryId)
+      url = `${url}?limit=${limit}&page=${page}&category=${categoryId}`;
 
     const { statusCode, body } = await this.httpClient.request({
       method: 'get',
-      url,
-      body: {
-        categoryId,
-      },
+      url: url,
     });
 
     switch (statusCode) {
       case HttpStatusCode.ok:
-        return body! as IPageResponse<IScheduleByCategory>;
+        return body! as IPageResponse<ISchedule>;
       default:
         throw new Error();
     }
   }
 
-  async delete(id: string): Promise<IScheduleByCategory> {
+  async delete(id: string): Promise<ISchedule> {
     const { statusCode, body } = await this.httpClient.request({
       method: 'delete',
       url: `${this.path}/${id}`,
@@ -63,7 +67,7 @@ export class SheduleService {
 
     switch (statusCode) {
       case HttpStatusCode.noContent:
-        return body! as IScheduleByCategory;
+        return body! as ISchedule;
       default:
         throw new Error();
     }
