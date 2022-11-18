@@ -1,4 +1,6 @@
 import { ICreateScheduleRequestDTO } from '@/data/interfaces/schedule';
+import useCategoryData from '@/hooks/useCategoryData';
+import useScheduleData from '@/hooks/useScheduleData';
 import { validationMessages } from '@/utils/messages';
 import {
   Button,
@@ -9,20 +11,22 @@ import {
   Select,
   VStack,
 } from '@chakra-ui/react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-
-interface ResultFormProps {
-  category: string;
-  workout: string;
-  subscription: string;
-  result: string;
-}
-
+import { useParams } from 'react-router-dom';
 interface IFormScheduleProps {
   onClose: () => void;
 }
 
 const ScheduleForm = ({ onClose }: IFormScheduleProps) => {
+  const { List, categories } = useCategoryData();
+  const { Create } = useScheduleData();
+  const { id } = useParams();
+
+  useEffect(() => {
+    List(id as string);
+  }, [List, id]);
+
   const {
     register,
     handleSubmit,

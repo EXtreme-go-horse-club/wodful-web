@@ -1,24 +1,54 @@
+import useScheduleData from '@/hooks/useScheduleData';
 import { formatDate, formatHour } from '@/utils/formatDate';
 import {
+  Button,
   Flex,
+  HStack,
   IconButton,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
+  Select,
   Table,
   TableContainer,
   Tbody,
   Td,
   Text,
+  Tfoot,
   Th,
   Thead,
+  Tooltip,
   Tr,
 } from '@chakra-ui/react';
-import { ChevronDown, MoreHorizontal, Zap } from 'react-feather';
-import { mockData } from './mockdata';
+import { useEffect, useState } from 'react';
+import { ChevronDown, ChevronLeft, ChevronRight, MoreHorizontal, Zap } from 'react-feather';
 
-const Listchedule = () => {
+interface IListLeaderboard {
+  champ: string;
+  category: string;
+}
+
+const Listchedule = ({ champ, category }: IListLeaderboard) => {
+  const [currentTotal, setCurrentTotal] = useState<number>(0);
+  const { ListPaginated, schedulePages, page, limit, setLimit, setPage, isLoading } =
+    useScheduleData();
+
+  useEffect(() => {
+    if (champ && category) {
+      ListPaginated(champ, category);
+      setCurrentTotal(schedulePages.results?.length);
+    }
+  }, [ListPaginated, category, champ, schedulePages.results?.length]);
+
+  const previousPage = () => {
+    setPage(page - 1);
+  };
+
+  const nextPage = () => {
+    setPage(page + 1);
+  };
+
   const deleteResult = (id: string) => {
     console.log(id);
   };
@@ -44,17 +74,17 @@ const Listchedule = () => {
           </Tr>
         </Thead>
         <Tbody>
-          {mockData?.map((result) => (
+          {schedulePages.results?.map((result) => (
             <Tr key={result.id}>
               <Td>
                 <ChevronDown cursor='pointer' />
               </Td>
 
               <Td py={6} px={1} textTransform='capitalize'>
-                {formatDate(result.startDate)}
+                {formatDate(result.date)}
               </Td>
               <Td py={6} px={1} textTransform='capitalize'>
-                {formatHour(result.startDate)}
+                {formatHour(result.hour)}
               </Td>
 
               <Td py={6} px={1} textTransform='capitalize'>
@@ -88,7 +118,7 @@ const Listchedule = () => {
             </Tr>
           ))}
         </Tbody>
-        {/* <Tfoot>
+        <Tfoot>
           <Tr>
             <Th display='flex' flexDirection='row'>
               <Flex align='center' mr={2}>
@@ -115,39 +145,39 @@ const Listchedule = () => {
                 <HStack>
                   {page === 1 && (
                     <Text>
-                      {page * limit - (limit - 1)} - {page * limit} de {resultPages.count}
+                      {page * limit - (limit - 1)} - {page * limit} de {schedulePages.count}
                     </Text>
                   )}
 
                   {page !== 1 && (
                     <Text>
                       {page * limit - (limit - 1)} - {page * limit - limit + currentTotal} de{' '}
-                      {resultPages.count}
+                      {schedulePages.count}
                     </Text>
                   )}
                   <Tooltip label='Página anterior' placement='top' hasArrow>
                     <Button
-                      disabled={!resultPages.previous || isLoading}
+                      disabled={!schedulePages.previous || isLoading}
                       variant='link'
                       onClick={previousPage}
                     >
-                      <ChevronLeft color={resultPages.previous ? 'black' : 'gray'} size={16} />
+                      <ChevronLeft color={schedulePages.previous ? 'black' : 'gray'} size={16} />
                     </Button>
                   </Tooltip>
                   <Tooltip label='Próxima página' placement='top' hasArrow>
                     <Button
-                      disabled={!resultPages.next || isLoading}
+                      disabled={!schedulePages.next || isLoading}
                       variant='link'
                       onClick={nextPage}
                     >
-                      <ChevronRight color={resultPages.next ? 'black' : 'gray'} size={16} />
+                      <ChevronRight color={schedulePages.next ? 'black' : 'gray'} size={16} />
                     </Button>
                   </Tooltip>
                 </HStack>
               </Flex>
             </Th>
           </Tr>
-        </Tfoot> */}
+        </Tfoot>
       </Table>
     </TableContainer>
   );
