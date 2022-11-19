@@ -16,22 +16,6 @@ import {
 
 const ListPublicLeaderboard = () => {
   const { publicLeaderboards } = useLeaderboardData();
-  // const [currentTotal, setCurrentTotal] = useState<number>(0);
-  // const { ListPaginated, championshipsPages, page, limit, setPage, isLoading, Delete } =
-  //   useChampionshipData();
-
-  // const { setCurrentChampionship } = useApp();
-
-  // useEffect(() => {
-  //   ListPaginated();
-  //   setCurrentTotal(championshipsPages.results?.length);
-  // }, [ListPaginated, championshipsPages.results?.length]);
-  // alignItems='center'
-  // justifyContent='center'
-  // textAlign='center'
-  // alignSelf='center'
-  // justifySelf='center'
-  // justifyItems='center'
   return (
     <>
       <SimpleGrid color='gray.600' columns={[null, 1, 2, 3]} spacing='24px' justifyItems='center'>
@@ -56,8 +40,6 @@ const ListPublicLeaderboard = () => {
                   <Spacer />
                   <Text fontSize='14px'>{leaderboard.generalScore} pontos</Text>
                 </HStack>
-
-                {/* <Text fontSize='14px'>data</Text> */}
               </VStack>
 
               <HStack fontSize='14px' align='start' gap='24px'>
@@ -67,10 +49,6 @@ const ListPublicLeaderboard = () => {
                   </Text>
                   <Text fontSize='sm'>{leaderboard.category.name}</Text>
                 </VStack>
-                {/* <VStack align='start' spacing={0}>
-                    <Text as='b'>Tipo de resultado</Text>
-                    <Text>outro</Text>
-                  </VStack> */}
               </HStack>
               <HStack fontSize='14px' width='100%'>
                 <Accordion allowToggle width='100%'>

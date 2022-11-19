@@ -72,12 +72,6 @@ const PublicLeaderboardAccess = () => {
                 onChange={(event) => {
                   if (event.target.value) {
                     ListPublic(String(event.target.value));
-                    // ListPaginated(String(id), event.target.value);
-                    // setCategoryId(event.target.value);
-                    console.log(event.target.value);
-                    console.log(
-                      publicCategories.find((selected) => selected.id === event.target.value)!.name,
-                    );
                     setSelectedCategory(
                       publicCategories.find((selected) => selected.id === event.target.value)!.name,
                     );
