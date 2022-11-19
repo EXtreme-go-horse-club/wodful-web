@@ -38,6 +38,7 @@ const PublicLeaderboardAccess = () => {
       <Center as='main' role='main'>
         <Box
           w='100%'
+          maxW='1280px'
           display='flex'
           flexDirection='column'
           alignItems='center'
@@ -91,7 +92,7 @@ const PublicLeaderboardAccess = () => {
               </Select>
             </Flex>
           </HStack>
-          <Box as='section' w='100%' marginTop={6}>
+          <Box as='section' w='100%' maxW='1280px' marginTop={6}>
             <ListPublicLeaderboard />
           </Box>
         </Box>

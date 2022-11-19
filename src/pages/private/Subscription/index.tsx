@@ -62,6 +62,7 @@ const Subscription = () => {
             <FormSubscriptionParticipants
               participantsNumber={participantsNumber as number}
               onClose={onClose}
+              resetStep={handleSubscriptionInfo}
             />
           )}
         </ComponentModal>
