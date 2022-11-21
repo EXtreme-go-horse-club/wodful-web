@@ -9,3 +9,20 @@ export interface ILeaderboard {
   };
   results: IResult[];
 }
+
+export interface IPublicLeaderboard {
+  nickname: string;
+  generalScore: number;
+  category: {
+    name: string;
+  };
+  ranking: number;
+  results: Array<{
+    result: string;
+    points: number;
+    classification: number;
+    workout: {
+      name: string;
+    };
+  }>;
+}

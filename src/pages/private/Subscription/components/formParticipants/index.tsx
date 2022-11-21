@@ -19,9 +19,15 @@ import { useForm } from 'react-hook-form';
 
 interface CreateModalProps {
   participantsNumber: number;
+  onClose: () => void;
+  resetStep: (step: number, participantsNumber: number) => void;
 }
 
-const FormSubscriptionParticipants = ({ participantsNumber }: CreateModalProps) => {
+const FormSubscriptionParticipants = ({
+  participantsNumber,
+  onClose,
+  resetStep,
+}: CreateModalProps) => {
   const { Create } = useSubscriptionData();
   const [indexes, setIndexes] = useState<number[]>([]);
   const {
@@ -40,6 +46,8 @@ const FormSubscriptionParticipants = ({ participantsNumber }: CreateModalProps) 
 
   function onSubmit(subscription: IParticipantForm) {
     Create(subscription);
+    onClose();
+    resetStep(0, 0);
   }
 
   return (
