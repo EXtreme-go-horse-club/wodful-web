@@ -44,7 +44,7 @@ const ListPublicLeaderboard = () => {
 
               <HStack fontSize='14px' align='start' gap='24px'>
                 <VStack align='start' spacing={0}>
-                  <Text as='b' textTransform='capitalize'>
+                  <Text as='b' color='gray.700' textTransform='capitalize'>
                     {leaderboard.nickname}
                   </Text>
                   <Text fontSize='sm'>{leaderboard.category.name}</Text>
@@ -64,7 +64,7 @@ const ListPublicLeaderboard = () => {
                     <AccordionPanel p={0}>
                       {leaderboard.results?.map((content, index) => (
                         <HStack justify='space-between' w='100%' key={index + 'result'}>
-                          <Text fontSize='16px' as='b' color='black' size='sm'>
+                          <Text fontSize='16px' as='b' color='gray.600' size='sm'>
                             {content.workout.name} ({content.classification} lugar)
                           </Text>
                           <Spacer />

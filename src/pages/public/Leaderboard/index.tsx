@@ -3,7 +3,7 @@ import { CategoryProvider } from '@/contexts/category';
 import { LeaderboardProvider } from '@/contexts/leaderboard';
 import useCategoryData from '@/hooks/useCategoryData';
 import useLeaderboardData from '@/hooks/useLeaderboardData';
-import { Box, Center, Flex, HStack, Select, Text } from '@chakra-ui/react';
+import { Box, Center, Flex, Select, Text } from '@chakra-ui/react';
 import { Suspense, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import ListPublicLeaderboard from './components';
@@ -45,7 +45,14 @@ const PublicLeaderboardAccess = () => {
           as='section'
           px={10}
         >
-          <HStack as='section' role='textbox' w='100%' mt={4} justifyContent='space-between'>
+          <Flex
+            as='section'
+            role='textbox'
+            w='100%'
+            mt={4}
+            justifyContent='space-between'
+            direction={['column', 'row', 'row']}
+          >
             <Flex as='article' role='textbox' direction='column' gap='0.75rem'>
               <Text fontSize='2xl' as='b' role='heading'>
                 Leaderboard
@@ -64,7 +71,7 @@ const PublicLeaderboardAccess = () => {
                 Categoria: {selectedCategory}
               </Text>
             </Flex>
-            <Flex as='article' gap='1rem'>
+            <Flex as='article' gap='1rem' mt={[4, 0, 0]}>
               <Select
                 as='select'
                 id='category'
@@ -85,7 +92,7 @@ const PublicLeaderboardAccess = () => {
                 ))}
               </Select>
             </Flex>
-          </HStack>
+          </Flex>
           <Box as='section' w='100%' maxW='1280px' marginTop={6}>
             <ListPublicLeaderboard />
           </Box>
