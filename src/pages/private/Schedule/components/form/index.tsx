@@ -1,6 +1,8 @@
 import { ICreateScheduleRequestDTO } from '@/data/interfaces/schedule';
 import useCategoryData from '@/hooks/useCategoryData';
 import useScheduleData from '@/hooks/useScheduleData';
+import useWorkoutData from '@/hooks/useWorkoutData';
+import { formatDate, formatHour } from '@/utils/formatDate';
 import { validationMessages } from '@/utils/messages';
 import {
   Button,
@@ -20,6 +22,8 @@ interface IFormScheduleProps {
 
 const ScheduleForm = ({ onClose }: IFormScheduleProps) => {
   const { List, categories } = useCategoryData();
+  const { ListByCategory, workouts } = useWorkoutData();
+
   const { Create } = useScheduleData();
   const { id } = useParams();
 
@@ -30,14 +34,22 @@ const ScheduleForm = ({ onClose }: IFormScheduleProps) => {
   const {
     register,
     handleSubmit,
+    getValues,
     formState: { errors, isValid },
   } = useForm<ICreateScheduleRequestDTO>({
     mode: 'onChange',
   });
 
-  function onSubmit(Schedule: ICreateScheduleRequestDTO) {
+  function onSubmit(schedule: ICreateScheduleRequestDTO) {
+    schedule.date = formatDate(schedule.date);
+    schedule.hour = formatHour(schedule.date);
+    Create(schedule);
     onClose();
   }
+
+  const handleWorkout = (categoryId: string): any => {
+    ListByCategory(categoryId as string);
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -48,9 +60,15 @@ const ScheduleForm = ({ onClose }: IFormScheduleProps) => {
             as='select'
             {...register('categoryId', { required: validationMessages['required'] })}
           >
-            <option value='1'>1</option>
-            <option value='2'>2</option>
-            <option value='3'>3</option>
+            {categories?.map((category) => (
+              <option
+                key={category.id}
+                value={category.id}
+                onChange={handleWorkout(getValues('categoryId'))}
+              >
+                {category.name}
+              </option>
+            ))}
           </Select>
         </FormControl>
 
@@ -60,19 +78,32 @@ const ScheduleForm = ({ onClose }: IFormScheduleProps) => {
             as='select'
             {...register('workoutId', { required: validationMessages['required'] })}
           >
-            <option value='1'>1</option>
-            <option value='2'>2</option>
-            <option value='3'>3</option>
+            {workouts?.map((workout) => (
+              <option key={workout.id} value={workout.id}>
+                {workout.name}
+              </option>
+            ))}
           </Select>
         </FormControl>
 
-        <FormControl isInvalid={!!errors.startDate}>
+        <FormControl isInvalid={!!errors.date}>
           <FormLabel>Data e horário de início</FormLabel>
           <Input
             type='datetime-local'
             placeholder='DD/MM/AAAA HH:MM'
-            {...register('startDate', { required: validationMessages['required'] })}
+            {...register('date', { required: validationMessages['required'] })}
           />
+        </FormControl>
+
+        <FormControl isInvalid={!!errors.heat}>
+          <FormLabel>Bateria</FormLabel>
+          <Select as='select' {...register('heat', { required: validationMessages['required'] })}>
+            <option value='1'>1</option>
+            <option value='2'>2</option>
+            <option value='3'>3</option>
+            <option value='4'>4</option>
+            <option value='5'>5</option>
+          </Select>
         </FormControl>
 
         <FormControl isInvalid={!!errors.laneQuantity}>
@@ -86,13 +117,6 @@ const ScheduleForm = ({ onClose }: IFormScheduleProps) => {
             <option value='3'>3</option>
             <option value='4'>4</option>
             <option value='5'>5</option>
-            <option value='6'>6</option>
-            <option value='7'>7</option>
-            <option value='8'>8</option>
-            <option value='9'>9</option>
-            <option value='10'>10</option>
-            <option value='11'>11</option>
-            <option value='12'>12</option>
           </Select>
         </FormControl>
 

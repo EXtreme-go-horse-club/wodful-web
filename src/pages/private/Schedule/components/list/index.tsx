@@ -22,7 +22,7 @@ import {
   Tr,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { ChevronDown, ChevronLeft, ChevronRight, MoreHorizontal, Zap } from 'react-feather';
+import { ChevronLeft, ChevronRight, MoreHorizontal, Zap } from 'react-feather';
 
 interface IListLeaderboard {
   champ: string;
@@ -31,7 +31,7 @@ interface IListLeaderboard {
 
 const Listchedule = ({ champ, category }: IListLeaderboard) => {
   const [currentTotal, setCurrentTotal] = useState<number>(0);
-  const { ListPaginated, schedulePages, page, limit, setLimit, setPage, isLoading } =
+  const { ListPaginated, schedulePages, page, limit, setLimit, setPage, isLoading, Delete } =
     useScheduleData();
 
   useEffect(() => {
@@ -50,14 +50,14 @@ const Listchedule = ({ champ, category }: IListLeaderboard) => {
   };
 
   const deleteResult = (id: string) => {
-    console.log(id);
+    Delete(id);
   };
   return (
     <TableContainer border='1px' borderColor='gray.100' fontSize='sm' color='#2D3748'>
       <Table variant='simple'>
         <Thead bg='gray.50' border='1px' borderColor='gray.100'>
           <Tr>
-            <Th></Th>
+            <Tr></Tr>
             <Th px={1}>
               <Text as='b'>DATA</Text>
             </Th>
@@ -70,16 +70,19 @@ const Listchedule = ({ champ, category }: IListLeaderboard) => {
             <Th px={1}>
               <Text as='b'>PROVA</Text>
             </Th>
+            <Th px={1}>
+              <Text as='b'>Bateria</Text>
+            </Th>
+            <Th px={1}>
+              <Text as='b'>Baia</Text>
+            </Th>
             <Th></Th>
           </Tr>
         </Thead>
         <Tbody>
           {schedulePages.results?.map((result) => (
             <Tr key={result.id}>
-              <Td>
-                <ChevronDown cursor='pointer' />
-              </Td>
-
+              <Td></Td>
               <Td py={6} px={1} textTransform='capitalize'>
                 {formatDate(result.date)}
               </Td>
@@ -93,14 +96,17 @@ const Listchedule = ({ champ, category }: IListLeaderboard) => {
               <Td py={6} px={1} textTransform='capitalize'>
                 {result.workout.name}
               </Td>
+              <Td py={6} px={1} textTransform='capitalize'>
+                Bateria
+              </Td>
+              <Td py={6} px={1} textTransform='capitalize'>
+                Raia
+              </Td>
               <Td py={6} px={1}>
                 <Flex justify='end' alignItems='center' gap='20px'>
-                  <Zap
-                    size={16}
-                    onClick={() => result.isLive!}
-                    cursor='pointer'
-                    fill={result.isLive ? 'red' : 'white'}
-                  />
+                  {result.isLive && (
+                    <Zap size={16} cursor='pointer' fill={result.isLive ? 'yellow' : 'white'} />
+                  )}
 
                   <Menu>
                     <MenuButton
@@ -110,6 +116,8 @@ const Listchedule = ({ champ, category }: IListLeaderboard) => {
                       variant='none'
                     />
                     <MenuList>
+                      <MenuItem>Iniciar</MenuItem>
+                      <MenuItem>Encerrar</MenuItem>
                       <MenuItem onClick={() => deleteResult(result.id)}>Deletar</MenuItem>
                     </MenuList>
                   </Menu>

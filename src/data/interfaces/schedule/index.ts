@@ -1,19 +1,26 @@
 export interface ISchedule {
   id: string;
+  date: Date;
+  hour: string;
+  heate: number;
+  isLive: boolean;
+  isOver: boolean;
   category: {
     name: string;
   };
   workout: {
     name: string;
   };
-  date: Date;
-  hour: string;
-  isLive: boolean | null;
+  subscriptions: {
+    raking: number;
+    nickname: string;
+  };
 }
 export interface ICreateScheduleRequestDTO {
-  date: Date;
+  date: string;
   hour: string;
   categoryId: string;
   workoutId: string;
+  heat: number;
   laneQuantity: number;
 }
