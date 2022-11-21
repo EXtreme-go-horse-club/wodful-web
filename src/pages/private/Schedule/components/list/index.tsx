@@ -1,5 +1,4 @@
 import useScheduleData from '@/hooks/useScheduleData';
-import { formatDate, formatHour } from '@/utils/formatDate';
 import {
   Button,
   Flex,
@@ -30,6 +29,7 @@ interface IListLeaderboard {
 }
 
 const Listchedule = ({ champ, category }: IListLeaderboard) => {
+  const isOver = false;
   const [currentTotal, setCurrentTotal] = useState<number>(0);
   const { ListPaginated, schedulePages, page, limit, setLimit, setPage, isLoading, Delete } =
     useScheduleData();
@@ -81,26 +81,33 @@ const Listchedule = ({ champ, category }: IListLeaderboard) => {
         </Thead>
         <Tbody>
           {schedulePages.results?.map((result) => (
-            <Tr key={result.id}>
+            <Tr
+              key={result.id}
+              opacity={result.isOver && '70%'}
+              background={result.isOver && 'gray.100'}
+            >
               <Td></Td>
               <Td py={6} px={1} textTransform='capitalize'>
-                {formatDate(result.date)}
+                <Text as={isOver ? 'del' : 'p'}>
+                  {/* {formatDate(result.date)}  */}
+                  aaa
+                </Text>
               </Td>
               <Td py={6} px={1} textTransform='capitalize'>
-                {formatHour(result.hour)}
+                <Text as={isOver ? 'del' : 'p'}>{/* {formatHour(result.hour)} */} aa</Text>
               </Td>
 
               <Td py={6} px={1} textTransform='capitalize'>
-                {result.category.name}
+                <Text as={isOver ? 'del' : 'p'}>{result.category.name}</Text>
               </Td>
               <Td py={6} px={1} textTransform='capitalize'>
-                {result.workout.name}
+                <Text as={isOver ? 'del' : 'p'}>{result.workout.name}</Text>
               </Td>
               <Td py={6} px={1} textTransform='capitalize'>
-                Bateria
+                <Text as={isOver ? 'del' : 'p'}>Bateria</Text>
               </Td>
               <Td py={6} px={1} textTransform='capitalize'>
-                Raia
+                <Text as={isOver ? 'del' : 'p'}>Raia</Text>
               </Td>
               <Td py={6} px={1}>
                 <Flex justify='end' alignItems='center' gap='20px'>
@@ -114,6 +121,7 @@ const Listchedule = ({ champ, category }: IListLeaderboard) => {
                       aria-label='Options'
                       icon={<MoreHorizontal />}
                       variant='none'
+                      disabled={result.isOver}
                     />
                     <MenuList>
                       <MenuItem>Iniciar</MenuItem>
