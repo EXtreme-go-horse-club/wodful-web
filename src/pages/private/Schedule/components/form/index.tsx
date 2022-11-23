@@ -41,8 +41,10 @@ const ScheduleForm = ({ onClose }: IFormScheduleProps) => {
   });
 
   function onSubmit(schedule: ICreateScheduleRequestDTO) {
-    schedule.date = formatDate(schedule.date);
+    schedule.date = formatDate(schedule.date, 'yyyy-MM-dd');
     schedule.hour = formatHour(schedule.date);
+    schedule.heat = Number(schedule.heat);
+    schedule.laneQuantity = Number(schedule.laneQuantity);
     Create(schedule);
     onClose();
   }
@@ -58,14 +60,17 @@ const ScheduleForm = ({ onClose }: IFormScheduleProps) => {
           <FormLabel>Categoria</FormLabel>
           <Select
             as='select'
-            {...register('categoryId', { required: validationMessages['required'] })}
+            id='category'
+            placeholder='Selecione a categoria'
+            {...register('categoryId', {
+              required: validationMessages['required'],
+              onChange: () => {
+                handleWorkout(getValues('categoryId'));
+              },
+            })}
           >
             {categories?.map((category) => (
-              <option
-                key={category.id}
-                value={category.id}
-                onChange={handleWorkout(getValues('categoryId'))}
-              >
+              <option key={category.id} value={category.id}>
                 {category.name}
               </option>
             ))}
@@ -76,7 +81,10 @@ const ScheduleForm = ({ onClose }: IFormScheduleProps) => {
           <FormLabel>Nome da Prova</FormLabel>
           <Select
             as='select'
+            id='workout'
+            placeholder='Selecione a prova'
             {...register('workoutId', { required: validationMessages['required'] })}
+            disabled={!workouts.length}
           >
             {workouts?.map((workout) => (
               <option key={workout.id} value={workout.id}>

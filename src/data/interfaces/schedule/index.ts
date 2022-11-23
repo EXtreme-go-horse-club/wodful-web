@@ -2,7 +2,7 @@ export interface ISchedule {
   id: string;
   date: Date;
   hour: string;
-  heate: number;
+  heat: number;
   isLive: boolean;
   isOver: boolean;
   category: {
@@ -23,4 +23,16 @@ export interface ICreateScheduleRequestDTO {
   workoutId: string;
   heat: number;
   laneQuantity: number;
+}
+
+export interface IIsLiveDTO {
+  championshipId: string;
+  activityId: string;
+  isLive: boolean;
+}
+
+export interface IIsOverDTO {
+  championshipId: string;
+  activityId: string;
+  isOver: boolean;
 }

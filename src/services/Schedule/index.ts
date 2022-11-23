@@ -5,7 +5,7 @@ import { ICreateScheduleRequestDTO, ISchedule } from '@/data/interfaces/schedule
 export class SheduleService {
   constructor(
     private readonly httpClient: HttpClient<IPageResponse<ISchedule> | ISchedule[] | ISchedule>,
-    private readonly path = '/schedule',
+    private readonly path = '/schedules',
   ) {}
 
   async create({
@@ -14,6 +14,7 @@ export class SheduleService {
     categoryId,
     workoutId,
     laneQuantity,
+    heat,
   }: ICreateScheduleRequestDTO): Promise<ISchedule> {
     const { statusCode, body } = await this.httpClient.request({
       method: 'post',
@@ -24,6 +25,7 @@ export class SheduleService {
         categoryId,
         workoutId,
         laneQuantity,
+        heat,
       },
     });
 
@@ -36,15 +38,13 @@ export class SheduleService {
   }
 
   async list(
-    id: string,
-    categoryId: string,
+    championshipId: string,
     limit: number,
     page: number,
   ): Promise<IPageResponse<ISchedule>> {
-    let url = `${this.path}/${id}/schedule`;
+    let url = `${this.path}/${championshipId}`;
 
-    if (limit && page && categoryId)
-      url = `${url}?limit=${limit}&page=${page}&category=${categoryId}`;
+    if (limit && page) url = `${url}?limit=${limit}&page=${page}`;
 
     const { statusCode, body } = await this.httpClient.request({
       method: 'get',
@@ -67,6 +67,44 @@ export class SheduleService {
 
     switch (statusCode) {
       case HttpStatusCode.noContent:
+        return body! as ISchedule;
+      default:
+        throw new Error();
+    }
+  }
+
+  async isLive(championshipId: string, activityId: string, isLive: boolean): Promise<ISchedule> {
+    const { statusCode, body } = await this.httpClient.request({
+      method: 'put',
+      url: `${this.path}/activities/is-live`,
+      body: {
+        championshipId,
+        activityId,
+        isLive,
+      },
+    });
+
+    switch (statusCode) {
+      case HttpStatusCode.ok:
+        return body! as ISchedule;
+      default:
+        throw new Error();
+    }
+  }
+
+  async isOver(championshipId: string, activityId: string, isLive: boolean): Promise<ISchedule> {
+    const { statusCode, body } = await this.httpClient.request({
+      method: 'put',
+      url: `${this.path}/activities/is-live`,
+      body: {
+        championshipId,
+        activityId,
+        isLive,
+      },
+    });
+
+    switch (statusCode) {
+      case HttpStatusCode.ok:
         return body! as ISchedule;
       default:
         throw new Error();

@@ -1,4 +1,6 @@
+import { IIsLiveDTO } from '@/data/interfaces/schedule';
 import useScheduleData from '@/hooks/useScheduleData';
+import { formatDate } from '@/utils/formatDate';
 import {
   Button,
   Flex,
@@ -21,28 +23,47 @@ import {
   Tr,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { ChevronLeft, ChevronRight, MoreHorizontal, Zap } from 'react-feather';
+import { ChevronLeft, ChevronRight, MoreHorizontal } from 'react-feather';
 
-interface IListLeaderboard {
-  champ: string;
-  category: string;
+interface IListSchedule {
+  championshipId: string;
 }
 
-const Listchedule = ({ champ, category }: IListLeaderboard) => {
-  const isOver = false;
+const ListSchedule = ({ championshipId }: IListSchedule) => {
   const [currentTotal, setCurrentTotal] = useState<number>(0);
-  const { ListPaginated, schedulePages, page, limit, setLimit, setPage, isLoading, Delete } =
-    useScheduleData();
+
+  const {
+    ListPaginated,
+    schedulePages,
+    page,
+    limit,
+    setLimit,
+    setPage,
+    isLoading,
+    Delete,
+    isLive,
+    isOver,
+  } = useScheduleData();
 
   useEffect(() => {
-    if (champ && category) {
-      ListPaginated(champ, category);
+    if (championshipId) {
+      ListPaginated(championshipId);
       setCurrentTotal(schedulePages.results?.length);
     }
-  }, [ListPaginated, category, champ, schedulePages.results?.length]);
+  }, [ListPaginated, championshipId, schedulePages.results?.length]);
 
   const previousPage = () => {
     setPage(page - 1);
+  };
+
+  const handleIsLive = (scheduleId: string, toggleInit: boolean) => {
+    const isLivePaylod: IIsLiveDTO = {
+      championshipId: championshipId,
+      activityId: scheduleId,
+      isLive: toggleInit,
+    };
+
+    isLive(isLivePaylod);
   };
 
   const nextPage = () => {
@@ -57,76 +78,78 @@ const Listchedule = ({ champ, category }: IListLeaderboard) => {
       <Table variant='simple'>
         <Thead bg='gray.50' border='1px' borderColor='gray.100'>
           <Tr>
-            <Tr></Tr>
-            <Th px={1}>
+            <Th>
               <Text as='b'>DATA</Text>
             </Th>
-            <Th px={1}>
+            <Th>
               <Text as='b'>HORÁRIO</Text>
             </Th>
-            <Th px={1}>
+            <Th>
               <Text as='b'>CATEGORIA</Text>
             </Th>
-            <Th px={1}>
+            <Th>
               <Text as='b'>PROVA</Text>
             </Th>
-            <Th px={1}>
-              <Text as='b'>Bateria</Text>
+            <Th>
+              <Text as='b'>BATERIA</Text>
             </Th>
-            <Th px={1}>
-              <Text as='b'>Baia</Text>
+            <Th>
+              <Text as='b'>BAIA</Text>
             </Th>
             <Th></Th>
           </Tr>
         </Thead>
+
         <Tbody>
-          {schedulePages.results?.map((result) => (
-            <Tr
-              key={result.id}
-              opacity={result.isOver && '70%'}
-              background={result.isOver && 'gray.100'}
-            >
-              <Td></Td>
-              <Td py={6} px={1} textTransform='capitalize'>
-                <Text as={isOver ? 'del' : 'p'}>
-                  {/* {formatDate(result.date)}  */}
-                  aaa
-                </Text>
-              </Td>
-              <Td py={6} px={1} textTransform='capitalize'>
-                <Text as={isOver ? 'del' : 'p'}>{/* {formatHour(result.hour)} */} aa</Text>
+          {schedulePages.results?.map((schedule) => (
+            <Tr key={schedule.id}>
+              <Td textTransform='capitalize'>
+                <Text as={schedule.isOver ? 'del' : 'p'}>{formatDate(schedule.date)}</Text>
               </Td>
 
-              <Td py={6} px={1} textTransform='capitalize'>
-                <Text as={isOver ? 'del' : 'p'}>{result.category.name}</Text>
+              <Td textTransform='capitalize'>
+                <Text as={schedule.isOver ? 'del' : 'p'}>{schedule.hour}</Text>
               </Td>
-              <Td py={6} px={1} textTransform='capitalize'>
-                <Text as={isOver ? 'del' : 'p'}>{result.workout.name}</Text>
-              </Td>
-              <Td py={6} px={1} textTransform='capitalize'>
-                <Text as={isOver ? 'del' : 'p'}>Bateria</Text>
-              </Td>
-              <Td py={6} px={1} textTransform='capitalize'>
-                <Text as={isOver ? 'del' : 'p'}>Raia</Text>
-              </Td>
-              <Td py={6} px={1}>
-                <Flex justify='end' alignItems='center' gap='20px'>
-                  {result.isLive && (
-                    <Zap size={16} cursor='pointer' fill={result.isLive ? 'yellow' : 'white'} />
-                  )}
 
+              <Td textTransform='capitalize'>
+                <Text as={schedule.isOver ? 'del' : 'p'}>{schedule.category.name}</Text>
+              </Td>
+
+              <Td textTransform='capitalize'>
+                <Text as={schedule.isOver ? 'del' : 'p'}>{schedule.workout.name}</Text>
+              </Td>
+
+              <Td textTransform='capitalize'>
+                <Text as={schedule.isOver ? 'del' : 'p'}>{schedule.heat}</Text>
+              </Td>
+
+              <Td>
+                <Text as={schedule.isOver ? 'del' : 'p'}>{schedule.heat}</Text>
+              </Td>
+              <Td p={6}>
+                <Flex justify='end'>
                   <Menu>
                     <MenuButton
                       as={IconButton}
                       aria-label='Options'
                       icon={<MoreHorizontal />}
                       variant='none'
-                      disabled={result.isOver}
                     />
                     <MenuList>
-                      <MenuItem>Iniciar</MenuItem>
-                      <MenuItem>Encerrar</MenuItem>
-                      <MenuItem onClick={() => deleteResult(result.id)}>Deletar</MenuItem>
+                      {!schedule.isLive && (
+                        <MenuItem onClick={() => handleIsLive(schedule.id, true)}>Iniciar</MenuItem>
+                      )}
+
+                      {schedule.isLive && (
+                        <MenuItem onClick={() => handleIsLive(schedule.id, false)}>Parar</MenuItem>
+                      )}
+
+                      {schedule.isLive && (
+                        <MenuItem onClick={() => handleIsLive(schedule.id, true)}>
+                          Encerrar
+                        </MenuItem>
+                      )}
+                      <MenuItem onClick={() => deleteResult(schedule.id)}>Deletar</MenuItem>
                     </MenuList>
                   </Menu>
                 </Flex>
@@ -199,4 +222,4 @@ const Listchedule = ({ champ, category }: IListLeaderboard) => {
   );
 };
 
-export default Listchedule;
+export default ListSchedule;
