@@ -1,3 +1,5 @@
+import { IPublicSchedule } from '@/data/interfaces/schedule';
+import { PublicScheduleService } from '@/services/Public/Schedule';
 import { useToast } from '@chakra-ui/react';
 import { createContext, useCallback, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -25,6 +27,8 @@ export interface ScheduleContextData {
   setPage: (value: number) => void;
   Create: ({ workoutId, categoryId, date, hour, laneQuantity }: ICreateScheduleRequestDTO) => void;
   Delete: (value: string) => void;
+  schedules: IPublicSchedule[];
+  PublicList: (code: string) => Promise<void>;
 }
 
 export const ScheduleContext = createContext({} as ScheduleContextData);
@@ -44,6 +48,7 @@ export const ScheduleProvider = ({ children, onClose }: ScheduleProviderProps) =
   const [limit, setLimit] = useState<number>(5);
   const [page, setPage] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [schedules, setSchedules] = useState<IPublicSchedule[]>([] as IPublicSchedule[]);
 
   const { id } = useParams();
 
@@ -162,6 +167,16 @@ export const ScheduleProvider = ({ children, onClose }: ScheduleProviderProps) =
     [ListPaginated, id, toast],
   );
 
+  const PublicList = useCallback(async (code: string) => {
+    setIsLoading(true);
+    await new PublicScheduleService(axios)
+      .list(code)
+      .then((schedules) => {
+        setSchedules(schedules as IPublicSchedule[]);
+      })
+      .finally(() => setIsLoading(false));
+  }, []);
+
   return (
     <ScheduleContext.Provider
       value={{
@@ -176,6 +191,8 @@ export const ScheduleProvider = ({ children, onClose }: ScheduleProviderProps) =
         setPage,
         Delete,
         Create,
+        schedules,
+        PublicList,
       }}
     >
       {children}
