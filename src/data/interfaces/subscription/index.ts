@@ -17,6 +17,11 @@ export interface ISubscriptionForm {
   ticketIndex?: number;
 }
 
+export interface ISimpleSubscription {
+  ranking: number;
+  nickname: string;
+}
+
 export interface IParticipantForm {
   nickname: string;
   participants: IParticipantDTO[];
