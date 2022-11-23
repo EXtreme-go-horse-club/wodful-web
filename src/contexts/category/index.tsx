@@ -1,7 +1,8 @@
 import { AxiosAdapter } from '@/adapters/AxiosAdapter';
-import { ICategory, ICategoryDTO } from '@/data/interfaces/category';
+import { ICategory, ICategoryDTO, IPublicCategory } from '@/data/interfaces/category';
 import { IPageResponse } from '@/data/interfaces/pageResponse';
 import { CategoryService } from '@/services/Category';
+import { PublicCategoryService } from '@/services/Public/Category';
 import { categoryMessages } from '@/utils/messages';
 import { useToast } from '@chakra-ui/react';
 import { createContext, useCallback, useState } from 'react';
@@ -15,6 +16,7 @@ interface CategoryProviderProps {
 export interface CategoryContextData {
   categories: ICategory[];
   categoriesPages: IPageResponse<ICategory>;
+  publicCategories: IPublicCategory[];
   isLoading: boolean;
   isError: boolean;
   limit: number;
@@ -22,6 +24,7 @@ export interface CategoryContextData {
   page: number;
   setPage: (value: number) => void;
   Delete: (id: string) => Promise<void>;
+  PublicList: (code: string) => Promise<void>;
   List: (id: string) => Promise<void>;
   ListPaginated: (id: string) => Promise<void>;
   Create: ({ championshipId, description, members, name }: ICategoryDTO) => Promise<void>;
@@ -40,6 +43,9 @@ export const CategoryProvider = ({ children, onClose }: CategoryProviderProps) =
   const [limit, setLimit] = useState<number>(5);
   const [page, setPage] = useState<number>(1);
   const [categories, setCategories] = useState<ICategory[]>([] as ICategory[]);
+  const [publicCategories, setPublicCategories] = useState<IPublicCategory[]>(
+    [] as IPublicCategory[],
+  );
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
 
@@ -49,6 +55,16 @@ export const CategoryProvider = ({ children, onClose }: CategoryProviderProps) =
       .listAll(id)
       .then((categories) => {
         setCategories(categories as ICategory[]);
+      })
+      .finally(() => setIsLoading(false));
+  }, []);
+
+  const PublicList = useCallback(async (code: string) => {
+    setIsLoading(true);
+    await new PublicCategoryService(axios)
+      .list(code)
+      .then((categories) => {
+        setPublicCategories(categories as IPublicCategory[]);
       })
       .finally(() => setIsLoading(false));
   }, []);
@@ -127,6 +143,8 @@ export const CategoryProvider = ({ children, onClose }: CategoryProviderProps) =
         limit,
         page,
         Delete,
+        publicCategories,
+        PublicList,
         setLimit,
         setPage,
         Create,

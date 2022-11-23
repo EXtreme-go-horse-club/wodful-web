@@ -1,7 +1,7 @@
 import { AxiosAdapter } from '@/adapters/AxiosAdapter';
 import { AuthenticatedUser, IAuthenticateUserRequest, IUserData } from '@/data/interfaces/user';
 import { AuthenticateService } from '@/services/Authenticate';
-import { PublicAccessService } from '@/services/PublicAccess';
+import { PublicAccessService } from '@/services/Public/Access';
 import { createContext, useCallback, useEffect, useState } from 'react';
 import { PublicUser } from '../../data/interfaces/user/index';
 
