@@ -41,11 +41,11 @@ export const resultMessages = {
   remove_err: 'Algo deu errado ao remover o Resultado',
 };
 
-export const activitMessages = {
+export const activityMessages = {
   success: 'Atividade adicionado ao cronograma com sucesso',
   start: 'Atividade iniciada com sucesso',
   stop: 'Atividade parada com sucesso',
-  finishg: 'Atividade encerrada com sucesso',
+  finish: 'Atividade encerrada com sucesso',
   errorStatus: 'Algo deu errado ao mudar o status da atividade',
   error: 'Algo deu errado ao adicionar uma atividade ao cronograma',
   remove: 'Atividade removida com sucesso',

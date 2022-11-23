@@ -7,9 +7,9 @@ import { Box, Button, Flex, HStack, Text, useDisclosure } from '@chakra-ui/react
 import { Suspense } from 'react';
 import { useParams } from 'react-router-dom';
 import ScheduleForm from './components/form';
-import Listchedule from './components/list';
+import ListSchedule from './components/list';
 
-const ScheduletWithProvider = () => {
+const ScheduleWithProvider = () => {
   const { onClose } = useDisclosure();
 
   return (
@@ -47,13 +47,13 @@ const Schedule = () => {
           </Flex>
           <Flex as='article' gap='1rem'>
             <Button minW='170px' w='100%' colorScheme='teal' size='md' onClick={onOpen}>
-              Adicionar no cronograma
+              Adicionar atividade
             </Button>
           </Flex>
         </HStack>
 
         <ComponentModal
-          modalHeader='Adicionar no cronograma'
+          modalHeader='Adicionar atividade ao cronograma'
           size='lg'
           isOpen={isOpen}
           onClose={onClose}
@@ -62,11 +62,11 @@ const Schedule = () => {
         </ComponentModal>
 
         <Box as='section' w='100%' marginTop={6}>
-          <Listchedule championshipId={id as string} />
+          <ListSchedule championshipId={id as string} />
         </Box>
       </Box>
     </Suspense>
   );
 };
 
-export default ScheduletWithProvider;
+export default ScheduleWithProvider;

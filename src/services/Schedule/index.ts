@@ -2,7 +2,7 @@ import { HttpClient, HttpStatusCode } from '@/data/interfaces/http';
 import { IPageResponse } from '@/data/interfaces/pageResponse';
 import { ICreateScheduleRequestDTO, ISchedule } from '@/data/interfaces/schedule';
 
-export class SheduleService {
+export class ScheduleService {
   constructor(
     private readonly httpClient: HttpClient<IPageResponse<ISchedule> | ISchedule[] | ISchedule>,
     private readonly path = '/schedules',
@@ -92,14 +92,14 @@ export class SheduleService {
     }
   }
 
-  async isOver(championshipId: string, activityId: string, isLive: boolean): Promise<ISchedule> {
+  async isOver(championshipId: string, activityId: string, isOver: boolean): Promise<ISchedule> {
     const { statusCode, body } = await this.httpClient.request({
       method: 'put',
-      url: `${this.path}/activities/is-live`,
+      url: `${this.path}/activities/is-over`,
       body: {
         championshipId,
         activityId,
-        isLive,
+        isOver,
       },
     });
 

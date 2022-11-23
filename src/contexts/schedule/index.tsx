@@ -10,8 +10,8 @@ import {
   IIsOverDTO,
   ISchedule,
 } from '@/data/interfaces/schedule';
-import { SheduleService } from '@/services/Schedule';
-import { activitMessages, resultMessages } from '@/utils/messages';
+import { ScheduleService } from '@/services/Schedule';
+import { activityMessages, resultMessages } from '@/utils/messages';
 
 export interface ScheduleContextData {
   schedulePages: IPageResponse<ISchedule>;
@@ -19,8 +19,8 @@ export interface ScheduleContextData {
   page: number;
   limit: number;
   ListPaginated: (championshipId: string) => void;
-  isLive: ({ championshipId, activityId, isLive }: IIsLiveDTO) => void;
-  isOver: ({ championshipId, activityId, isOver }: IIsOverDTO) => void;
+  IsLive: ({ championshipId, activityId, isLive }: IIsLiveDTO) => void;
+  IsOver: ({ championshipId, activityId, isOver }: IIsOverDTO) => void;
   setLimit: (value: number) => void;
   setPage: (value: number) => void;
   Create: ({ workoutId, categoryId, date, hour, laneQuantity }: ICreateScheduleRequestDTO) => void;
@@ -50,7 +50,7 @@ export const ScheduleProvider = ({ children, onClose }: ScheduleProviderProps) =
   const ListPaginated = useCallback(
     async (championshipId: string) => {
       setIsLoading(true);
-      await new SheduleService(axios)
+      await new ScheduleService(axios)
         .list(championshipId, limit, page)
         .then((paginatedSchedules) => {
           setSchedulePages(paginatedSchedules as IPageResponse<ISchedule>);
@@ -70,11 +70,11 @@ export const ScheduleProvider = ({ children, onClose }: ScheduleProviderProps) =
       laneQuantity,
     }: ICreateScheduleRequestDTO) => {
       setIsLoading(true);
-      await new SheduleService(axios)
+      await new ScheduleService(axios)
         .create({ date, hour, categoryId, workoutId, heat, laneQuantity })
         .then(() => {
           toast({
-            title: activitMessages['success'],
+            title: activityMessages['success'],
             status: 'success',
             isClosable: true,
           });
@@ -83,7 +83,7 @@ export const ScheduleProvider = ({ children, onClose }: ScheduleProviderProps) =
         })
         .catch(() => {
           toast({
-            title: activitMessages['error'],
+            title: activityMessages['error'],
             status: 'error',
             isClosable: true,
           });
@@ -93,14 +93,14 @@ export const ScheduleProvider = ({ children, onClose }: ScheduleProviderProps) =
     [ListPaginated, id, onClose, toast],
   );
 
-  const isLive = useCallback(
+  const IsLive = useCallback(
     async ({ championshipId, activityId, isLive }: IIsLiveDTO) => {
       setIsLoading(true);
-      await new SheduleService(axios)
+      await new ScheduleService(axios)
         .isLive(championshipId, activityId, isLive)
         .then(() => {
           toast({
-            title: isLive ? activitMessages['start'] : activitMessages['stop'],
+            title: isLive ? activityMessages['start'] : activityMessages['stop'],
             status: 'success',
             isClosable: true,
           });
@@ -109,7 +109,7 @@ export const ScheduleProvider = ({ children, onClose }: ScheduleProviderProps) =
         })
         .catch(() => {
           toast({
-            title: activitMessages['errorStatus'],
+            title: activityMessages['errorStatus'],
             status: 'error',
             isClosable: true,
           });
@@ -119,14 +119,14 @@ export const ScheduleProvider = ({ children, onClose }: ScheduleProviderProps) =
     [ListPaginated, id, onClose, toast],
   );
 
-  const isOver = useCallback(
+  const IsOver = useCallback(
     async ({ championshipId, activityId, isOver }: IIsOverDTO) => {
       setIsLoading(true);
-      await new SheduleService(axios)
-        .isLive(championshipId, activityId, isOver)
+      await new ScheduleService(axios)
+        .isOver(championshipId, activityId, isOver)
         .then(() => {
           toast({
-            title: activitMessages['finishg'],
+            title: activityMessages['finish'],
             status: 'success',
             isClosable: true,
           });
@@ -135,7 +135,7 @@ export const ScheduleProvider = ({ children, onClose }: ScheduleProviderProps) =
         })
         .catch(() => {
           toast({
-            title: activitMessages['errorStatus'],
+            title: activityMessages['errorStatus'],
             status: 'error',
             isClosable: true,
           });
@@ -147,7 +147,7 @@ export const ScheduleProvider = ({ children, onClose }: ScheduleProviderProps) =
 
   const Delete = useCallback(
     async (idCat: string) => {
-      await new SheduleService(axios)
+      await new ScheduleService(axios)
         .delete(idCat)
         .then(() => {
           toast({
@@ -166,8 +166,8 @@ export const ScheduleProvider = ({ children, onClose }: ScheduleProviderProps) =
     <ScheduleContext.Provider
       value={{
         schedulePages,
-        isLive,
-        isOver,
+        IsLive,
+        IsOver,
         isLoading,
         page,
         limit,

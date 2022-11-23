@@ -30,7 +30,6 @@ export interface IIsLiveDTO {
   activityId: string;
   isLive: boolean;
 }
-
 export interface IIsOverDTO {
   championshipId: string;
   activityId: string;

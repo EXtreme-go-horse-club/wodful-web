@@ -1,4 +1,4 @@
-import { IIsLiveDTO } from '@/data/interfaces/schedule';
+import { IIsLiveDTO, IIsOverDTO } from '@/data/interfaces/schedule';
 import useScheduleData from '@/hooks/useScheduleData';
 import { formatDate } from '@/utils/formatDate';
 import {
@@ -23,7 +23,7 @@ import {
   Tr,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { ChevronLeft, ChevronRight, MoreHorizontal } from 'react-feather';
+import { ChevronLeft, ChevronRight, MoreHorizontal, Radio } from 'react-feather';
 
 interface IListSchedule {
   championshipId: string;
@@ -41,8 +41,8 @@ const ListSchedule = ({ championshipId }: IListSchedule) => {
     setPage,
     isLoading,
     Delete,
-    isLive,
-    isOver,
+    IsLive,
+    IsOver,
   } = useScheduleData();
 
   useEffect(() => {
@@ -57,13 +57,23 @@ const ListSchedule = ({ championshipId }: IListSchedule) => {
   };
 
   const handleIsLive = (scheduleId: string, toggleInit: boolean) => {
-    const isLivePaylod: IIsLiveDTO = {
+    const isLivePayload: IIsLiveDTO = {
       championshipId: championshipId,
       activityId: scheduleId,
       isLive: toggleInit,
     };
 
-    isLive(isLivePaylod);
+    IsLive(isLivePayload);
+  };
+
+  const handleIsOver = (scheduleId: string, toggleInit: boolean) => {
+    const isOverPayload: IIsOverDTO = {
+      championshipId: championshipId,
+      activityId: scheduleId,
+      isOver: toggleInit,
+    };
+
+    IsOver(isOverPayload);
   };
 
   const nextPage = () => {
@@ -102,7 +112,7 @@ const ListSchedule = ({ championshipId }: IListSchedule) => {
 
         <Tbody>
           {schedulePages.results?.map((schedule) => (
-            <Tr key={schedule.id}>
+            <Tr bg={schedule.isOver ? 'gray.200' : ''} key={schedule.id}>
               <Td textTransform='capitalize'>
                 <Text as={schedule.isOver ? 'del' : 'p'}>{formatDate(schedule.date)}</Text>
               </Td>
@@ -127,29 +137,58 @@ const ListSchedule = ({ championshipId }: IListSchedule) => {
                 <Text as={schedule.isOver ? 'del' : 'p'}>{schedule.heat}</Text>
               </Td>
               <Td p={6}>
-                <Flex justify='end'>
+                <Flex justify='end' align='center'>
                   <Menu>
+                    {schedule.isLive && (
+                      <Tooltip label='Ao vivo' placement='top' hasArrow>
+                        <Text p='0px 5px' fontSize='12px' color='red.500'>
+                          <Radio />
+                        </Text>
+                      </Tooltip>
+                    )}
                     <MenuButton
                       as={IconButton}
                       aria-label='Options'
                       icon={<MoreHorizontal />}
                       variant='none'
                     />
+                    {/* 
+                      isLive: 
+                      - Não pode iniciar se já estiver iniciada.
+                      - Não pode iniciar se já estiver Over.
+                      - Só pode parar se estiver em live.
+                      isOver
+                      - Não pode encerrar se já estiver encerrado.
+                      - 
+                    */}
                     <MenuList>
-                      {!schedule.isLive && (
-                        <MenuItem onClick={() => handleIsLive(schedule.id, true)}>Iniciar</MenuItem>
+                      {!schedule.isLive && !schedule.isOver && (
+                        <>
+                          <MenuItem onClick={() => handleIsLive(schedule.id, true)}>
+                            Iniciar
+                          </MenuItem>
+                          <MenuItem onClick={() => deleteResult(schedule.id)}>Deletar</MenuItem>
+                        </>
                       )}
 
                       {schedule.isLive && (
-                        <MenuItem onClick={() => handleIsLive(schedule.id, false)}>Parar</MenuItem>
+                        <>
+                          <MenuItem onClick={() => handleIsLive(schedule.id, false)}>
+                            Parar
+                          </MenuItem>
+                          <MenuItem onClick={() => handleIsOver(schedule.id, true)}>
+                            Encerrar
+                          </MenuItem>
+                        </>
                       )}
 
-                      {schedule.isLive && (
-                        <MenuItem onClick={() => handleIsLive(schedule.id, true)}>
-                          Encerrar
-                        </MenuItem>
+                      {schedule.isOver && (
+                        <>
+                          <MenuItem onClick={() => handleIsOver(schedule.id, false)}>
+                            Reabrir
+                          </MenuItem>
+                        </>
                       )}
-                      <MenuItem onClick={() => deleteResult(schedule.id)}>Deletar</MenuItem>
                     </MenuList>
                   </Menu>
                 </Flex>
@@ -174,8 +213,11 @@ const ListSchedule = ({ championshipId }: IListSchedule) => {
                 <option value='5'>5</option>
                 <option value='10'>10</option>
                 <option value='20'>20</option>
+                <option value='40'>40</option>
               </Select>
             </Th>
+            <Th />
+            <Th />
             <Th />
             <Th />
             <Th />
