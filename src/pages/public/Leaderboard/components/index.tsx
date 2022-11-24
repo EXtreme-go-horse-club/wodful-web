@@ -62,6 +62,11 @@ const ListPublicLeaderboard = () => {
                       </HStack>
                     </AccordionButton>
                     <AccordionPanel p={3}>
+                      {!leaderboard.results.length && (
+                        <Text fontSize='0.8rem' as='b' color='gray.600' size='sm'>
+                          Sem resultados
+                        </Text>
+                      )}
                       {leaderboard.results?.map((content, index) => (
                         <HStack justify='space-between' w='100%' key={index + 'result'}>
                           <Text fontSize='0.8rem' as='b' color='gray.600' size='sm'>

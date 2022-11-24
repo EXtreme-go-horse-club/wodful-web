@@ -59,7 +59,6 @@ const PublicLeaderboardAccess = () => {
     ValidateAccess.verify(code as string, navigate);
   }, [code, navigate]);
 
-  console.log(selectedCategory);
   return (
     <Suspense fallback={<Loader title='Carregando ...' />}>
       <Center as='main' role='main'>
