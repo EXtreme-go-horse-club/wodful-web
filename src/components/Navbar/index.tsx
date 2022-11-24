@@ -1,14 +1,11 @@
 import useAuth from '@/hooks/useAuth';
 import { Box, Link, Tab, TabList, Tabs, Tooltip } from '@chakra-ui/react';
 import { ChevronLeft } from 'react-feather';
-import { Link as RouterLink, Outlet, useLocation, useParams } from 'react-router-dom';
+import { Link as RouterLink, Outlet, useParams } from 'react-router-dom';
 
 export const Navbar = () => {
   const params = useParams();
   const { signed } = useAuth();
-
-  const location = useLocation();
-  console.log(location);
 
   const NavItems = [
     {
