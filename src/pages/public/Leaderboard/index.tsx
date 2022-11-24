@@ -4,7 +4,8 @@ import { LeaderboardProvider } from '@/contexts/leaderboard';
 import useCategoryData from '@/hooks/useCategoryData';
 import useLeaderboardData from '@/hooks/useLeaderboardData';
 import { Box, Center, Flex, Select, Text } from '@chakra-ui/react';
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
+import { Server } from 'react-feather';
 import { useNavigate, useParams } from 'react-router-dom';
 import ListPublicLeaderboard from './components';
 import { ValidateAccess } from './helper/ValidateAccess';
@@ -24,7 +25,31 @@ const PublicLeaderboardAccess = () => {
   const navigate = useNavigate();
   const { PublicList, publicCategories } = useCategoryData();
   const { ListPublic } = useLeaderboardData();
-  const [selectedCategory, setSelectedCategory] = useState<string>('Sem categoria');
+  const [selectedCategory, setSelectedCategory] = useState<{ name: string; value: string }>({
+    name: 'Sem categoria',
+    value: '0',
+  });
+
+  const hasSelectedCategory = useMemo(
+    () => selectedCategory.name === 'Sem categoria',
+    [selectedCategory],
+  );
+
+  const handleSelection = useCallback(
+    (event: React.ChangeEvent<HTMLSelectElement>) => {
+      if (event.target.value) {
+        ListPublic(String(event.target.value));
+        const category = publicCategories.find((selected) => selected.id === event.target.value);
+        setSelectedCategory({ name: category!.name, value: category!.id });
+        return;
+      }
+      setSelectedCategory({
+        name: 'Sem categoria',
+        value: '0',
+      });
+    },
+    [ListPublic, publicCategories],
+  );
 
   useEffect(() => {
     if (code) PublicList(code);
@@ -33,6 +58,7 @@ const PublicLeaderboardAccess = () => {
   useEffect(() => {
     ValidateAccess.verify(code as string, navigate);
   }, [code, navigate]);
+
   return (
     <Suspense fallback={<Loader title='Carregando ...' />}>
       <Center as='main' role='main'>
@@ -54,47 +80,63 @@ const PublicLeaderboardAccess = () => {
             direction={['column', 'row', 'row']}
           >
             <Flex as='article' role='textbox' direction='column' gap='0.75rem'>
-              <Text fontSize='2xl' as='b' role='heading'>
-                Leaderboard
-              </Text>
-              <Text
-                as='b'
-                role='textbox'
-                fontSize='0.75rem'
-                color='gray.500'
-                border='1px'
-                borderColor='gray.500'
-                borderRadius='4px'
-                padding='2px 8px'
-                textTransform='capitalize'
-              >
-                Categoria: {selectedCategory}
-              </Text>
+              {!hasSelectedCategory && (
+                <Text fontSize='2xl' as='b' role='heading'>
+                  Leaderboard
+                </Text>
+              )}
             </Flex>
-            <Flex as='article' gap='1rem' mt={[4, 0, 0]}>
-              <Select
-                as='select'
-                id='category'
-                placeholder='Selecione a categoria'
-                onChange={(event) => {
-                  if (event.target.value) {
-                    ListPublic(String(event.target.value));
-                    setSelectedCategory(
-                      publicCategories.find((selected) => selected.id === event.target.value)!.name,
-                    );
-                  }
-                }}
-              >
-                {publicCategories?.map((category) => (
-                  <option key={category.id} value={category.id}>
-                    {category.name}
-                  </option>
-                ))}
-              </Select>
-            </Flex>
+            {!hasSelectedCategory && (
+              <Flex as='article' gap='1rem' mt={[4, 0, 0]}>
+                <Select
+                  as='select'
+                  id='category'
+                  defaultValue={selectedCategory.value}
+                  onChange={(event) => {
+                    handleSelection(event);
+                  }}
+                >
+                  {publicCategories?.map((category) => (
+                    <option key={category.id} value={category.id}>
+                      {category.name}
+                    </option>
+                  ))}
+                </Select>
+              </Flex>
+            )}
           </Flex>
-          <Box as='section' w='100%' maxW='1280px' marginTop={6}>
-            <ListPublicLeaderboard />
+          <Box as='section' w='100%' maxW='1280px' p='1.5rem 0px'>
+            {!hasSelectedCategory ? (
+              <ListPublicLeaderboard />
+            ) : (
+              <Box
+                display='flex'
+                flexDirection='column'
+                alignItems='center'
+                justifyContent='center'
+                gap='8px'
+                mt='20%'
+              >
+                <Server size={80} color='#1A202C' />
+                <Text color='teal.500'>Selecione uma categoria</Text>
+                <Flex as='article' gap='1rem' mt={[4, 0, 0]}>
+                  <Select
+                    as='select'
+                    id='category'
+                    placeholder='Categorias'
+                    onChange={(event) => {
+                      handleSelection(event);
+                    }}
+                  >
+                    {publicCategories?.map((category) => (
+                      <option key={category.id} value={category.id}>
+                        {category.name}
+                      </option>
+                    ))}
+                  </Select>
+                </Flex>
+              </Box>
+            )}
           </Box>
         </Box>
       </Center>

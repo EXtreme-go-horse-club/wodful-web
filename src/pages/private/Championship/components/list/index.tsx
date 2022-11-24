@@ -92,7 +92,7 @@ const ListChampionship = () => {
                   }}
                 >
                   <VStack align='start' spacing={1}>
-                    <Heading color='black' as='h4' size='md'>
+                    <Heading color='black' as='h4' size='md' textTransform='capitalize'>
                       {championship.name}
                     </Heading>
                     <Text fontSize='14px'>

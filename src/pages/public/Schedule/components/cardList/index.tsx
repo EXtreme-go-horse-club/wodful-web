@@ -28,25 +28,29 @@ const ListCardPublicSchedule = () => {
   const { isMobile } = useWindowDimensions();
   const [activity, setActivity] = useState<IPublicSchedule>({} as IPublicSchedule);
 
-  const handleModalEvent = useCallback((schedule: IPublicSchedule) => {
-    if (!isMobile) {
-      onOpen();
-      setActivity(schedule);
-    }
-  }, []);
+  const handleModalEvent = useCallback(
+    (schedule: IPublicSchedule) => {
+      if (!isMobile) {
+        onOpen();
+        setActivity(schedule);
+      }
+    },
+    [isMobile, onOpen],
+  );
 
   return (
     <>
       <SimpleGrid color='gray.600' columns={[null, 1, 2, 3]} spacing='24px' justifyItems='center'>
-        {schedules?.map((schedule) => (
+        {schedules?.map((schedule, index) => (
           <Box
+            as='article'
             className={schedule.isLive ? 'live' : 'off'}
             p={6}
             pb={2}
             w='100%'
             maxW='384px'
             minW='300px'
-            key={schedule.id}
+            key={`${index}_${schedule.id}`}
           >
             <VStack gap='8px' align='start'>
               <VStack align='start' spacing={1} w='100%'>
@@ -55,21 +59,29 @@ const ListCardPublicSchedule = () => {
                     {schedule.hour}
                   </Heading>
                   {schedule.isLive && (
-                    <Text p='0px 5px' as='b' fontSize='12px' color='red.300'>
+                    <Text p='0px 5px' as='b' fontSize='12px' color='red.500'>
                       L I V E
                     </Text>
                   )}
 
                   <Spacer />
-                  <Tag size='sm' key='sm' variant='solid' colorScheme='teal'>
+                  <Tag
+                    size='sm'
+                    textTransform='capitalize'
+                    key='sm'
+                    variant='solid'
+                    colorScheme='teal'
+                  >
                     {schedule.category.name}
                   </Tag>
                 </HStack>
               </VStack>
 
-              <HStack fontSize='14px' align='start' gap='24px'>
-                <VStack align='start' spacing={0}>
-                  <Text fontSize='sm'>{schedule.workout.name}</Text>
+              <HStack as='article' fontSize='14px' mt='0px' align='start'>
+                <VStack align='start'>
+                  <Text fontSize='sm' textTransform='capitalize'>
+                    {schedule.workout.name}
+                  </Text>
                 </VStack>
               </HStack>
               <HStack fontSize='14px' width='100%'>
@@ -80,17 +92,36 @@ const ListCardPublicSchedule = () => {
                         <Box textAlign='left' as='b'>
                           Mostrar participantes
                         </Box>
-                        <AccordionIcon />
+                        {isMobile && <AccordionIcon />}
                       </HStack>
                     </AccordionButton>
                     {isMobile && (
-                      <AccordionPanel p={0}>
+                      <AccordionPanel p={3}>
                         {schedule.subscriptions?.map((subscription, index) => (
-                          <HStack justify='space-between' w='100%' key={index}>
-                            <Text fontSize='16px' as='b' color='gray.600' size='sm'>
-                              {subscription.nickname}
-                            </Text>
-                          </HStack>
+                          <Box key={`${Math.random() * 1000}_${index}_${subscription.nickname}`}>
+                            <HStack
+                              justify='space-between'
+                              w='100%'
+                              key={`${index * subscription.ranking}_${subscription.nickname}`}
+                            >
+                              <Text
+                                overflow={'hidden'}
+                                whiteSpace='nowrap'
+                                textOverflow='ellipsis'
+                                maxW='165px'
+                                fontSize='0.8rem'
+                                as='b'
+                                color='gray.600'
+                                size='sm'
+                              >
+                                {index + 1}. {subscription.nickname}
+                              </Text>
+                              <Text fontSize='12px' color='gray.500' size='xs' minW='50px'>
+                                {`${subscription.ranking}`}° Lugar
+                              </Text>
+                            </HStack>
+                            <Divider />
+                          </Box>
                         ))}
                       </AccordionPanel>
                     )}
@@ -118,17 +149,32 @@ const ListCardPublicSchedule = () => {
               {activity.category?.name}
             </Tag>
           </HStack>
-          <Text fontSize='16px' as='b' p='8px 0px' color='gray.700' size='sm'>
+          <Text textTransform='capitalize' fontSize='16px' p='1rem 0px' color='gray.700' size='sm'>
             {activity.workout?.name}
           </Text>
         </VStack>
         <Divider />
         {activity.subscriptions?.map((team, index) => (
-          <HStack justify='space-between' w='100%' key={index}>
-            <Text fontSize='16px' as='b' p='4px 0px' color='gray.600' size='sm'>
-              {team.nickname}
-            </Text>
-          </HStack>
+          <Box key={`${Math.random() * 1000}_${index}_${team.nickname}`}>
+            <HStack justify='space-between' w='100%' p='5px'>
+              <Text
+                overflow={'hidden'}
+                whiteSpace='nowrap'
+                textOverflow='ellipsis'
+                maxW='165px'
+                fontSize='0.8rem'
+                as='b'
+                color='gray.600'
+                size='sm'
+              >
+                {index + 1}. {team.nickname}
+              </Text>
+              <Text fontSize='12px' color='gray.500' size='xs' minW='50px'>
+                {`${team.ranking}`}° Lugar
+              </Text>
+            </HStack>
+            <Divider />
+          </Box>
         ))}
       </ComponentModal>
     </>
