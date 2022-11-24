@@ -36,6 +36,7 @@ export interface IPublicSchedule {
   };
   subscriptions: ISimpleSubscription[];
 }
+
 export interface ICreateScheduleRequestDTO {
   date: string;
   hour: string;

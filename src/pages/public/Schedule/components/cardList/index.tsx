@@ -28,12 +28,15 @@ const ListCardPublicSchedule = () => {
   const { isMobile } = useWindowDimensions();
   const [activity, setActivity] = useState<IPublicSchedule>({} as IPublicSchedule);
 
-  const handleModalEvent = useCallback((schedule: IPublicSchedule) => {
-    if (!isMobile) {
-      onOpen();
-      setActivity(schedule);
-    }
-  }, []);
+  const handleModalEvent = useCallback(
+    (schedule: IPublicSchedule) => {
+      if (!isMobile) {
+        onOpen();
+        setActivity(schedule);
+      }
+    },
+    [isMobile, onOpen],
+  );
 
   return (
     <>
@@ -55,21 +58,29 @@ const ListCardPublicSchedule = () => {
                     {schedule.hour}
                   </Heading>
                   {schedule.isLive && (
-                    <Text p='0px 5px' as='b' fontSize='12px' color='red.300'>
+                    <Text p='0px 5px' as='b' fontSize='12px' color='red.500'>
                       L I V E
                     </Text>
                   )}
 
                   <Spacer />
-                  <Tag size='sm' key='sm' variant='solid' colorScheme='teal'>
+                  <Tag
+                    size='sm'
+                    textTransform='capitalize'
+                    key='sm'
+                    variant='solid'
+                    colorScheme='teal'
+                  >
                     {schedule.category.name}
                   </Tag>
                 </HStack>
               </VStack>
 
-              <HStack fontSize='14px' align='start' gap='24px'>
-                <VStack align='start' spacing={0}>
-                  <Text fontSize='sm'>{schedule.workout.name}</Text>
+              <HStack as='article' fontSize='14px' mt='0px' align='start'>
+                <VStack align='start'>
+                  <Text fontSize='sm' textTransform='capitalize'>
+                    {schedule.workout.name}
+                  </Text>
                 </VStack>
               </HStack>
               <HStack fontSize='14px' width='100%'>
@@ -124,7 +135,7 @@ const ListCardPublicSchedule = () => {
         </VStack>
         <Divider />
         {activity.subscriptions?.map((team, index) => (
-          <HStack justify='space-between' w='100%' key={index}>
+          <HStack justify='space-between' w='100%' p='10px' key={index}>
             <Text fontSize='16px' as='b' p='4px 0px' color='gray.600' size='sm'>
               {team.nickname}
             </Text>
