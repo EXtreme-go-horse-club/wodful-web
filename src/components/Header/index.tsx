@@ -20,6 +20,8 @@ import Logo from '../../assets/icons/wodful-white-logo.svg';
 
 const NO_TITLE_ROUTES = ['/championships', '/login'];
 
+const NO_EXIT_ROUTES = ['/access', '/login'];
+
 export const Header = () => {
   const { signed, Logout, Reset } = useAuth();
   const { user } = useAuth();
@@ -27,6 +29,7 @@ export const Header = () => {
   const { currentChampionship } = useApp();
 
   const untitledRoutes = useMemo(() => NO_TITLE_ROUTES.includes(pathname), [pathname]);
+  const noExitRoutes = useMemo(() => NO_EXIT_ROUTES.includes(pathname), [pathname]);
 
   return (
     <Flex
@@ -67,9 +70,9 @@ export const Header = () => {
             </Menu>
           </HStack>
         ) : (
-          pathname !== '/access' && (
+          !noExitRoutes && (
             <Button color='white' variant='link' onClick={Reset}>
-              Voltar
+              Sair
             </Button>
           )
         )}

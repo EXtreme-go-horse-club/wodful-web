@@ -61,14 +61,16 @@ const ListPublicLeaderboard = () => {
                         <AccordionIcon />
                       </HStack>
                     </AccordionButton>
-                    <AccordionPanel p={0}>
+                    <AccordionPanel p={3}>
                       {leaderboard.results?.map((content, index) => (
                         <HStack justify='space-between' w='100%' key={index + 'result'}>
-                          <Text fontSize='16px' as='b' color='gray.600' size='sm'>
+                          <Text fontSize='0.8rem' as='b' color='gray.600' size='sm'>
                             {content.workout.name} ({content.classification} lugar)
                           </Text>
                           <Spacer />
-                          <Text fontSize='14px'>{content.points} pontos</Text>
+                          <Text fontSize='12px' minW='50px'>
+                            {content.points} pontos
+                          </Text>
                         </HStack>
                       ))}
                     </AccordionPanel>

@@ -37,7 +37,7 @@ const axios = new AxiosAdapter();
 
 interface ScheduleProviderProps {
   children: React.ReactNode;
-  onClose: () => void;
+  onClose?: () => void;
 }
 
 export const ScheduleProvider = ({ children, onClose }: ScheduleProviderProps) => {
