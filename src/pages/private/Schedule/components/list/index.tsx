@@ -1,6 +1,6 @@
 import { IIsLiveDTO, IIsOverDTO } from '@/data/interfaces/schedule';
 import useScheduleData from '@/hooks/useScheduleData';
-import { formatDate } from '@/utils/formatDate';
+import { incrementAndFormatDate } from '@/utils/formatDate';
 import {
   Button,
   Flex,
@@ -114,7 +114,9 @@ const ListSchedule = ({ championshipId }: IListSchedule) => {
           {schedulePages.results?.map((schedule) => (
             <Tr bg={schedule.isOver ? 'gray.200' : ''} key={schedule.id}>
               <Td textTransform='capitalize'>
-                <Text as={schedule.isOver ? 'del' : 'p'}>{formatDate(schedule.date)}</Text>
+                <Text as={schedule.isOver ? 'del' : 'p'}>
+                  {incrementAndFormatDate(schedule.date)}
+                </Text>
               </Td>
 
               <Td textTransform='capitalize'>
@@ -134,7 +136,7 @@ const ListSchedule = ({ championshipId }: IListSchedule) => {
               </Td>
 
               <Td>
-                <Text as={schedule.isOver ? 'del' : 'p'}>{schedule.heat}</Text>
+                <Text as={schedule.isOver ? 'del' : 'p'}>{schedule.laneQuantity}</Text>
               </Td>
               <Td p={6}>
                 <Flex justify='end' align='center'>
@@ -152,15 +154,7 @@ const ListSchedule = ({ championshipId }: IListSchedule) => {
                       icon={<MoreHorizontal />}
                       variant='none'
                     />
-                    {/* 
-                      isLive: 
-                      - Não pode iniciar se já estiver iniciada.
-                      - Não pode iniciar se já estiver Over.
-                      - Só pode parar se estiver em live.
-                      isOver
-                      - Não pode encerrar se já estiver encerrado.
-                      - 
-                    */}
+
                     <MenuList>
                       {!schedule.isLive && !schedule.isOver && (
                         <>

@@ -2,13 +2,15 @@ import { ICreateScheduleRequestDTO } from '@/data/interfaces/schedule';
 import useCategoryData from '@/hooks/useCategoryData';
 import useScheduleData from '@/hooks/useScheduleData';
 import useWorkoutData from '@/hooks/useWorkoutData';
-import { formatDate, formatHour } from '@/utils/formatDate';
+import { incrementAndFormatDate } from '@/utils/formatDate';
 import { validationMessages } from '@/utils/messages';
 import {
   Button,
   ButtonGroup,
   FormControl,
+  FormErrorMessage,
   FormLabel,
+  HStack,
   Input,
   Select,
   VStack,
@@ -41,8 +43,7 @@ const ScheduleForm = ({ onClose }: IFormScheduleProps) => {
   });
 
   function onSubmit(schedule: ICreateScheduleRequestDTO) {
-    schedule.date = formatDate(schedule.date, 'yyyy-MM-dd');
-    schedule.hour = formatHour(schedule.date);
+    schedule.date = incrementAndFormatDate(schedule.date, 'yyyy-MM-dd');
     schedule.heat = Number(schedule.heat);
     schedule.laneQuantity = Number(schedule.laneQuantity);
     Create(schedule);
@@ -75,6 +76,7 @@ const ScheduleForm = ({ onClose }: IFormScheduleProps) => {
               </option>
             ))}
           </Select>
+          <FormErrorMessage>{errors.categoryId && errors.categoryId.message}</FormErrorMessage>
         </FormControl>
 
         <FormControl isInvalid={!!errors.workoutId}>
@@ -92,16 +94,30 @@ const ScheduleForm = ({ onClose }: IFormScheduleProps) => {
               </option>
             ))}
           </Select>
+          <FormErrorMessage>{errors.workoutId && errors.workoutId.message}</FormErrorMessage>
         </FormControl>
 
-        <FormControl isInvalid={!!errors.date}>
-          <FormLabel>Data e horário de início</FormLabel>
-          <Input
-            type='datetime-local'
-            placeholder='DD/MM/AAAA HH:MM'
-            {...register('date', { required: validationMessages['required'] })}
-          />
-        </FormControl>
+        <HStack width='100%'>
+          <FormControl isInvalid={!!errors.date}>
+            <FormLabel>Data de início</FormLabel>
+            <Input
+              type='date'
+              placeholder='DD/MM/AAAA'
+              {...register('date', { required: validationMessages['required'] })}
+            />
+            <FormErrorMessage>{errors.date && errors.date.message}</FormErrorMessage>
+          </FormControl>
+
+          <FormControl isInvalid={!!errors.hour}>
+            <FormLabel>Horário de início</FormLabel>
+            <Input
+              type='time'
+              placeholder='HH:MM'
+              {...register('hour', { required: validationMessages['required'] })}
+            />
+            <FormErrorMessage>{errors.hour && errors.hour.message}</FormErrorMessage>
+          </FormControl>
+        </HStack>
 
         <FormControl isInvalid={!!errors.heat}>
           <FormLabel>Bateria</FormLabel>
@@ -112,6 +128,7 @@ const ScheduleForm = ({ onClose }: IFormScheduleProps) => {
             <option value='4'>4</option>
             <option value='5'>5</option>
           </Select>
+          <FormErrorMessage>{errors.heat && errors.heat.message}</FormErrorMessage>
         </FormControl>
 
         <FormControl isInvalid={!!errors.laneQuantity}>
@@ -126,6 +143,7 @@ const ScheduleForm = ({ onClose }: IFormScheduleProps) => {
             <option value='4'>4</option>
             <option value='5'>5</option>
           </Select>
+          <FormErrorMessage>{errors.laneQuantity && errors.laneQuantity.message}</FormErrorMessage>
         </FormControl>
 
         <ButtonGroup flexDirection='column' alignItems='end' gap={6} w='100%'>

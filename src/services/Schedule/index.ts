@@ -62,7 +62,7 @@ export class ScheduleService {
   async delete(id: string): Promise<ISchedule> {
     const { statusCode, body } = await this.httpClient.request({
       method: 'delete',
-      url: `${this.path}/${id}`,
+      url: `${this.path}/activities/${id}`,
     });
 
     switch (statusCode) {

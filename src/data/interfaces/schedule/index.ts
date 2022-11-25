@@ -3,6 +3,7 @@ import { ISimpleSubscription } from '../subscription';
 export interface ISchedule {
   id: string;
   schedule: string;
+  laneQuantity: number;
   date: Date;
   hour: string;
   heat: number;
