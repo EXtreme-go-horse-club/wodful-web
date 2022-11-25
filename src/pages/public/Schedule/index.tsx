@@ -3,11 +3,12 @@ import { CategoryProvider } from '@/contexts/category';
 import { ScheduleProvider } from '@/contexts/schedule';
 import useScheduleData from '@/hooks/useScheduleData';
 import { Box, Button, Center, Flex, Text } from '@chakra-ui/react';
-import { Suspense, useCallback, useEffect, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useState } from 'react';
 import { RefreshCw } from 'react-feather';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ValidateAccess } from '../Leaderboard/helper/ValidateAccess';
-import ListCardPublicSchedule from './components/cardList';
+
+const ListCardPublicSchedule = lazy(() => import('./components/cardList'));
 
 const PublicSchedule = () => {
   return (
