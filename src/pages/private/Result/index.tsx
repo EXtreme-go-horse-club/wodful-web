@@ -1,4 +1,4 @@
-import { ChangeEvent, lazy, Suspense, useEffect, useState } from 'react';
+import { ChangeEvent, lazy, Suspense, useCallback, useEffect, useState } from 'react';
 
 import { Loader } from '@/components/Loader';
 import ComponentModal from '@/components/Modal';
@@ -8,6 +8,7 @@ import { SubscriptionProvider } from '@/contexts/subscription';
 import { WorkoutProvider } from '@/contexts/workout';
 import useCategoryData from '@/hooks/useCategoryData';
 import useResultData from '@/hooks/useResultData';
+import useWorkoutData from '@/hooks/useWorkoutData';
 import {
   Box,
   Button,
@@ -44,21 +45,65 @@ const ResultWithProvider = () => {
 
 const Result = () => {
   const { id } = useParams();
-  const [participantsName, setParticipantsName] = useState<string>('');
   const [selectedCategory, setSelectedCategory] = useState<string>('Sem categoria');
   const [categoryId, setCategoryId] = useState<string>('');
+  const [workoutId, setWorkoutId] = useState<string>('');
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { List: CategoryList, categories } = useCategoryData();
-  const { ListPaginated } = useResultData();
+  const { ListPaginated: ListResultsData, ListPaginatedByWorkout } = useResultData();
+  const { workouts, ListByCategory: ListWorkouts } = useWorkoutData();
 
   useEffect(() => {
-    if (id) CategoryList(id);
+    if (id) {
+      CategoryList(id);
+    }
   }, [CategoryList, id]);
 
   const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const name = event.target.value.length;
-    return name >= 3 ? setParticipantsName(event.target.value) : setParticipantsName('');
+    const name = event.target.value;
+    const nameLength = event.target.value.length;
+
+    if (nameLength < 3) {
+      return;
+    }
+
+    if (nameLength >= 3 && workoutId) {
+      ListPaginatedByWorkout(categoryId, workoutId, name);
+      return;
+    }
+
+    if (nameLength >= 3 && categoryId) {
+      ListResultsData(categoryId, name);
+      return;
+    }
   };
+
+  const handleChangeCategory = useCallback(
+    (event: ChangeEvent<HTMLSelectElement>) => {
+      if (event.target.value) {
+        ListResultsData(event.target.value);
+        setCategoryId(event.target.value);
+        setSelectedCategory(
+          categories.find((selected) => selected.id === event.target.value)!.name,
+        );
+        ListWorkouts(event.target.value);
+        return;
+      }
+      setCategoryId('');
+    },
+    [ListResultsData, ListWorkouts, categories],
+  );
+
+  const handleChangeWorkout = useCallback(
+    (event: ChangeEvent<HTMLSelectElement>) => {
+      const workoutId = event.target.value;
+      if (categoryId) {
+        setWorkoutId(workoutId);
+        ListPaginatedByWorkout(categoryId, event.target.value);
+      }
+    },
+    [ListPaginatedByWorkout, categoryId],
+  );
 
   return (
     <Suspense fallback={<Loader title='Carregando ...' />}>
@@ -97,6 +142,7 @@ const Result = () => {
               </InputLeftElement>
               <Input
                 onChange={handleOnChange}
+                disabled={!categories.length || !categoryId}
                 as='input'
                 w='100%'
                 minW='320px'
@@ -105,17 +151,22 @@ const Result = () => {
             </InputGroup>
             <Select
               as='select'
+              disabled={!categories.length || !categoryId}
+              id='workout'
+              placeholder='Selecione uma prova'
+              onChange={(event) => handleChangeWorkout(event)}
+            >
+              {workouts?.map((workout) => (
+                <option key={workout.id} value={workout.id}>
+                  {workout.name}
+                </option>
+              ))}
+            </Select>
+            <Select
+              as='select'
               id='category'
               placeholder='Selecione a categoria'
-              onChange={(event) => {
-                if (event.target.value) {
-                  ListPaginated(event.target.value);
-                  setCategoryId(event.target.value);
-                  setSelectedCategory(
-                    categories.find((selected) => selected.id === event.target.value)!.name,
-                  );
-                }
-              }}
+              onChange={(event) => handleChangeCategory(event)}
             >
               {categories?.map((category) => (
                 <option key={category.id} value={category.id}>
@@ -137,7 +188,7 @@ const Result = () => {
           <ResultForm onClose={onClose} />
         </ComponentModal>
         <Box as='section' w='100%' marginTop={6}>
-          <ListResults participantsName={participantsName} id={categoryId as string} />
+          <ListResults />
         </Box>
       </Box>
     </Suspense>

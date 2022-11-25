@@ -1,53 +1,24 @@
 import useResultData from '@/hooks/useResultData';
 import {
-  Button,
   Flex,
-  HStack,
   IconButton,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
-  Select,
   Table,
   TableContainer,
   Tbody,
   Td,
   Text,
-  Tfoot,
   Th,
   Thead,
-  Tooltip,
   Tr,
 } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
-import { ChevronLeft, ChevronRight, MoreHorizontal } from 'react-feather';
+import { MoreHorizontal } from 'react-feather';
 
-interface IListResults {
-  id: string;
-  participantsName: string;
-}
-
-const ListResults = ({ id, participantsName }: IListResults) => {
-  const [currentTotal, setCurrentTotal] = useState<number>(0);
-
-  const { ListPaginated, resultPages, page, limit, setLimit, setPage, isLoading, Delete } =
-    useResultData();
-
-  useEffect(() => {
-    if (id) {
-      ListPaginated(id, participantsName);
-      setCurrentTotal(resultPages.results?.length);
-    }
-  }, [ListPaginated, id, participantsName, resultPages.results?.length]);
-
-  const previousPage = () => {
-    setPage(page - 1);
-  };
-
-  const nextPage = () => {
-    setPage(page + 1);
-  };
+const ListResults = () => {
+  const { resultPages, Delete } = useResultData();
 
   const deleteResult = (id: string) => {
     Delete(id);
@@ -77,7 +48,16 @@ const ListResults = ({ id, participantsName }: IListResults) => {
           </Tr>
         </Thead>
         <Tbody>
-          {resultPages.results?.map((result) => (
+          {resultPages.length === 0 && (
+            <Tr>
+              <Td />
+              <Td />
+              <Td p={6} textAlign='center'>
+                Busque por uma categoria
+              </Td>
+            </Tr>
+          )}
+          {resultPages?.map((result) => (
             <Tr key={result.id}>
               <Td p={6} textTransform='capitalize'>
                 {result.nickname}
@@ -108,66 +88,6 @@ const ListResults = ({ id, participantsName }: IListResults) => {
             </Tr>
           ))}
         </Tbody>
-        <Tfoot>
-          <Tr>
-            <Th display='flex' flexDirection='row'>
-              <Flex align='center' mr={2}>
-                Linhas por página
-              </Flex>
-
-              <Select
-                w='75px'
-                onChange={(event) => {
-                  setLimit(Number(event.target.value));
-                  setPage(Number(1));
-                }}
-              >
-                <option value='5'>5</option>
-                <option value='10'>10</option>
-                <option value='20'>20</option>
-              </Select>
-            </Th>
-            <Th />
-            <Th />
-            <Th />
-            <Th>
-              <Flex justify='end'>
-                <HStack>
-                  {page === 1 && (
-                    <Text>
-                      {page * limit - (limit - 1)} - {page * limit} de {resultPages.count}
-                    </Text>
-                  )}
-
-                  {page !== 1 && (
-                    <Text>
-                      {page * limit - (limit - 1)} - {page * limit - limit + currentTotal} de{' '}
-                      {resultPages.count}
-                    </Text>
-                  )}
-                  <Tooltip label='Página anterior' placement='top' hasArrow>
-                    <Button
-                      disabled={!resultPages.previous || isLoading}
-                      variant='link'
-                      onClick={previousPage}
-                    >
-                      <ChevronLeft color={resultPages.previous ? 'black' : 'gray'} size={16} />
-                    </Button>
-                  </Tooltip>
-                  <Tooltip label='Próxima página' placement='top' hasArrow>
-                    <Button
-                      disabled={!resultPages.next || isLoading}
-                      variant='link'
-                      onClick={nextPage}
-                    >
-                      <ChevronRight color={resultPages.next ? 'black' : 'gray'} size={16} />
-                    </Button>
-                  </Tooltip>
-                </HStack>
-              </Flex>
-            </Th>
-          </Tr>
-        </Tfoot>
       </Table>
     </TableContainer>
   );

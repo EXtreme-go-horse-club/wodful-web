@@ -6,6 +6,7 @@ import {
   AccordionItem,
   AccordionPanel,
   Box,
+  Flex,
   Heading,
   HStack,
   SimpleGrid,
@@ -13,9 +14,12 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react';
+import { useCallback } from 'react';
 
 const ListPublicLeaderboard = () => {
   const { publicLeaderboards } = useLeaderboardData();
+
+  const isScore = useCallback((value: string) => value.includes(':'), []);
   return (
     <>
       <SimpleGrid color='gray.600' columns={[null, 1, 2, 3]} spacing='24px' justifyItems='center'>
@@ -35,7 +39,7 @@ const ListPublicLeaderboard = () => {
               <VStack align='start' spacing={1} w='100%'>
                 <HStack justify='space-between' w='100%'>
                   <Heading color='black' as='h4' size='md'>
-                    {index + 1}º Lugar geral
+                    {leaderboard.ranking}º Lugar geral
                   </Heading>
                   <Spacer />
                   <Text fontSize='14px'>{leaderboard.generalScore} pontos</Text>
@@ -70,15 +74,29 @@ const ListPublicLeaderboard = () => {
                             </Text>
                           )}
                           {leaderboard.results?.map((content, index) => (
-                            <HStack justify='space-between' w='100%' key={index + 'result'}>
-                              <Text fontSize='0.8rem' as='b' color='gray.600' size='sm'>
-                                {content.workout.name} ({content.classification} lugar)
-                              </Text>
-                              <Spacer />
-                              <Text fontSize='12px' minW='50px'>
-                                {content.points} pontos
-                              </Text>
-                            </HStack>
+                            <Flex
+                              direction='column'
+                              mb='10px'
+                              align='center'
+                              key={index + 'result'}
+                            >
+                              <HStack justify='space-between' w='100%'>
+                                <Text fontSize='0.8rem' as='b' color='gray.600' size='sm'>
+                                  {content.workout.name}
+                                </Text>
+                                <Spacer />
+                                <Text fontSize='12px' minW='50px'>
+                                  {content.points} pontos
+                                </Text>
+                              </HStack>
+                              <HStack w='100%'>
+                                <Text fontSize='12px' minW='50px'>
+                                  {content.classification} lugar - {content.result}
+                                  {isScore(content.result) ? ' min' : ' reps'}
+                                </Text>
+                                <Spacer />
+                              </HStack>
+                            </Flex>
                           ))}
                         </AccordionPanel>
                       </>

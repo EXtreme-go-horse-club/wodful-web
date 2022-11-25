@@ -10,6 +10,9 @@ export interface AuthenticatedUser {
 
 export interface PublicUser {
   code: string;
+  championship: {
+    name: string;
+  };
 }
 
 export interface IAuthenticateUserRequest {

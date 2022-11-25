@@ -1,5 +1,4 @@
 import { AxiosAdapter } from '@/adapters/AxiosAdapter';
-import { IPageResponse } from '@/data/interfaces/pageResponse';
 import { ICreateResultRequestDTO, IResultByCategory } from '@/data/interfaces/result';
 import { ResultService } from '@/services/Result';
 import { resultMessages } from '@/utils/messages';
@@ -13,11 +12,12 @@ interface ResultProps {
 }
 
 export interface ResultContextData {
-  resultPages: IPageResponse<IResultByCategory>;
+  resultPages: IResultByCategory[];
   isLoading: boolean;
   page: number;
   limit: number;
   ListPaginated: (categoryId: string, name?: string) => void;
+  ListPaginatedByWorkout: (categoryId: string, workoutId: string, name?: string) => void;
   setLimit: (value: number) => void;
   setPage: (value: number) => void;
   Delete: (id: string) => Promise<void>;
@@ -30,26 +30,34 @@ const axios = new AxiosAdapter();
 
 export const ResultProvider = ({ children, onClose }: ResultProps) => {
   const toast = useToast();
-  const [resultPages, setResultPages] = useState<IPageResponse<IResultByCategory>>(
-    {} as IPageResponse<IResultByCategory>,
-  );
+  const [resultPages, setResultPages] = useState<IResultByCategory[]>([] as IResultByCategory[]);
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(5);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { id } = useParams();
 
-  const ListPaginated = useCallback(
-    async (categoryId: string, name?: string) => {
+  const ListPaginated = useCallback(async (categoryId: string, name?: string) => {
+    setIsLoading(true);
+    await new ResultService(axios)
+      .listByCategory(categoryId, name)
+      .then((results) => {
+        setResultPages(results as IResultByCategory[]);
+      })
+      .finally(() => setIsLoading(false));
+  }, []);
+
+  const ListPaginatedByWorkout = useCallback(
+    async (categoryId: string, workoutId: string, name?: string) => {
       setIsLoading(true);
       await new ResultService(axios)
-        .listByCategory(categoryId, limit, page, name)
-        .then((paginatedResults) => {
-          setResultPages(paginatedResults as IPageResponse<IResultByCategory>);
+        .listByCategoryAndWorkout(categoryId, workoutId, name)
+        .then((results) => {
+          setResultPages(results as IResultByCategory[]);
         })
         .finally(() => setIsLoading(false));
     },
-    [limit, page],
+    [],
   );
 
   const Create = useCallback(
@@ -106,6 +114,7 @@ export const ResultProvider = ({ children, onClose }: ResultProps) => {
         page,
         resultPages,
         ListPaginated,
+        ListPaginatedByWorkout,
         setLimit,
         setPage,
       }}

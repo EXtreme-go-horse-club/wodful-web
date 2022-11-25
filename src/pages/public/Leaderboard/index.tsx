@@ -1,6 +1,7 @@
 import { Loader } from '@/components/Loader';
 import { CategoryProvider } from '@/contexts/category';
 import { LeaderboardProvider } from '@/contexts/leaderboard';
+import useApp from '@/hooks/useApp';
 import useCategoryData from '@/hooks/useCategoryData';
 import useLeaderboardData from '@/hooks/useLeaderboardData';
 import { Box, Center, Flex, Select, Text } from '@chakra-ui/react';
@@ -23,6 +24,7 @@ const PublicLeaderboard = () => {
 const PublicLeaderboardAccess = () => {
   const { code } = useParams();
   const navigate = useNavigate();
+  const { setPublicChampionshipName } = useApp();
   const { PublicList, publicCategories } = useCategoryData();
   const { ListPublic } = useLeaderboardData();
   const [selectedCategory, setSelectedCategory] = useState<{ name: string; value: string }>({
@@ -56,8 +58,9 @@ const PublicLeaderboardAccess = () => {
   }, [PublicList, code]);
 
   useEffect(() => {
-    ValidateAccess.verify(code as string, navigate);
-  }, [code, navigate]);
+    const name = ValidateAccess.verify(code as string, navigate);
+    if (name) setPublicChampionshipName(name);
+  }, [code, navigate, setPublicChampionshipName]);
 
   return (
     <Suspense fallback={<Loader title='Carregando ...' />}>

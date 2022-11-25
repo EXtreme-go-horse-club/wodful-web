@@ -1,5 +1,6 @@
 import useApp from '@/hooks/useApp';
 import useAuth from '@/hooks/useAuth';
+import useWindowDimensions from '@/hooks/useWindowDimensions';
 import {
   Avatar,
   Box,
@@ -26,15 +27,15 @@ export const Header = () => {
   const { signed, Logout, Reset } = useAuth();
   const { user } = useAuth();
   const { pathname } = useLocation();
-  const { currentChampionship } = useApp();
+  const { currentChampionship, publicChampionshipName } = useApp();
+  const { isMobile } = useWindowDimensions();
 
   const untitledRoutes = useMemo(() => NO_TITLE_ROUTES.includes(pathname), [pathname]);
   const noExitRoutes = useMemo(() => NO_EXIT_ROUTES.includes(pathname), [pathname]);
-
   return (
     <Flex
-      px='40px'
-      py='15px'
+      px={['1rem', '1.5rem', '2.25rem']}
+      py='1rem'
       width='full'
       bg='gray.800'
       alignItems='center'
@@ -45,13 +46,19 @@ export const Header = () => {
           <Image src={Logo} alt='logo' boxSize='40px' marginRight='8px' />
         </Box>
         <Heading color='whiteAlpha.900' fontSize={16} marginBottom={2}>
-          Wodful
+          {isMobile ? '' : 'Wodful'}
         </Heading>
       </Flex>
       <Flex>
-        <Heading color='whiteAlpha.900' fontSize={20} fontWeight='500' textTransform='capitalize'>
-          {!untitledRoutes ? currentChampionship?.name : null}
-        </Heading>
+        {isMobile ? (
+          <Heading color='whiteAlpha.900' fontSize={16} fontWeight='500' textTransform='capitalize'>
+            {!untitledRoutes ? publicChampionshipName : null}
+          </Heading>
+        ) : (
+          <Heading color='whiteAlpha.900' fontSize={20} fontWeight='500' textTransform='capitalize'>
+            {!untitledRoutes ? currentChampionship?.name : null}
+          </Heading>
+        )}
       </Flex>
 
       <Flex>

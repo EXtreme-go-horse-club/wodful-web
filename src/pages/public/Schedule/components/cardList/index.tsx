@@ -118,10 +118,16 @@ const ListCardPublicSchedule = () => {
                                     color='gray.600'
                                     size='sm'
                                   >
-                                    {index + 1}. {subscription.nickname}
+                                    {subscription.nickname}
                                   </Text>
-                                  <Text fontSize='12px' color='gray.500' size='xs' minW='50px'>
-                                    {`${subscription.ranking}`}° Lugar
+                                  <Text
+                                    fontSize='12px'
+                                    color='gray.500'
+                                    size='xs'
+                                    textAlign='center'
+                                    minW='50px'
+                                  >
+                                    Baia {index + 1}
                                   </Text>
                                 </HStack>
                                 <Divider />

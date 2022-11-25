@@ -1,10 +1,9 @@
 import { HttpClient, HttpStatusCode } from '@/data/interfaces/http';
-import { IPageResponse } from '@/data/interfaces/pageResponse';
 import { ICreateResultRequestDTO, IResult, IResultByCategory } from '@/data/interfaces/result';
 
 export class ResultService {
   constructor(
-    private readonly httpClient: HttpClient<IPageResponse<IResult> | IResult[] | IResult>,
+    private readonly httpClient: HttpClient<IResult[] | IResult>,
     private readonly path = '/results',
   ) {}
 
@@ -27,29 +26,41 @@ export class ResultService {
     }
   }
 
-  async listByCategory(
-    categoryId: string,
-    limit?: number,
-    page?: number,
-    search?: string | null,
-  ): Promise<IPageResponse<IResultByCategory>> {
-    let url = `categories/${categoryId}${this.path}${
-      limit && page && `?limit=${limit}&page=${page}`
-    }`;
+  async listByCategory(categoryId: string, search?: string | null): Promise<IResultByCategory[]> {
+    let url = `categories/${categoryId}${this.path}`;
 
-    if (search !== null) url = `${url}&name=${search}`;
+    if (search) url = `${url}?name=${search}`;
 
     const { statusCode, body } = await this.httpClient.request({
       method: 'get',
       url,
-      body: {
-        categoryId,
-      },
     });
 
     switch (statusCode) {
       case HttpStatusCode.ok:
-        return body! as IPageResponse<IResultByCategory>;
+        return body! as IResultByCategory[];
+      default:
+        throw new Error();
+    }
+  }
+
+  async listByCategoryAndWorkout(
+    categoryId: string,
+    workoutId: string,
+    search?: string | null,
+  ): Promise<IResultByCategory[]> {
+    let url = `categories/${categoryId}/workouts/${workoutId}${this.path}`;
+
+    if (search) url = `${url}?name=${search}`;
+
+    const { statusCode, body } = await this.httpClient.request({
+      method: 'get',
+      url,
+    });
+
+    switch (statusCode) {
+      case HttpStatusCode.ok:
+        return body! as IResultByCategory[];
       default:
         throw new Error();
     }

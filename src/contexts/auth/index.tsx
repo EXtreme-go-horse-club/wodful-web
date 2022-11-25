@@ -58,6 +58,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       .then((access: PublicUser) => {
         setIsError(false);
         localStorage.setItem('@Wodful:access', access.code);
+        localStorage.setItem('@Wodful:pcname', access.championship.name);
         window.location.href = `/access/${access.code}/leaderboards`;
       })
       .catch(() => setIsError(true))
@@ -66,6 +67,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const Reset = useCallback(() => {
     localStorage.removeItem('@Wodful:access');
+    localStorage.removeItem('@Wodful:pcname');
     window.location.href = '/access';
   }, []);
 
