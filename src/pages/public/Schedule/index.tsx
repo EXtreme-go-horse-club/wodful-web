@@ -48,7 +48,7 @@ const PublicScheduleAccess = () => {
           flexDirection='column'
           alignItems='center'
           as='section'
-          px={10}
+          px={4}
         >
           <Flex
             as='section'

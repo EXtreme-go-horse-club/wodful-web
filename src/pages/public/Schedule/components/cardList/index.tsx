@@ -45,7 +45,7 @@ const ListCardPublicSchedule = () => {
           <Box
             as='article'
             className={schedule.isLive ? 'live' : 'off'}
-            p={6}
+            p={4}
             pb={2}
             w='100%'
             maxW='384px'
@@ -87,43 +87,49 @@ const ListCardPublicSchedule = () => {
               <HStack fontSize='14px' width='100%'>
                 <Accordion allowToggle width='100%'>
                   <AccordionItem borderBottom='none'>
-                    <AccordionButton onClick={() => handleModalEvent(schedule)}>
-                      <HStack justify='center' w='100%'>
-                        <Box textAlign='left' as='b'>
-                          Mostrar participantes
-                        </Box>
-                        {isMobile && <AccordionIcon />}
-                      </HStack>
-                    </AccordionButton>
-                    {isMobile && (
-                      <AccordionPanel p={3}>
-                        {schedule.subscriptions?.map((subscription, index) => (
-                          <Box key={`${Math.random() * 1000}_${index}_${subscription.nickname}`}>
-                            <HStack
-                              justify='space-between'
-                              w='100%'
-                              key={`${index * subscription.ranking}_${subscription.nickname}`}
-                            >
-                              <Text
-                                overflow={'hidden'}
-                                whiteSpace='nowrap'
-                                textOverflow='ellipsis'
-                                maxW='165px'
-                                fontSize='0.8rem'
-                                as='b'
-                                color='gray.600'
-                                size='sm'
+                    {({ isExpanded }) => (
+                      <>
+                        <AccordionButton onClick={() => handleModalEvent(schedule)}>
+                          <HStack justify='center' w='100%'>
+                            <Box textAlign='left' as='b'>
+                              {isExpanded ? 'Esconder' : 'Mostrar'} participantes
+                            </Box>
+                            {isMobile && <AccordionIcon />}
+                          </HStack>
+                        </AccordionButton>
+                        {isMobile && (
+                          <AccordionPanel py={3} px={0}>
+                            {schedule.subscriptions?.map((subscription, index) => (
+                              <Box
+                                key={`${Math.random() * 1000}_${index}_${subscription.nickname}`}
                               >
-                                {index + 1}. {subscription.nickname}
-                              </Text>
-                              <Text fontSize='12px' color='gray.500' size='xs' minW='50px'>
-                                {`${subscription.ranking}`}° Lugar
-                              </Text>
-                            </HStack>
-                            <Divider />
-                          </Box>
-                        ))}
-                      </AccordionPanel>
+                                <HStack
+                                  justify='space-between'
+                                  w='100%'
+                                  key={`${index * subscription.ranking}_${subscription.nickname}`}
+                                >
+                                  <Text
+                                    overflow={'hidden'}
+                                    whiteSpace='nowrap'
+                                    textOverflow='ellipsis'
+                                    maxW='80%'
+                                    fontSize='0.8rem'
+                                    as='b'
+                                    color='gray.600'
+                                    size='sm'
+                                  >
+                                    {index + 1}. {subscription.nickname}
+                                  </Text>
+                                  <Text fontSize='12px' color='gray.500' size='xs' minW='50px'>
+                                    {`${subscription.ranking}`}° Lugar
+                                  </Text>
+                                </HStack>
+                                <Divider />
+                              </Box>
+                            ))}
+                          </AccordionPanel>
+                        )}
+                      </>
                     )}
                   </AccordionItem>
                 </Accordion>
@@ -161,7 +167,7 @@ const ListCardPublicSchedule = () => {
                 overflow={'hidden'}
                 whiteSpace='nowrap'
                 textOverflow='ellipsis'
-                maxW='165px'
+                maxW='80%'
                 fontSize='0.8rem'
                 as='b'
                 color='gray.600'

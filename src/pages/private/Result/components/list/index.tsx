@@ -65,6 +65,9 @@ const ListResults = ({ id, participantsName }: IListResults) => {
               <Text as='b'>PROVA</Text>
             </Th>
             <Th>
+              <Text as='b'>RESULTADO</Text>
+            </Th>
+            <Th>
               <Text as='b'>COLOCAÇÃO</Text>
             </Th>
             <Th>
@@ -80,6 +83,7 @@ const ListResults = ({ id, participantsName }: IListResults) => {
                 {result.nickname}
               </Td>
               <Td p={6}>{result.workout.name}</Td>
+              <Td p={6}>{result.result}</Td>
               <Td p={6}>{result.classification}° Lugar</Td>
               <Td p={6}>
                 {Number(result.points) === 0

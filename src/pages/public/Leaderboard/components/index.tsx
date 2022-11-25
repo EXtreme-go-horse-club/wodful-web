@@ -21,7 +21,7 @@ const ListPublicLeaderboard = () => {
       <SimpleGrid color='gray.600' columns={[null, 1, 2, 3]} spacing='24px' justifyItems='center'>
         {publicLeaderboards?.map((leaderboard, index) => (
           <Box
-            p={6}
+            p={4}
             pb={2}
             w='100%'
             maxW='384px'
@@ -53,32 +53,36 @@ const ListPublicLeaderboard = () => {
               <HStack fontSize='14px' width='100%'>
                 <Accordion allowToggle width='100%'>
                   <AccordionItem borderBottom='none'>
-                    <AccordionButton>
-                      <HStack justify='center' w='100%'>
-                        <Box textAlign='left' as='b'>
-                          Mostrar mais
-                        </Box>
-                        <AccordionIcon />
-                      </HStack>
-                    </AccordionButton>
-                    <AccordionPanel p={3}>
-                      {!leaderboard.results.length && (
-                        <Text fontSize='0.8rem' as='b' color='gray.600' size='sm'>
-                          Sem resultados
-                        </Text>
-                      )}
-                      {leaderboard.results?.map((content, index) => (
-                        <HStack justify='space-between' w='100%' key={index + 'result'}>
-                          <Text fontSize='0.8rem' as='b' color='gray.600' size='sm'>
-                            {content.workout.name} ({content.classification} lugar)
-                          </Text>
-                          <Spacer />
-                          <Text fontSize='12px' minW='50px'>
-                            {content.points} pontos
-                          </Text>
-                        </HStack>
-                      ))}
-                    </AccordionPanel>
+                    {({ isExpanded }) => (
+                      <>
+                        <AccordionButton>
+                          <HStack justify='center' w='100%'>
+                            <Box textAlign='left' as='b'>
+                              {isExpanded ? 'Esconder' : 'Mostrar'} resultados
+                            </Box>
+                            <AccordionIcon />
+                          </HStack>
+                        </AccordionButton>
+                        <AccordionPanel py={3} px={0}>
+                          {!leaderboard.results.length && (
+                            <Text fontSize='0.8rem' as='b' color='gray.600' size='sm'>
+                              Sem resultados
+                            </Text>
+                          )}
+                          {leaderboard.results?.map((content, index) => (
+                            <HStack justify='space-between' w='100%' key={index + 'result'}>
+                              <Text fontSize='0.8rem' as='b' color='gray.600' size='sm'>
+                                {content.workout.name} ({content.classification} lugar)
+                              </Text>
+                              <Spacer />
+                              <Text fontSize='12px' minW='50px'>
+                                {content.points} pontos
+                              </Text>
+                            </HStack>
+                          ))}
+                        </AccordionPanel>
+                      </>
+                    )}
                   </AccordionItem>
                 </Accordion>
               </HStack>
