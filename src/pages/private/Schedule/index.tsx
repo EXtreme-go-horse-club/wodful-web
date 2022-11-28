@@ -1,5 +1,5 @@
+import ComponentModal from '@/components/ComponentModal';
 import { Loader } from '@/components/Loader';
-import ComponentModal from '@/components/Modal';
 import { CategoryProvider } from '@/contexts/category';
 import { ScheduleProvider } from '@/contexts/schedule';
 import { WorkoutProvider } from '@/contexts/workout';
