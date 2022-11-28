@@ -1,27 +1,27 @@
 import { HttpClient, HttpStatusCode } from '@/data/interfaces/http';
+import { AuthenticatedUser } from '@/data/interfaces/user';
+
+interface AuthenticationUserDTO {
+  email: string;
+  password: string;
+}
 
 export class AuthenticateService {
   constructor(
-    private readonly httpClient: HttpClient<any>,
-    private readonly url = `${import.meta.env.VITE_BASE_API_URL}`,
+    private readonly httpClient: HttpClient<AuthenticatedUser>,
+    private readonly path = '/auth/',
   ) {}
 
-  async login(email: string, password: string) {
-    const headers = {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('@Wodful:tkn')}`,
-    };
-
+  async login({ email, password }: AuthenticationUserDTO): Promise<AuthenticatedUser> {
     const { statusCode, body } = await this.httpClient.request({
       method: 'post',
-      url: `${this.url}/auth/`,
-      headers,
+      url: this.path,
       body: { email, password },
     });
 
     switch (statusCode) {
       case HttpStatusCode.ok:
-        return body;
+        return body!;
       default:
         throw new Error();
     }

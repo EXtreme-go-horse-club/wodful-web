@@ -3,9 +3,16 @@ export interface IUserData {
   email: string;
 }
 
-export interface AuthenticatedUserData {
+export interface AuthenticatedUser {
   token: string;
   user: IUserData;
+}
+
+export interface PublicUser {
+  code: string;
+  championship: {
+    name: string;
+  };
 }
 
 export interface IAuthenticateUserRequest {

@@ -1,7 +1,9 @@
 import { AxiosAdapter } from '@/adapters/AxiosAdapter';
-import { AuthenticatedUserData, IAuthenticateUserRequest, IUserData } from '@/data/interfaces/user';
+import { AuthenticatedUser, IAuthenticateUserRequest, IUserData } from '@/data/interfaces/user';
 import { AuthenticateService } from '@/services/Authenticate';
+import { PublicAccessService } from '@/services/Public/Access';
 import { createContext, useCallback, useEffect, useState } from 'react';
+import { PublicUser } from '../../data/interfaces/user/index';
 
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -12,6 +14,10 @@ export interface AuthContextData {
   user: IUserData | null;
   Login({ email, password }: IAuthenticateUserRequest): Promise<void>;
   Logout(): void;
+  isLoading: boolean;
+  isError: boolean;
+  Access: (accessCode: string) => void;
+  Reset(): void;
 }
 
 const AuthContext = createContext({} as AuthContextData);
@@ -20,16 +26,22 @@ const axios = new AxiosAdapter();
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<IUserData | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
 
   const Login = useCallback(async ({ email, password }: IAuthenticateUserRequest) => {
+    setIsLoading(true);
     await new AuthenticateService(axios)
-      .login(email, password)
-      .then((userData: AuthenticatedUserData) => {
+      .login({ email, password })
+      .then((userData: AuthenticatedUser) => {
+        setIsError(false);
         setUser(userData.user);
 
         localStorage.setItem('@Wodful:usr', JSON.stringify(userData.user));
         localStorage.setItem('@Wodful:tkn', userData.token);
-      });
+      })
+      .catch(() => setIsError(true))
+      .finally(() => setIsLoading(false));
   }, []);
 
   const Logout = useCallback(() => {
@@ -37,6 +49,26 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
     localStorage.removeItem('@Wodful:usr');
     localStorage.removeItem('@Wodful:tkn');
+  }, []);
+
+  const Access = useCallback(async (accessCode: string) => {
+    setIsLoading(true);
+    await new PublicAccessService(axios)
+      .access(accessCode)
+      .then((access: PublicUser) => {
+        setIsError(false);
+        localStorage.setItem('@Wodful:access', access.code);
+        localStorage.setItem('@Wodful:pcname', access.championship.name);
+        window.location.href = `/access/${access.code}/leaderboards`;
+      })
+      .catch(() => setIsError(true))
+      .finally(() => setIsLoading(false));
+  }, []);
+
+  const Reset = useCallback(() => {
+    localStorage.removeItem('@Wodful:access');
+    localStorage.removeItem('@Wodful:pcname');
+    window.location.href = '/access';
   }, []);
 
   useEffect(() => {
@@ -49,7 +81,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ signed: Boolean(user), user, Login, Logout }}>
+    <AuthContext.Provider
+      value={{ signed: Boolean(user), user, Login, Logout, isLoading, isError, Access, Reset }}
+    >
       {children}
     </AuthContext.Provider>
   );
