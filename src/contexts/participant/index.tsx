@@ -30,7 +30,7 @@ export const ParticipantProvider = ({ children }: TicketProviderProps) => {
   const [limit, setLimit] = useState<number>(5);
   const [page, setPage] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isError, setIsError] = useState<boolean>(false);
+  const [isError] = useState<boolean>(false);
 
   const ListPaginated = useCallback(
     async (id: string | null, name?: string) => {
