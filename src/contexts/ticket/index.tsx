@@ -48,7 +48,7 @@ export const TicketProvider = ({ children, onClose }: TicketProviderProps) => {
   const [page, setPage] = useState<number>(1);
   const [tickets, setTickets] = useState<ITicket[]>([] as ITicket[]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isError, setIsError] = useState<boolean>(false);
+  const [isError] = useState<boolean>(false);
 
   const { id } = useParams();
 

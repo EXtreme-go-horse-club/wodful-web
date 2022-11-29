@@ -1,7 +1,7 @@
 import { Box, Button, HStack, Text, useDisclosure } from '@chakra-ui/react';
 import { lazy, Suspense, useMemo } from 'react';
 
-import ComponentModal from '@/components/Modal';
+import ComponentModal from '@/components/ComponentModal';
 import { CategoryProvider } from '@/contexts/category';
 import { TicketProvider } from '@/contexts/ticket';
 

@@ -1,9 +1,9 @@
 import { Box, Button, Center, Flex, Heading, useDisclosure } from '@chakra-ui/react';
 import { lazy, Suspense, useMemo } from 'react';
 
+import ComponentModal from '@/components/ComponentModal';
 import { EmptyList } from '@/components/EmptyList';
 import { Loader } from '@/components/Loader';
-import ComponentModal from '@/components/Modal';
 import { ChampionshipProvider } from '@/contexts/championship';
 import useChampionshipData from '@/hooks/useChampionshipData';
 

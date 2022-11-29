@@ -47,7 +47,7 @@ export const CategoryProvider = ({ children, onClose }: CategoryProviderProps) =
     [] as IPublicCategory[],
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isError, setIsError] = useState<boolean>(false);
+  const [isError] = useState<boolean>(false);
 
   const List = useCallback(async (id: string) => {
     setIsLoading(true);

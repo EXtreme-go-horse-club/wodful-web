@@ -1,6 +1,6 @@
+import ComponentModal from '@/components/ComponentModal';
 import { EmptyList } from '@/components/EmptyList';
 import { Loader } from '@/components/Loader';
-import ComponentModal from '@/components/Modal';
 import { CategoryProvider } from '@/contexts/category';
 import { WorkoutProvider } from '@/contexts/workout';
 import useWorkoutData from '@/hooks/useWorkoutData';

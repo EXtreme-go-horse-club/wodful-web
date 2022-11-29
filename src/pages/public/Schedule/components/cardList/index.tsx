@@ -1,4 +1,4 @@
-import ComponentModal from '@/components/Modal';
+import ComponentModal from '@/components/ComponentModal';
 import { IPublicSchedule } from '@/data/interfaces/schedule';
 import useScheduleData from '@/hooks/useScheduleData';
 import useWindowDimensions from '@/hooks/useWindowDimensions';

@@ -1,6 +1,6 @@
+import ComponentModal from '@/components/ComponentModal';
 import { EmptyList } from '@/components/EmptyList';
 import { Loader } from '@/components/Loader';
-import ComponentModal from '@/components/Modal';
 
 import { SubscriptionProvider } from '@/contexts/subscription';
 import { TicketProvider } from '@/contexts/ticket';
