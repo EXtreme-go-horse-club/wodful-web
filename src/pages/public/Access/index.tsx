@@ -14,14 +14,18 @@ import {
 import wodfulBlackLogo from '@/assets/icons/wodful-black-logo.svg';
 import useAuth from '@/hooks/useAuth';
 import { useCallback, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Access = () => {
   const { Access, isError, isLoading } = useAuth();
   const [accessCode, setAccessCode] = useState('');
+  const navigate = useNavigate();
 
   const handlePublicAccess = useCallback(() => {
-    Access(accessCode);
-  }, [Access, accessCode]);
+    Access(accessCode).then(() => {
+      return navigate(`/access/${accessCode}/leaderboards`);
+    });
+  }, [Access, accessCode, navigate]);
 
   const isEmpty = useMemo(() => !accessCode.length, [accessCode]);
 

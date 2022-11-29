@@ -23,11 +23,11 @@ const wodfulApiPrivate = axios.create({
       return config;
     },
     async function (error) {
-      const errorReponseMessage = error.response.data.message;
-      if (error.response.status === 400 && removeTokenMessage.includes(errorReponseMessage)) {
+      const errorResponseMessage = error.response.data.message;
+      if (error.response.status === 400 && removeTokenMessage.includes(errorResponseMessage)) {
         localStorage.removeItem('@Wodful:usr');
         localStorage.removeItem('@Wodful:tkn');
-        window.location.href = '/login';
+        window.location.href = '/';
       }
       return Promise.reject(error);
     },

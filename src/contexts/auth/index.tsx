@@ -16,7 +16,7 @@ export interface AuthContextData {
   Logout(): void;
   isLoading: boolean;
   isError: boolean;
-  Access: (accessCode: string) => void;
+  Access: (accessCode: string) => Promise<void>;
   Reset(): void;
 }
 
@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     localStorage.removeItem('@Wodful:tkn');
   }, []);
 
-  const Access = useCallback(async (accessCode: string) => {
+  const Access = useCallback(async (accessCode: string): Promise<void> => {
     setIsLoading(true);
     await new PublicAccessService(axios)
       .access(accessCode)
@@ -59,7 +59,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         setIsError(false);
         localStorage.setItem('@Wodful:access', access.code);
         localStorage.setItem('@Wodful:pcname', access.championship.name);
-        window.location.href = `/access/${access.code}/leaderboards`;
       })
       .catch(() => setIsError(true))
       .finally(() => setIsLoading(false));
@@ -68,7 +67,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const Reset = useCallback(() => {
     localStorage.removeItem('@Wodful:access');
     localStorage.removeItem('@Wodful:pcname');
-    window.location.href = '/access';
   }, []);
 
   useEffect(() => {

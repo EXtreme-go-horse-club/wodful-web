@@ -16,7 +16,7 @@ import {
   WrapItem,
 } from '@chakra-ui/react';
 import { useMemo } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Logo from '../../assets/icons/wodful-white-logo.svg';
 
 const NO_TITLE_ROUTES = ['/championships', '/login'];
@@ -29,6 +29,7 @@ export const Header = () => {
   const { pathname } = useLocation();
   const { currentChampionship, publicChampionshipName } = useApp();
   const { isMobile } = useWindowDimensions();
+  const navigate = useNavigate();
 
   const untitledRoutes = useMemo(() => NO_TITLE_ROUTES.includes(pathname), [pathname]);
   const noExitRoutes = useMemo(() => NO_EXIT_ROUTES.includes(pathname), [pathname]);
@@ -78,7 +79,14 @@ export const Header = () => {
           </HStack>
         ) : (
           !noExitRoutes && (
-            <Button color='white' variant='link' onClick={Reset}>
+            <Button
+              color='white'
+              variant='link'
+              onClick={() => {
+                Reset();
+                navigate(`/access`);
+              }}
+            >
               Sair
             </Button>
           )

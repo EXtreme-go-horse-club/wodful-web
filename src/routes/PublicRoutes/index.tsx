@@ -11,12 +11,13 @@ const PublicRoutes = () => {
     <BrowserRouter>
       <Header />
       <Routes>
-        <Route path='/login' element={<Login />} />
-
         <Route path='/' element={<Navigate to='/login' replace />} />
+
+        <Route path='/login' element={<Login />} />
+        <Route path='/access' element={<Access />} />
+
         <Route path='/championships' element={<Navigate to='/login' replace />} />
         <Route path='/championships/:id/*' element={<Navigate to='/login' replace />} />
-        <Route path='/access' element={<Access />} />
         <Route path='/access/:code/' element={<Navbar />}>
           <Route path='/access/:code/leaderboards' element={<PublicLeaderboard />} />
           <Route path='/access/:code/schedules' element={<PublicSchedule />} />
