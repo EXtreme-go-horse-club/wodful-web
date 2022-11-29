@@ -20,6 +20,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { useCallback, useState } from 'react';
+import { incrementAndFormatDate } from '../../../../../utils/formatDate/index';
 import '../lists.css';
 
 const ListCardPublicSchedule = () => {
@@ -54,6 +55,9 @@ const ListCardPublicSchedule = () => {
           >
             <VStack gap='8px' align='start'>
               <VStack align='start' spacing={1} w='100%'>
+                <Text fontSize='12px' minW='50px'>
+                  {incrementAndFormatDate(schedule.date, 'dd/MM')}
+                </Text>
                 <HStack justify='space-between' w='100%'>
                   <Heading color='black' as='h4' size='md'>
                     {schedule.hour}
