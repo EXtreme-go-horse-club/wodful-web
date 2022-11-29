@@ -39,7 +39,9 @@ const ListPublicLeaderboard = () => {
               <VStack align='start' spacing={1} w='100%'>
                 <HStack justify='space-between' w='100%'>
                   <Heading color='black' as='h4' size='md'>
-                    {leaderboard.ranking}º Lugar geral
+                    {leaderboard.ranking === 0
+                      ? 'Sem resultados'
+                      : `${leaderboard.ranking}º Lugar geral`}
                   </Heading>
                   <Spacer />
                   <Text fontSize='14px'>{leaderboard.generalScore} pontos</Text>
