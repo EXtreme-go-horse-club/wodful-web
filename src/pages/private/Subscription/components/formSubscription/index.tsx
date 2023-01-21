@@ -92,6 +92,7 @@ const FormSubscription = ({ id, openFormParticipants }: CreateModalProps) => {
           <Input
             id='responsiblePhone'
             placeholder='Telefone do responsável'
+            type='number'
             {...register('responsiblePhone', {
               required: validationMessages['required'],
               minLength: { value: 10, message: validationMessages['minLength'] },
