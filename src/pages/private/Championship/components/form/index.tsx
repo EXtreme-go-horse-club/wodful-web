@@ -58,7 +58,7 @@ const FormChampionship = ({ onClose }: IFormChampionshipProps) => {
               <FormControl alignItems='start' isInvalid={!!errors.startDate}>
                 <FormLabel m={0}>Data de início</FormLabel>
                 <Input
-                  type='datetime-local'
+                  type='date'
                   placeholder='DD/MM/AAAA'
                   {...register('startDate', {
                     required: validationMessages['required'],
@@ -70,7 +70,7 @@ const FormChampionship = ({ onClose }: IFormChampionshipProps) => {
               <FormControl isInvalid={!!errors.endDate}>
                 <FormLabel m={0}>Data de encerramento</FormLabel>
                 <Input
-                  type='datetime-local'
+                  type='date'
                   placeholder='DD/MM/AAAA'
                   {...register('endDate', {
                     required: '* Campo obrigatório',

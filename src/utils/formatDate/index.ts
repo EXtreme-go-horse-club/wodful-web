@@ -1,4 +1,5 @@
-import { addDays, format } from 'date-fns';
+import { format } from 'date-fns';
+import addDays from 'date-fns/addDays';
 
 export const formatDate = (date: Date | string, mask = 'dd/MM/yyyy') => {
   return format(new Date(date), mask);
