@@ -25,7 +25,7 @@ import { Link as ReactRouter } from 'react-router-dom';
 import { IChampionship } from '@/data/interfaces/championship';
 import useApp from '@/hooks/useApp';
 import { default as useChampionshipData } from '@/hooks/useChampionshipData';
-import { formatDate } from '@/utils/formatDate';
+import { incrementAndFormatDate } from '@/utils/formatDate';
 
 const resultType: { [key: string]: string } = {
   SCORE: 'Pontuação',
@@ -96,8 +96,8 @@ const ListChampionship = () => {
                       {championship.name}
                     </Heading>
                     <Text fontSize='14px'>
-                      {formatDate(`${championship.startDate}`)} até{' '}
-                      {formatDate(`${championship.endDate}`)}
+                      {incrementAndFormatDate(`${championship.startDate}`)} até{' '}
+                      {incrementAndFormatDate(`${championship.endDate}`)}
                     </Text>
                   </VStack>
 
