@@ -1,6 +1,6 @@
 import useTicketData from '@/hooks/useTicketData';
 import { formatCurrency } from '@/utils/formatCurrency';
-import { formatDate } from '@/utils/formatDate';
+import { incrementAndFormatDate } from '@/utils/formatDate';
 import {
   Button,
   Flex,
@@ -80,8 +80,8 @@ const ListTicket = () => {
               <Td p={6}>{ticket.name}</Td>
 
               <Td p={6}>{formatCurrency(ticket.price)}</Td>
-              <Td p={6}>{formatDate(ticket.startDate)}</Td>
-              <Td p={6}>{formatDate(ticket.endDate)}</Td>
+              <Td p={6}>{incrementAndFormatDate(ticket.startDate)}</Td>
+              <Td p={6}>{incrementAndFormatDate(ticket.endDate)}</Td>
               <Td p={6}>{ticket.quantity}</Td>
 
               <Td p={6}>
