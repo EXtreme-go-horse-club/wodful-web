@@ -14,7 +14,6 @@ import {
 } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import InputMask from 'react-input-mask';
 interface CreateModalProps {
   id: string;
   openFormParticipants: (step: number, participantsNumber: number) => void;
@@ -91,12 +90,12 @@ const FormSubscription = ({ id, openFormParticipants }: CreateModalProps) => {
             Telefone
           </FormLabel>
           <Input
-            mask={'+99 (99) 99999-9999'}
-            as={InputMask}
             id='responsiblePhone'
             placeholder='Telefone do responsável'
             {...register('responsiblePhone', {
               required: validationMessages['required'],
+              minLength: { value: 10, message: validationMessages['minLength'] },
+              maxLength: { value: 15, message: validationMessages['maxLengthSm'] },
             })}
           />
 
