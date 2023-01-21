@@ -1,3 +1,4 @@
+import useCategoryData from '@/hooks/useCategoryData';
 import useLeaderboardData from '@/hooks/useLeaderboardData';
 import {
   Button,
@@ -16,7 +17,7 @@ import {
   Tr,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { ChevronLeft, ChevronRight, MoreHorizontal } from 'react-feather';
+import { ChevronLeft, ChevronRight } from 'react-feather';
 
 interface IListLeaderboard {
   champ: string;
@@ -25,6 +26,8 @@ interface IListLeaderboard {
 
 const ListLeaderboard = ({ champ, category }: IListLeaderboard) => {
   const [currentTotal, setCurrentTotal] = useState<number>(0);
+
+  const { categories } = useCategoryData();
 
   const { ListPaginated, leaderboardPages, page, limit, setLimit, setPage, isLoading } =
     useLeaderboardData();
@@ -65,6 +68,26 @@ const ListLeaderboard = ({ champ, category }: IListLeaderboard) => {
           </Tr>
         </Thead>
         <Tbody>
+          {categories?.length && !leaderboardPages.results && (
+            <Tr>
+              <Td />
+              <Td />
+              <Td p={6} textAlign='center'>
+                Busque por uma categoria
+              </Td>
+            </Tr>
+          )}
+
+          {leaderboardPages.results?.length === 0 && (
+            <Tr>
+              <Td />
+              <Td />
+              <Td p={6} textAlign='center'>
+                Sua categoria não tem inscrições ainda.
+              </Td>
+            </Tr>
+          )}
+
           {leaderboardPages.results?.map((leaderboard) => (
             <Tr key={`${leaderboard.nickname}_${leaderboard.generalScore}`}>
               <Td p={6} textTransform='capitalize'>
@@ -83,11 +106,7 @@ const ListLeaderboard = ({ champ, category }: IListLeaderboard) => {
                       leaderboard.generalScore === 1 ? 'Ponto' : 'Pontos'
                     }`}
               </Td>
-              <Td p={6}>
-                <Flex justify='end'>
-                  <MoreHorizontal cursor='pointer' size={18} />
-                </Flex>
-              </Td>
+              <Td />
             </Tr>
           ))}
         </Tbody>
