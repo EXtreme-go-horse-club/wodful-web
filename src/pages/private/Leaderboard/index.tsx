@@ -107,7 +107,7 @@ const Leaderboard = () => {
           <EmptyList
             text='Você não possui um leaderboard ainda!'
             linkTo={`/championships/${id}/categories`}
-            textLinkTo='Começe seu campeonato aqui.'
+            textLinkTo='Comece seu campeonato aqui.'
           />
         )}
       </Box>
