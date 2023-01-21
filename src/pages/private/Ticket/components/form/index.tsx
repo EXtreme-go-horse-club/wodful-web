@@ -122,7 +122,7 @@ const FormTicket = ({ onClose }: IFormChampionshipProps) => {
           <FormControl isInvalid={!!errors.startDate}>
             <FormLabel>Data de início</FormLabel>
             <Input
-              type='datetime-local'
+              type='date'
               placeholder='DD/MM/AAAA'
               {...register('startDate', {
                 required: validationMessages['required'],
@@ -134,7 +134,7 @@ const FormTicket = ({ onClose }: IFormChampionshipProps) => {
           <FormControl isInvalid={!!errors.endDate}>
             <FormLabel>Data de encerramento</FormLabel>
             <Input
-              type='datetime-local'
+              type='date'
               placeholder='DD/MM/AAAA'
               {...register('endDate', {
                 required: validationMessages['required'],
