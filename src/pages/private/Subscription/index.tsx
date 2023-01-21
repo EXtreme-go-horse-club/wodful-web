@@ -42,14 +42,30 @@ const Subscription = () => {
   return (
     <Suspense fallback={<Loader title='Carregando ...' />}>
       <Box w='100%' display='flex' flexDirection='column' alignItems='center' p={6}>
-        <HStack w='100%' justifyContent='space-between'>
-          <Text fontSize='2xl' as='b'>
-            Gestão de inscrições
-          </Text>
-          <Button colorScheme='teal' size='md' onClick={onOpen}>
-            Adicionar inscrição
-          </Button>
-        </HStack>
+        {hasElements && (
+          <>
+            <HStack w='100%' justifyContent='space-between'>
+              <Text fontSize='2xl' as='b'>
+                Gestão de inscrições
+              </Text>
+              <Button colorScheme='teal' size='md' onClick={onOpen}>
+                Adicionar inscrição
+              </Button>
+            </HStack>
+            <Box w='100%' marginTop={6}>
+              <ListSubscription id={id as string} />
+            </Box>
+          </>
+        )}
+
+        {!hasElements && (
+          <EmptyList
+            text='Você não possui inscrições ainda!'
+            contentButton='Crie uma inscrição'
+            onClose={onOpen}
+          />
+        )}
+
         <ComponentModal
           modalHeader='Adicionar inscrição'
           size='lg'
@@ -66,19 +82,6 @@ const Subscription = () => {
             />
           )}
         </ComponentModal>
-        {hasElements && (
-          <Box w='100%' marginTop={6}>
-            <ListSubscription id={id as string} />
-          </Box>
-        )}
-
-        {!hasElements && (
-          <EmptyList
-            text='Você não possui inscrições ainda!'
-            contentButton='Crie uma inscrição'
-            onClose={onOpen}
-          />
-        )}
       </Box>
     </Suspense>
   );
