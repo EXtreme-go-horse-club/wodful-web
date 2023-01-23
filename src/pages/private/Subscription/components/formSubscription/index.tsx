@@ -11,6 +11,7 @@ import {
   FormLabel,
   Input,
   Select,
+  Text,
   VStack,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
@@ -49,7 +50,8 @@ const FormSubscription = ({ id, openFormParticipants }: CreateModalProps) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <VStack align='start' w='100%' spacing={6} pt={6} pb={6} flexDirection='column'>
+      <VStack align='start' w='100%' spacing={6} pb={6} flexDirection='column'>
+        <Text as='b'>Dados do responsável</Text>
         <FormControl isInvalid={!!errors.responsibleName}>
           <FormLabel htmlFor='responsibleName' m={0}>
             Nome
