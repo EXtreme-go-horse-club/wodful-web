@@ -24,7 +24,7 @@ const ComponentModal = ({
 }: CreateChampionshipProps) => {
   return (
     <>
-      <Modal size={size} isOpen={isOpen} onClose={onClose as () => void}>
+      <Modal size={size} isOpen={isOpen} onClose={onClose as () => void} isCentered={size == 'sm'}>
         <ModalOverlay />
         <ModalContent
           maxH='80%'
