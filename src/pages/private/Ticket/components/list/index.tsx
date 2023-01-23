@@ -2,7 +2,7 @@ import ComponentModal from '@/components/ComponentModal';
 import DeleteData from '@/components/Delete';
 import useTicketData from '@/hooks/useTicketData';
 import { formatCurrency } from '@/utils/formatCurrency';
-import { formatDate } from '@/utils/formatDate';
+import { incrementAndFormatDate } from '@/utils/formatDate';
 import {
   Button,
   Flex,
@@ -68,7 +68,6 @@ const ListTicket = () => {
       <ComponentModal modalHeader='Remover ingresso' size='sm' isOpen={isOpen} onClose={onClose}>
         <DeleteData onClose={onClose} removedData="o ingresso" confirmDelete={confirmDelete}/>
       </ComponentModal>
-      
       <TableContainer border='1px' borderColor='gray.100' fontSize='sm' color='#2D3748'>
         <Table variant='simple'>
           <Thead bg='gray.50' border='1px' borderColor='gray.100'>
@@ -97,8 +96,8 @@ const ListTicket = () => {
                 <Td p={6}>{ticket.name}</Td>
 
                 <Td p={6}>{formatCurrency(ticket.price)}</Td>
-                <Td p={6}>{formatDate(ticket.startDate)}</Td>
-                <Td p={6}>{formatDate(ticket.endDate)}</Td>
+                <Td p={6}>{incrementAndFormatDate(ticket.startDate)}</Td>
+                <Td p={6}>{incrementAndFormatDate(ticket.endDate)}</Td>
                 <Td p={6}>{ticket.quantity}</Td>
 
                 <Td p={6}>
@@ -111,7 +110,7 @@ const ListTicket = () => {
                         variant='none'
                       />
                       <MenuList>
-                        <MenuItem onClick={() => openDelete(ticket.id)}>Deletar</MenuItem>
+                        <MenuItem onClick={() => deleteTicket(ticket.id)}>Deletar</MenuItem>
                       </MenuList>
                     </Menu>
                   </Flex>
