@@ -51,9 +51,9 @@ const FormSubscriptionParticipants = ({
     resetStep(0, 0);
   }
 
-  const formatCpf = (CpfNumber: string) => {
-    CpfNumber = regexOnlyNumber(CpfNumber);
-    setFormatDisplayCpf(CpfNumber);
+  const formatCpf = (cpfNumber: string) => {
+    cpfNumber = regexOnlyNumber(cpfNumber);
+    setFormatDisplayCpf(cpfNumber);
   };
 
   return (
