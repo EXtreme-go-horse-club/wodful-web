@@ -110,7 +110,7 @@ const ListTicket = () => {
                         variant='none'
                       />
                       <MenuList>
-                        <MenuItem onClick={() => deleteTicket(ticket.id)}>Deletar</MenuItem>
+                        <MenuItem onClick={() => openDelete(ticket.id)}>Deletar</MenuItem>
                       </MenuList>
                     </Menu>
                   </Flex>
