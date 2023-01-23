@@ -1,6 +1,7 @@
 import { ISubscriptionForm } from '@/data/interfaces/subscription';
 import useSubscriptionData from '@/hooks/useSubscriptionData';
 import useTicketData from '@/hooks/useTicketData';
+import { regexOnlyNumber } from '@/utils/documentVerification';
 import { validationMessages } from '@/utils/messages';
 import {
   Button,
@@ -12,7 +13,7 @@ import {
   Select,
   VStack,
 } from '@chakra-ui/react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 interface CreateModalProps {
   id: string;
@@ -20,6 +21,7 @@ interface CreateModalProps {
 }
 
 const FormSubscription = ({ id, openFormParticipants }: CreateModalProps) => {
+  const [formatDisplayPhone, setFormatDisplayPhone] = useState<string>('');
   const { setSubscriptionForm } = useSubscriptionData();
   const { List, tickets } = useTicketData();
   const {
@@ -39,6 +41,11 @@ const FormSubscription = ({ id, openFormParticipants }: CreateModalProps) => {
     setSubscriptionForm(subscription as ISubscriptionForm);
     openFormParticipants(1, tickets[subscription.ticketIndex as number].category?.members);
   }
+
+  const formatPhone = (phoneNumber: string) => {
+    phoneNumber = regexOnlyNumber(phoneNumber);
+    setFormatDisplayPhone(phoneNumber);
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -92,11 +99,14 @@ const FormSubscription = ({ id, openFormParticipants }: CreateModalProps) => {
           <Input
             id='responsiblePhone'
             placeholder='Telefone do responsável'
-            type='number'
+            value={formatDisplayPhone}
             {...register('responsiblePhone', {
               required: validationMessages['required'],
               minLength: { value: 10, message: validationMessages['minLength'] },
               maxLength: { value: 15, message: validationMessages['maxLengthSm'] },
+              onChange(event) {
+                formatPhone(event.target.value);
+              },
             })}
           />
 
