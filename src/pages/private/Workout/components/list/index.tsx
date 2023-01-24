@@ -95,7 +95,11 @@ const ListWorkout = ({ id }: IListWorkout) => {
                     size='md'
                     key='md'
                     variant='solid'
-                    colorScheme={workout.workoutType == 'AMRAP' ? 'purple' : 'blue'}
+                    colorScheme={
+                      workout.workoutType == 'AMRAP' ? 'purple' : 
+                      workout.workoutType == 'EMOM'? 'blue': 
+                      workout.workoutType == 'FORTIME'? 'green': 'yellow'
+                    }
                   >
                     {workout.workoutType}
                   </Tag>
