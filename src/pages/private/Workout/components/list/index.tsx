@@ -1,6 +1,7 @@
 import ComponentModal from '@/components/ComponentModal';
 import DeleteData from '@/components/Delete';
 import useWorkoutData from '@/hooks/useWorkoutData';
+import { workoutsColors } from '@/utils/workouts';
 import {
   Button,
   Flex,
@@ -95,11 +96,7 @@ const ListWorkout = ({ id }: IListWorkout) => {
                     size='md'
                     key='md'
                     variant='solid'
-                    colorScheme={
-                      workout.workoutType == 'AMRAP' ? 'purple' : 
-                      workout.workoutType == 'EMOM'? 'blue': 
-                      workout.workoutType == 'FORTIME'? 'green': 'yellow'
-                    }
+                    colorScheme={workoutsColors[workout.workoutType]}
                   >
                     {workout.workoutType}
                   </Tag>
