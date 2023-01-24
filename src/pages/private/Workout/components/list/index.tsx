@@ -38,9 +38,9 @@ const ListWorkout = ({ id }: IListWorkout) => {
   const { ListPaginated, workoutsPages, page, limit, setLimit, setPage, isLoading, Delete } =
     useWorkoutData();
 
-    const [workoutId, setWorkoutId] = useState<string>('');
+  const [workoutId, setWorkoutId] = useState<string>('');
 
-    const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
     ListPaginated(id);
@@ -67,10 +67,9 @@ const ListWorkout = ({ id }: IListWorkout) => {
   return (
     <>
       <ComponentModal modalHeader='Remover prova' size='sm' isOpen={isOpen} onClose={onClose}>
-        <DeleteData onClose={onClose} removedData="a prova" confirmDelete={confirmDelete}/>
+        <DeleteData onClose={onClose} removedData='a prova' confirmDelete={confirmDelete} />
       </ComponentModal>
-    
-      
+
       <TableContainer border='1px' borderColor='gray.100' fontSize='sm' color='#2D3748'>
         <Table variant='simple'>
           <Thead bg='gray.50' border='1px' borderColor='gray.100'>
