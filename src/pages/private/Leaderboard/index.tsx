@@ -28,7 +28,7 @@ const PrivateLeaderboardWithProvider = () => {
 };
 
 const Leaderboard = () => {
-  const { id } = useParams();
+  const params = useParams();
   const { List: CategoryList, categories } = useCategoryData();
   const [selectedCategory, setSelectedCategory] = useState<string>('Sem categoria');
   const [categoryId, setCategoryId] = useState<string>('');
@@ -38,8 +38,8 @@ const Leaderboard = () => {
   const hasElements: boolean = useMemo(() => categories?.length !== 0, [categories]);
 
   useEffect(() => {
-    if (id) CategoryList(id);
-  }, [CategoryList, id]);
+    if (params.id) CategoryList(params.id);
+  }, [CategoryList, params.id]);
 
   return (
     <Suspense fallback={<Loader title='Carregando ...' />}>
@@ -79,7 +79,7 @@ const Leaderboard = () => {
                 placeholder='Selecione a categoria'
                 onChange={(event) => {
                   if (event.target.value) {
-                    ListPaginated(String(id), event.target.value);
+                    ListPaginated(String(params.id), event.target.value);
                     setCategoryId(event.target.value);
                     setSelectedCategory(
                       categories.find((selected) => selected.id === event.target.value)!.name,
@@ -99,14 +99,14 @@ const Leaderboard = () => {
 
         {hasElements && (
           <Box as='section' w='100%' marginTop={6}>
-            <ListLeaderboard category={categoryId as string} champ={id as string} />
+            <ListLeaderboard category={categoryId as string} champ={params.id as string} />
           </Box>
         )}
 
         {!hasElements && (
           <EmptyList
             text='Você não possui um leaderboard ainda!'
-            linkTo={`/championships/${id}/categories`}
+            linkTo={`/championships/${params.id}/categories`}
             textLinkTo='Comece seu campeonato aqui.'
           />
         )}
