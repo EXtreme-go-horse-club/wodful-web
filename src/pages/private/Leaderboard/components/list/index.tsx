@@ -64,31 +64,39 @@ const ListLeaderboard = ({ champ, category }: IListLeaderboard) => {
             <Th>
               <Text as='b'>PONTUAÇÃO GERAL</Text>
             </Th>
-            <Th></Th>
           </Tr>
         </Thead>
         <Tbody>
           {categories?.length && !leaderboardPages.results && (
+            
             <Tr>
               <Td />
-              <Td />
-              <Td p={6} textAlign='center'>
+              <Td p={6} textAlign='right'>
                 Busque por uma categoria
               </Td>
+              <Td />
+              <Td />
+
             </Tr>
+            
           )}
 
           {leaderboardPages.results?.length === 0 && (
+            
             <Tr>
               <Td />
-              <Td />
-              <Td p={6} textAlign='center'>
+              <Td p={6} textAlign='right'>
                 Sua categoria não tem inscrições ainda.
               </Td>
+              <Td />
+              
+              <Td />
             </Tr>
+            
           )}
 
           {leaderboardPages.results?.map((leaderboard) => (
+            
             <Tr key={`${leaderboard.nickname}_${leaderboard.generalScore}`}>
               <Td p={6} textTransform='capitalize'>
                 {leaderboard.nickname}
@@ -106,7 +114,6 @@ const ListLeaderboard = ({ champ, category }: IListLeaderboard) => {
                       leaderboard.generalScore === 1 ? 'Ponto' : 'Pontos'
                     }`}
               </Td>
-              <Td />
             </Tr>
           ))}
         </Tbody>
@@ -129,7 +136,6 @@ const ListLeaderboard = ({ champ, category }: IListLeaderboard) => {
                 <option value='20'>20</option>
               </Select>
             </Th>
-            <Th />
             <Th />
             <Th />
             <Th>
