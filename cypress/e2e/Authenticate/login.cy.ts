@@ -66,7 +66,7 @@ context('[Authenticate] Flow', () => {
         it('should RETURN 200 in access code', () => {
           cy.wait('@success-login').then((intercept) => {
             expect(intercept.response.statusCode).to.eq(200);
-            expect(intercept.response.body.token).to.contain('batata').and.not.to.be.null;
+            expect(intercept.response.body.token).to.contain('token KGPEYSO').and.not.to.be.null;
             expect(intercept.response.body.user).not.to.be.null;
             expect(intercept.response.body.user.name).to.contain('Matheus').and.not.be.null;
             expect(intercept.response.body.user.email).to.contain('matheus@email.com').and.not.to.be
