@@ -1,4 +1,6 @@
-context('[Authenticate] View', () => {
+import { Interception } from 'cypress/types/net-stubbing';
+
+describe('[Authenticate] View', () => {
   describe('My login page screen', () => {
     beforeEach(() => {
       cy.visit('/');
@@ -37,7 +39,7 @@ context('[Authenticate] View', () => {
   });
 });
 
-context('[Authenticate] Flow', () => {
+describe('[Authenticate] Flow', () => {
   describe('WHEN a user access the login page', () => {
     describe('AND type a correct email and password', () => {
       beforeEach(() => {
@@ -64,13 +66,16 @@ context('[Authenticate] Flow', () => {
           });
         });
         it('should RETURN 200 in access code', () => {
-          cy.wait('@success-login').then((intercept) => {
-            expect(intercept.response.statusCode).to.eq(200);
-            expect(intercept.response.body.token).to.contain('token KGPEYSO').and.not.to.be.null;
-            expect(intercept.response.body.user).not.to.be.null;
-            expect(intercept.response.body.user.name).to.contain('Matheus').and.not.be.null;
-            expect(intercept.response.body.user.email).to.contain('matheus@email.com').and.not.to.be
-              .null;
+          cy.wait('@success-login').then((intercept: Interception) => {
+            if (intercept.response) {
+              expect(intercept.response.statusCode).to.eq(200);
+              expect(intercept.response.statusCode).to.eq(200);
+              expect(intercept.response.body.token).to.contain('token KGPEYSO').and.not.to.be.null;
+              expect(intercept.response.body.user).not.to.be.null;
+              expect(intercept.response.body.user.name).to.contain('Matheus').and.not.be.null;
+              expect(intercept.response.body.user.email).to.contain('matheus@email.com').and.not.to
+                .be.null;
+            }
           });
         });
       });
@@ -97,9 +102,11 @@ context('[Authenticate] Flow', () => {
           });
         });
         it('should RETURN 400 in access code', () => {
-          cy.wait('@error-login').then((intercept) => {
-            expect(intercept.response.statusCode).to.eq(400);
-            expect(intercept.response.body.message).to.contain('Email or password incorrect!');
+          cy.wait('@error-login').then((intercept: Interception) => {
+            if (intercept.response) {
+              expect(intercept.response.statusCode).to.eq(400);
+              expect(intercept.response.body.message).to.contain('Email or password incorrect!');
+            }
           });
         });
         it('must display a error message', () => {
