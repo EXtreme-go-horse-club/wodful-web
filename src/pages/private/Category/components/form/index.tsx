@@ -61,7 +61,6 @@ const FormCategory = ({ id, onClose }: IFormChampionshipProps) => {
             as='textarea'
             id='description'
             {...register('description', {
-              required: validationMessages['required'],
               minLength: { value: 4, message: validationMessages['minLength'] },
               maxLength: { value: 250, message: validationMessages['maxLengthSm'] },
             })}

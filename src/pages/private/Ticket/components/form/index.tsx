@@ -79,7 +79,6 @@ const FormTicket = ({ onClose }: IFormChampionshipProps) => {
           <Textarea
             placeholder='Descrição do ticket'
             {...register('description', {
-              required: validationMessages['required'],
               minLength: { value: 4, message: validationMessages['minLength'] },
               maxLength: { value: 250, message: validationMessages['maxLengthSm'] },
             })}

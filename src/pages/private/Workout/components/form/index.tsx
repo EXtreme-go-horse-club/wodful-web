@@ -104,6 +104,7 @@ const FormWorkout = ({ id, onClose }: IFormChampionshipProps) => {
             <option value='EMOM'>EMOM</option>
             <option value='FORTIME'>FORTIME</option>
             <option value='AMRAP'>AMRAP</option>
+            <option value='PR'>PR</option>
           </Select>
           <FormErrorMessage>{errors.workoutType && errors.workoutType.message}</FormErrorMessage>
         </FormControl>
