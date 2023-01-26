@@ -15,6 +15,7 @@ Remember this application is the front-end part of Wodful, to run all the projec
 5. Prettier;
 6. ESLint
 7. Vite;
+8. Cypress
 
 ## Setup Installation
 
