@@ -18,3 +18,12 @@ export interface ChampionshipDTO {
   resultType: string;
   address: string;
 }
+
+export interface IChampionshipEditDTO {
+  championshipId: string;
+  name: string;
+  startDate: Date;
+  endDate: Date;
+  accessCode: string;
+  address: string;
+}

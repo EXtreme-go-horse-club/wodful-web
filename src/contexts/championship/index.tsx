@@ -1,5 +1,5 @@
 import { AxiosAdapter } from '@/adapters/AxiosAdapter';
-import { ChampionshipDTO, IChampionship } from '@/data/interfaces/championship';
+import { ChampionshipDTO, IChampionship, IChampionshipEditDTO } from '@/data/interfaces/championship';
 import { IPageResponse } from '@/data/interfaces/pageResponse';
 import { ChampionshipService } from '@/services/Championship';
 import { championshipMessages } from '@/utils/messages';
@@ -31,6 +31,14 @@ export interface ChampionshipContextData {
     resultType,
     address,
   }: ChampionshipDTO): Promise<void>;
+  Edit({
+    championshipId,
+    name,
+    startDate,
+    endDate,
+    accessCode,
+    address,
+  }: IChampionshipEditDTO): Promise<void>;
 }
 
 const ChampionshipContext = createContext({} as ChampionshipContextData);
@@ -106,6 +114,39 @@ export const ChampionshipProvider = ({ children, onClose }: ChampionshipProps) =
     [onClose, toast, ListPaginated],
   );
 
+  const Edit = useCallback(
+    async ({
+      championshipId,
+      name,
+      startDate,
+      endDate,
+      accessCode,
+      address,
+    }: IChampionshipEditDTO) => {
+      setIsLoading(true);
+      await new ChampionshipService(axios)
+        .edit({ championshipId, name, startDate, endDate, accessCode, address })
+        .then(() => {
+          toast({
+            title: championshipMessages['success'],
+            status: 'success',
+            isClosable: true,
+          });
+          ListPaginated();
+          onClose!();
+        })
+        .catch(() => {
+          toast({
+            title: championshipMessages['error'],
+            status: 'error',
+            isClosable: true,
+          });
+        })
+        .finally(() => setIsLoading(false));
+    },
+    [onClose, toast, ListPaginated],
+  );
+
   const Delete = useCallback(
     async (idChamp: string) => {
       setIsLoading(true);
@@ -142,6 +183,7 @@ export const ChampionshipProvider = ({ children, onClose }: ChampionshipProps) =
         page,
         setPage,
         Create,
+        Edit,
         Delete,
         List,
         ListPaginated,

@@ -1,4 +1,4 @@
-import { ChampionshipDTO, IChampionship } from '@/data/interfaces/championship';
+import { ChampionshipDTO, IChampionship, IChampionshipEditDTO } from '@/data/interfaces/championship';
 import { HttpClient, HttpStatusCode } from '@/data/interfaces/http';
 import { IPageResponse } from '@/data/interfaces/pageResponse';
 
@@ -30,6 +30,38 @@ export class ChampionshipService {
         accessCode,
         banner,
         resultType,
+        address,
+      },
+    });
+
+    switch (statusCode) {
+      case HttpStatusCode.created:
+        return body! as IChampionship;
+      default:
+        throw new Error();
+    }
+  }
+
+  async edit({
+    championshipId,
+    name,
+    startDate,
+    endDate,
+    accessCode,
+    address,
+  }: IChampionshipEditDTO): Promise<IChampionship> {
+    const { statusCode, body } = await this.httpClient.request({
+      method: 'put',
+      url: this.path,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      body: {
+        championshipId,
+        name,
+        startDate,
+        endDate,
+        accessCode,
         address,
       },
     });

@@ -1,11 +1,12 @@
 import { Box, Button, Center, Flex, Heading, useDisclosure } from '@chakra-ui/react';
-import { lazy, Suspense, useMemo } from 'react';
+import { lazy, Suspense, useMemo, useState } from 'react';
 
 import ComponentModal from '@/components/ComponentModal';
 import { EmptyList } from '@/components/EmptyList';
 import { Loader } from '@/components/Loader';
 import { ChampionshipProvider } from '@/contexts/championship';
 import useChampionshipData from '@/hooks/useChampionshipData';
+import { IChampionship } from '@/data/interfaces/championship';
 
 const ListChampionship = lazy(() => import('./components/list'));
 const FormChampionship = lazy(() => import('./components/form'));
@@ -22,8 +23,13 @@ const ChampionshipWithProvider = () => {
 
 const Championship = () => {
   const { championshipsPages } = useChampionshipData();
-
+  const [championship, setChampionship] = useState<IChampionship>();
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const openEdit = (championshipObj: IChampionship) => {
+    setChampionship(championshipObj);
+    onOpen();
+  };
 
   const hasElements: boolean = useMemo(() => championshipsPages.count !== 0, [championshipsPages]);
 
@@ -65,10 +71,10 @@ const Championship = () => {
             isOpen={isOpen}
             onClose={onClose}
           >
-            <FormChampionship onClose={onClose} />
+            <FormChampionship onClose={onClose} oldChampionship={championship} />
           </ComponentModal>
 
-          {hasElements && <ListChampionship />}
+          {hasElements && <ListChampionship openEdit={openEdit}/>}
           {!hasElements && (
             <EmptyList
               text='Você não possui um campeonato ainda!'
