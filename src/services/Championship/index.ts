@@ -1,4 +1,8 @@
-import { ChampionshipDTO, IChampionship, IChampionshipEditDTO } from '@/data/interfaces/championship';
+import {
+  ChampionshipDTO,
+  IChampionship,
+  IChampionshipEditDTO,
+} from '@/data/interfaces/championship';
 import { HttpClient, HttpStatusCode } from '@/data/interfaces/http';
 import { IPageResponse } from '@/data/interfaces/pageResponse';
 
@@ -54,14 +58,14 @@ export class ChampionshipService {
       method: 'put',
       url: this.path,
       headers: {
-        'Content-Type': 'multipart/form-data',
+        'Content-Type': 'application/json',
       },
       body: {
         championshipId,
         name,
         startDate,
         endDate,
-        accessCode,
+        accessCode: accessCode.toUpperCase(),
         address,
       },
     });
