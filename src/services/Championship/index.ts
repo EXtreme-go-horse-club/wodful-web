@@ -71,7 +71,7 @@ export class ChampionshipService {
     });
 
     switch (statusCode) {
-      case HttpStatusCode.created:
+      case HttpStatusCode.ok:
         return body! as IChampionship;
       default:
         throw new Error();

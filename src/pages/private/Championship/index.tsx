@@ -30,7 +30,9 @@ const Championship = () => {
     setChampionship(championshipObj);
     onOpen();
   };
-
+  const resetChampionship = () => {
+    setChampionship(undefined);
+  };
   const hasElements: boolean = useMemo(() => championshipsPages.count !== 0, [championshipsPages]);
 
   return (
@@ -71,7 +73,7 @@ const Championship = () => {
             isOpen={isOpen}
             onClose={onClose}
           >
-            <FormChampionship onClose={onClose} oldChampionship={championship} />
+            <FormChampionship onClose={onClose} oldChampionship={championship} resetChampionship={resetChampionship} />
           </ComponentModal>
 
           {hasElements && <ListChampionship openEdit={openEdit}/>}

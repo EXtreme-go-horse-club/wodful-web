@@ -12,28 +12,43 @@ import {
   Select,
   VStack,
 } from '@chakra-ui/react';
+import { useEffect } from 'react';
 
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { SubmitHandler, useForm, } from 'react-hook-form';
 
 interface IFormChampionshipProps {
   onClose: () => void;
   oldChampionship?: IChampionship;
+  resetChampionship: () => void;
 }
 
-const FormChampionship = ({ onClose, oldChampionship }: IFormChampionshipProps) => {
+const FormChampionship = ({ onClose, oldChampionship, resetChampionship }: IFormChampionshipProps) => {
   const { Create, Edit } = useChampionshipData();
+
   const {
     handleSubmit,
     register,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<ChampionshipDTO>({ mode: 'onChange', defaultValues: {
+    
     accessCode: oldChampionship?.accessCode,
-    startDate: oldChampionship?.startDate,
-    endDate: oldChampionship?.endDate,
     name: oldChampionship?.name,
     address: oldChampionship?.address,
     resultType: oldChampionship?.resultType,
   } });
+
+  useEffect(() => {
+    let startDate = oldChampionship?.startDate+""
+    let endDate = oldChampionship?.endDate+""
+    if(oldChampionship?.startDate && oldChampionship?.endDate){
+      reset({
+        startDate: startDate.substring(0, 10),
+        endDate: endDate.substring(0, 10),
+      })
+    }
+    
+  }, [oldChampionship])
 
   const onSubmit: SubmitHandler<ChampionshipDTO> = async (championship) => {
     
@@ -47,6 +62,7 @@ const FormChampionship = ({ onClose, oldChampionship }: IFormChampionshipProps) 
         address : championship.address,
       };
       await Edit(editedChampionship);
+      resetChampionship();
     }else{
       const banner = championship.banner as FileList;
       championship.banner = banner[0];
@@ -155,7 +171,9 @@ const FormChampionship = ({ onClose, oldChampionship }: IFormChampionshipProps) 
 
             <ButtonGroup flexDirection='column' alignItems='end' gap='12px' w='100%'>
               <Button w='100%' isLoading={isSubmitting} colorScheme='teal' type='submit'>
-                Adicionar
+              {
+                !oldChampionship ? 'Adicionar' : 'Editar'
+              }
               </Button>
             </ButtonGroup>
           </VStack>
