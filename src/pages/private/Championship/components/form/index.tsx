@@ -30,13 +30,7 @@ const FormChampionship = ({ onClose, oldChampionship, resetChampionship }: IForm
     register,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<ChampionshipDTO>({ mode: 'onChange', defaultValues: {
-    
-    accessCode: oldChampionship?.accessCode,
-    name: oldChampionship?.name,
-    address: oldChampionship?.address,
-    resultType: oldChampionship?.resultType,
-  } });
+  } = useForm<ChampionshipDTO>({ mode: 'onChange'});
 
   useEffect(() => {
     let startDate = oldChampionship?.startDate+""
@@ -45,6 +39,10 @@ const FormChampionship = ({ onClose, oldChampionship, resetChampionship }: IForm
       reset({
         startDate: startDate.substring(0, 10),
         endDate: endDate.substring(0, 10),
+        accessCode: oldChampionship?.accessCode,
+        name: oldChampionship?.name,
+        address: oldChampionship?.address,
+        resultType: oldChampionship?.resultType,
       })
     }
     
@@ -63,12 +61,13 @@ const FormChampionship = ({ onClose, oldChampionship, resetChampionship }: IForm
       };
       await Edit(editedChampionship);
       resetChampionship();
-    }else{
-      const banner = championship.banner as FileList;
-      championship.banner = banner[0];
-      championship.accessCode = championship.accessCode.toUpperCase();
-      await Create(championship);
+      onClose();
+      return;
     }
+    const banner = championship.banner as FileList;
+    championship.banner = banner[0];
+    championship.accessCode = championship.accessCode.toUpperCase();
+    await Create(championship);
     onClose();
   };
 

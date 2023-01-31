@@ -1,5 +1,5 @@
 import { Box, Button, Center, Flex, Heading, useDisclosure } from '@chakra-ui/react';
-import { lazy, Suspense, useMemo, useState } from 'react';
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 
 import ComponentModal from '@/components/ComponentModal';
 import { EmptyList } from '@/components/EmptyList';
@@ -30,9 +30,16 @@ const Championship = () => {
     setChampionship(championshipObj);
     onOpen();
   };
+
+  const openCreate = () => {
+    resetChampionship();
+    onOpen();
+  };
+  
   const resetChampionship = () => {
     setChampionship(undefined);
   };
+
   const hasElements: boolean = useMemo(() => championshipsPages.count !== 0, [championshipsPages]);
 
   return (
@@ -59,7 +66,7 @@ const Championship = () => {
                     Lista de campeonatos
                   </Heading>
 
-                  <Button size='lg' colorScheme='teal' onClick={onOpen}>
+                  <Button size='lg' colorScheme='teal' onClick={openCreate}>
                     Criar campeonato
                   </Button>
                 </>
@@ -68,12 +75,15 @@ const Championship = () => {
           </Box>
 
           <ComponentModal
-            modalHeader='Criar Campeonato'
+            modalHeader={championship ? 'Editar Campeonato': ' Criar Campeonato'}
             size='lg'
             isOpen={isOpen}
             onClose={onClose}
           >
-            <FormChampionship onClose={onClose} oldChampionship={championship} resetChampionship={resetChampionship} />
+            <FormChampionship 
+              onClose={onClose } 
+              oldChampionship={championship} 
+              resetChampionship={resetChampionship} />
           </ComponentModal>
 
           {hasElements && <ListChampionship openEdit={openEdit}/>}
