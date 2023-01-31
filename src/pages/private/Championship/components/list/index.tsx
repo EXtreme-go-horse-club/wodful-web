@@ -35,7 +35,11 @@ const resultType: { [key: string]: string } = {
   RANKING: 'Colocação',
 };
 
-const ListChampionship = () => {
+interface IListChampionship {
+  openEdit: (championship: IChampionship) => void;
+}
+
+const ListChampionship = ( {openEdit}: IListChampionship) => {
   const [currentTotal, setCurrentTotal] = useState<number>(0);
   const [championshipId, setChampionshipId] = useState<string>('');
 
@@ -141,6 +145,9 @@ const ListChampionship = () => {
                     <MenuList>
                       <MenuItem onClick={() => openDelete(championship.id)}>
                         Deletar
+                      </MenuItem>
+                      <MenuItem onClick={() => openEdit(championship)}>
+                        Editar
                       </MenuItem>
                     </MenuList>
                   </Menu>

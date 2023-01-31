@@ -1,11 +1,12 @@
 import { Box, Button, Center, Flex, Heading, useDisclosure } from '@chakra-ui/react';
-import { lazy, Suspense, useMemo } from 'react';
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 
 import ComponentModal from '@/components/ComponentModal';
 import { EmptyList } from '@/components/EmptyList';
 import { Loader } from '@/components/Loader';
 import { ChampionshipProvider } from '@/contexts/championship';
 import useChampionshipData from '@/hooks/useChampionshipData';
+import { IChampionship } from '@/data/interfaces/championship';
 
 const ListChampionship = lazy(() => import('./components/list'));
 const FormChampionship = lazy(() => import('./components/form'));
@@ -22,8 +23,22 @@ const ChampionshipWithProvider = () => {
 
 const Championship = () => {
   const { championshipsPages } = useChampionshipData();
-
+  const [championship, setChampionship] = useState<IChampionship>();
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const openEdit = (championshipObj: IChampionship) => {
+    setChampionship(championshipObj);
+    onOpen();
+  };
+
+  const openCreate = () => {
+    resetChampionship();
+    onOpen();
+  };
+  
+  const resetChampionship = () => {
+    setChampionship(undefined);
+  };
 
   const hasElements: boolean = useMemo(() => championshipsPages.count !== 0, [championshipsPages]);
 
@@ -51,7 +66,7 @@ const Championship = () => {
                     Lista de campeonatos
                   </Heading>
 
-                  <Button size='lg' colorScheme='teal' onClick={onOpen}>
+                  <Button size='lg' colorScheme='teal' onClick={openCreate}>
                     Criar campeonato
                   </Button>
                 </>
@@ -60,15 +75,18 @@ const Championship = () => {
           </Box>
 
           <ComponentModal
-            modalHeader='Criar Campeonato'
+            modalHeader={championship ? 'Editar Campeonato': ' Criar Campeonato'}
             size='lg'
             isOpen={isOpen}
             onClose={onClose}
           >
-            <FormChampionship onClose={onClose} />
+            <FormChampionship 
+              onClose={onClose } 
+              oldChampionship={championship} 
+              resetChampionship={resetChampionship} />
           </ComponentModal>
 
-          {hasElements && <ListChampionship />}
+          {hasElements && <ListChampionship openEdit={openEdit}/>}
           {!hasElements && (
             <EmptyList
               text='Você não possui um campeonato ainda!'
