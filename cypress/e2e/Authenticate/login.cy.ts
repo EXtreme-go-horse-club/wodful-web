@@ -44,7 +44,7 @@ describe('[Authenticate] Flow', () => {
     describe('AND type a correct email and password', () => {
       beforeEach(() => {
         cy.visit('/');
-        cy.get('[data-cy="input-email"]').type('matheus@email.com');
+        cy.get('[data-cy="input-email"]').type('user@email.com');
         cy.get('[data-cy="input-senha"]').type('senha@123');
       });
       it('THEN the button must be enabled', () => {
@@ -72,9 +72,9 @@ describe('[Authenticate] Flow', () => {
               expect(intercept.response.statusCode).to.eq(200);
               expect(intercept.response.body.token).to.contain('token KGPEYSO').and.not.to.be.null;
               expect(intercept.response.body.user).not.to.be.null;
-              expect(intercept.response.body.user.name).to.contain('Matheus').and.not.be.null;
-              expect(intercept.response.body.user.email).to.contain('matheus@email.com').and.not.to
-                .be.null;
+              expect(intercept.response.body.user.name).to.contain('User name').and.not.be.null;
+              expect(intercept.response.body.user.email).to.contain('user@email.com').and.not.to.be
+                .null;
             }
           });
         });
