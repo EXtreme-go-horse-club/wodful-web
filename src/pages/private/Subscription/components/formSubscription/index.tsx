@@ -1,6 +1,7 @@
 import { ISubscriptionForm } from '@/data/interfaces/subscription';
 import useSubscriptionData from '@/hooks/useSubscriptionData';
 import useTicketData from '@/hooks/useTicketData';
+import { regexOnlyNumber } from '@/utils/documentVerification';
 import { validationMessages } from '@/utils/messages';
 import {
   Button,
@@ -10,17 +11,18 @@ import {
   FormLabel,
   Input,
   Select,
+  Text,
   VStack,
 } from '@chakra-ui/react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import InputMask from 'react-input-mask';
 interface CreateModalProps {
   id: string;
   openFormParticipants: (step: number, participantsNumber: number) => void;
 }
 
 const FormSubscription = ({ id, openFormParticipants }: CreateModalProps) => {
+  const [formatDisplayPhone, setFormatDisplayPhone] = useState<string>('');
   const { setSubscriptionForm } = useSubscriptionData();
   const { List, tickets } = useTicketData();
   const {
@@ -41,9 +43,15 @@ const FormSubscription = ({ id, openFormParticipants }: CreateModalProps) => {
     openFormParticipants(1, tickets[subscription.ticketIndex as number].category?.members);
   }
 
+  const formatPhone = (phoneNumber: string) => {
+    phoneNumber = regexOnlyNumber(phoneNumber);
+    setFormatDisplayPhone(phoneNumber);
+  };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <VStack align='start' w='100%' spacing={6} pt={6} pb={6} flexDirection='column'>
+      <VStack align='start' w='100%' spacing={6} pb={6} flexDirection='column'>
+        <Text as='b'>Dados do responsável</Text>
         <FormControl isInvalid={!!errors.responsibleName}>
           <FormLabel htmlFor='responsibleName' m={0}>
             Nome
@@ -91,12 +99,16 @@ const FormSubscription = ({ id, openFormParticipants }: CreateModalProps) => {
             Telefone
           </FormLabel>
           <Input
-            mask={'+99 (99) 99999-9999'}
-            as={InputMask}
             id='responsiblePhone'
             placeholder='Telefone do responsável'
+            value={formatDisplayPhone}
             {...register('responsiblePhone', {
               required: validationMessages['required'],
+              minLength: { value: 10, message: validationMessages['minLength'] },
+              maxLength: { value: 15, message: validationMessages['maxLengthSm'] },
+              onChange(event) {
+                formatPhone(event.target.value);
+              },
             })}
           />
 

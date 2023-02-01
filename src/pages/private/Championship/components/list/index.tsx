@@ -16,6 +16,7 @@ import {
   Stack,
   Text,
   Tooltip,
+  useDisclosure,
   VStack,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
@@ -25,15 +26,25 @@ import { Link as ReactRouter } from 'react-router-dom';
 import { IChampionship } from '@/data/interfaces/championship';
 import useApp from '@/hooks/useApp';
 import { default as useChampionshipData } from '@/hooks/useChampionshipData';
-import { formatDate } from '@/utils/formatDate';
+import ComponentModal from '@/components/ComponentModal';
+import DeleteData from '@/components/Delete';
+import { incrementAndFormatDate } from '@/utils/formatDate';
 
 const resultType: { [key: string]: string } = {
   SCORE: 'Pontuação',
   RANKING: 'Colocação',
 };
 
-const ListChampionship = () => {
+interface IListChampionship {
+  openEdit: (championship: IChampionship) => void;
+}
+
+const ListChampionship = ( {openEdit}: IListChampionship) => {
   const [currentTotal, setCurrentTotal] = useState<number>(0);
+  const [championshipId, setChampionshipId] = useState<string>('');
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const { ListPaginated, championshipsPages, page, limit, setPage, isLoading, Delete } =
     useChampionshipData();
 
@@ -44,8 +55,13 @@ const ListChampionship = () => {
     setCurrentTotal(championshipsPages.results?.length);
   }, [ListPaginated, championshipsPages.results?.length]);
 
-  const deleteChampionship = (id: string) => {
-    Delete(id);
+  const openDelete = (id: string) => {
+    setChampionshipId(id);
+    onOpen();
+  };
+
+  const confirmDelete = () => {
+    Delete(championshipId);
   };
 
   const previousPage = () => {
@@ -57,6 +73,9 @@ const ListChampionship = () => {
   };
   return (
     <>
+      <ComponentModal modalHeader='Remover campeonato' size='sm' isOpen={isOpen} onClose={onClose}>
+        <DeleteData onClose={onClose} removedData="o campeonato" confirmDelete={confirmDelete}/>
+      </ComponentModal>
       <SimpleGrid maxW='1200px' w='100%' color='gray.600' columns={[null, 1, 2, 3]} spacing='24px'>
         {championshipsPages.results?.map((championship) => (
           <LinkBox
@@ -96,8 +115,8 @@ const ListChampionship = () => {
                       {championship.name}
                     </Heading>
                     <Text fontSize='14px'>
-                      {formatDate(`${championship.startDate}`)} até{' '}
-                      {formatDate(`${championship.endDate}`)}
+                      {incrementAndFormatDate(`${championship.startDate}`)} até{' '}
+                      {incrementAndFormatDate(`${championship.endDate}`)}
                     </Text>
                   </VStack>
 
@@ -124,8 +143,11 @@ const ListChampionship = () => {
                       variant='none'
                     />
                     <MenuList>
-                      <MenuItem onClick={() => deleteChampionship(championship.id)}>
+                      <MenuItem onClick={() => openDelete(championship.id)}>
                         Deletar
+                      </MenuItem>
+                      <MenuItem onClick={() => openEdit(championship)}>
+                        Editar
                       </MenuItem>
                     </MenuList>
                   </Menu>

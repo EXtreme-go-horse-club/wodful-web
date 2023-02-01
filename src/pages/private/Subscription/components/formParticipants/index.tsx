@@ -1,6 +1,6 @@
 import { IParticipantForm } from '@/data/interfaces/subscription';
 import useSubscriptionData from '@/hooks/useSubscriptionData';
-import { isValidDocument } from '@/utils/documentVerification';
+import { isValidDocument, regexOnlyNumber } from '@/utils/documentVerification';
 import { validationMessages } from '@/utils/messages';
 import {
   Button,
@@ -28,6 +28,7 @@ const FormSubscriptionParticipants = ({
   onClose,
   resetStep,
 }: CreateModalProps) => {
+  const [formatDisplayCpf, setFormatDisplayCpf] = useState<string>('');
   const { Create } = useSubscriptionData();
   const [indexes, setIndexes] = useState<number[]>([]);
   const {
@@ -49,6 +50,11 @@ const FormSubscriptionParticipants = ({
     onClose();
     resetStep(0, 0);
   }
+
+  const formatCpf = (cpfNumber: string) => {
+    cpfNumber = regexOnlyNumber(cpfNumber);
+    setFormatDisplayCpf(cpfNumber);
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -111,10 +117,14 @@ const FormSubscriptionParticipants = ({
                   as='input'
                   id={`${participants}.identificationCode`}
                   placeholder='Informe o CPF'
+                  value={formatDisplayCpf}
                   {...register(`participants.${index}.identificationCode`, {
                     required: validationMessages['required'],
                     minLength: { value: 9, message: validationMessages['minLength'] },
                     maxLength: { value: 20, message: validationMessages['maxLengthSm'] },
+                    onChange(event) {
+                      formatCpf(event.target.value);
+                    },
                     validate: (value) =>
                       isValidDocument(value) || validationMessages['invalidCode'],
                   })}

@@ -15,7 +15,7 @@ export const EmptyList = ({ contentButton, onClose, text, linkTo, textLinkTo }: 
     <Box display='flex' flexDirection='column' alignItems='center' gap='8px' mt='20%'>
       <FolderPlus size={50} opacity='80%' />
       <Text>{text}</Text>
-      {!linkTo && (
+      {contentButton && (
         <Button width='100%' colorScheme='teal' onClick={onClose}>
           {contentButton}
         </Button>

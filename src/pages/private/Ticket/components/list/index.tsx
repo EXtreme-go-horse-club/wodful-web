@@ -1,6 +1,8 @@
+import ComponentModal from '@/components/ComponentModal';
+import DeleteData from '@/components/Delete';
 import useTicketData from '@/hooks/useTicketData';
 import { formatCurrency } from '@/utils/formatCurrency';
-import { formatDate } from '@/utils/formatDate';
+import { incrementAndFormatDate } from '@/utils/formatDate';
 import {
   Button,
   Flex,
@@ -21,6 +23,7 @@ import {
   Thead,
   Tooltip,
   Tr,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight, MoreHorizontal } from 'react-feather';
@@ -32,6 +35,10 @@ const ListTicket = () => {
   const { ListPaginated, ticketsPages, page, limit, setLimit, setPage, isLoading, Delete } =
     useTicketData();
 
+    const [ticketId, setTicketId] = useState<string>('');
+
+    const { isOpen, onOpen, onClose } = useDisclosure();
+
   const { id } = useParams();
 
   useEffect(() => {
@@ -39,12 +46,17 @@ const ListTicket = () => {
     setCurrentTotal(ticketsPages.results?.length);
   }, [ListPaginated, id, ticketsPages.results?.length]);
 
-  const previousPage = () => {
-    setPage(page - 1);
+  const openDelete = (id: string) => {
+    setTicketId(id);
+    onOpen();
   };
 
-  const deleteTicket = (id: string) => {
-    Delete(id);
+  const confirmDelete = () => {
+    Delete(ticketId);
+  };
+
+  const previousPage = () => {
+    setPage(page - 1);
   };
 
   const nextPage = () => {
@@ -52,119 +64,124 @@ const ListTicket = () => {
   };
 
   return (
-    <TableContainer border='1px' borderColor='gray.100' fontSize='sm' color='#2D3748'>
-      <Table variant='simple'>
-        <Thead bg='gray.50' border='1px' borderColor='gray.100'>
-          <Tr>
-            <Th>
-              <Text as='b'>Nome</Text>
-            </Th>
-            <Th>
-              <Text as='b'>Valor do ingresso</Text>
-            </Th>
-            <Th>
-              <Text as='b'>Início</Text>
-            </Th>
-            <Th>
-              <Text as='b'>Encerramento</Text>
-            </Th>
-            <Th>
-              <Text as='b'>qnt. máx</Text>
-            </Th>
-            <Th></Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          {ticketsPages.results?.map((ticket) => (
-            <Tr key={ticket.id}>
-              <Td p={6}>{ticket.name}</Td>
-
-              <Td p={6}>{formatCurrency(ticket.price)}</Td>
-              <Td p={6}>{formatDate(ticket.startDate)}</Td>
-              <Td p={6}>{formatDate(ticket.endDate)}</Td>
-              <Td p={6}>{ticket.quantity}</Td>
-
-              <Td p={6}>
-                <Flex justify='end'>
-                  <Menu>
-                    <MenuButton
-                      as={IconButton}
-                      aria-label='Options'
-                      icon={<MoreHorizontal />}
-                      variant='none'
-                    />
-                    <MenuList>
-                      <MenuItem onClick={() => deleteTicket(ticket.id)}>Deletar</MenuItem>
-                    </MenuList>
-                  </Menu>
-                </Flex>
-              </Td>
+    <>
+      <ComponentModal modalHeader='Remover ingresso' size='sm' isOpen={isOpen} onClose={onClose}>
+        <DeleteData onClose={onClose} removedData="o ingresso" confirmDelete={confirmDelete}/>
+      </ComponentModal>
+      <TableContainer border='1px' borderColor='gray.100' fontSize='sm' color='#2D3748'>
+        <Table variant='simple'>
+          <Thead bg='gray.50' border='1px' borderColor='gray.100'>
+            <Tr>
+              <Th>
+                <Text as='b'>Nome</Text>
+              </Th>
+              <Th>
+                <Text as='b'>Valor do ingresso</Text>
+              </Th>
+              <Th>
+                <Text as='b'>Início</Text>
+              </Th>
+              <Th>
+                <Text as='b'>Encerramento</Text>
+              </Th>
+              <Th>
+                <Text as='b'>qnt. máx</Text>
+              </Th>
+              <Th></Th>
             </Tr>
-          ))}
-        </Tbody>
-        <Tfoot>
-          <Tr>
-            <Th display='flex' flexDirection='row'>
-              <Flex align='center' mr={2}>
-                Linhas por página
-              </Flex>
+          </Thead>
+          <Tbody>
+            {ticketsPages.results?.map((ticket) => (
+              <Tr key={ticket.id}>
+                <Td p={6}>{ticket.name}</Td>
 
-              <Select
-                w='75px'
-                onChange={(event) => {
-                  setLimit(Number(event.target.value));
-                  setPage(Number(1));
-                }}
-              >
-                <option value='5'>5</option>
-                <option value='10'>10</option>
-                <option value='20'>20</option>
-              </Select>
-            </Th>
-            <Th></Th>
-            <Th></Th>
-            <Th></Th>
-            <Th></Th>
-            <Th maxW='100px'>
-              <Flex justify='end'>
-                <HStack>
-                  {page === 1 && (
-                    <Text>
-                      {page * limit - (limit - 1)} - {page * limit} de {ticketsPages.count}
-                    </Text>
-                  )}
+                <Td p={6}>{formatCurrency(ticket.price)}</Td>
+                <Td p={6}>{incrementAndFormatDate(ticket.startDate)}</Td>
+                <Td p={6}>{incrementAndFormatDate(ticket.endDate)}</Td>
+                <Td p={6}>{ticket.quantity}</Td>
 
-                  {page !== 1 && (
-                    <Text>
-                      {page * limit - (limit - 1)} - {page * limit - limit + currentTotal} de{' '}
-                      {ticketsPages.count}
-                    </Text>
-                  )}
-                  <Tooltip label='Página anterior' placement='top' hasArrow>
-                    <Button
-                      disabled={!ticketsPages.previous || isLoading}
-                      variant='link'
-                      onClick={previousPage}
-                    >
-                      <ChevronLeft color={ticketsPages.previous ? 'black' : 'gray'} size={16} />
-                    </Button>
-                  </Tooltip>
-                  <Tooltip label='Próxima página' placement='top' hasArrow>
-                    <Button
-                      disabled={!ticketsPages.next || isLoading}
-                      variant='link'
-                      onClick={nextPage}
-                    >
-                      <ChevronRight color={ticketsPages.next ? 'black' : 'gray'} size={16} />
-                    </Button>
-                  </Tooltip>
-                </HStack>
-              </Flex>
-            </Th>
-          </Tr>
-        </Tfoot>
-      </Table>
-    </TableContainer>
+                <Td p={6}>
+                  <Flex justify='end'>
+                    <Menu>
+                      <MenuButton
+                        as={IconButton}
+                        aria-label='Options'
+                        icon={<MoreHorizontal />}
+                        variant='none'
+                      />
+                      <MenuList>
+                        <MenuItem onClick={() => openDelete(ticket.id)}>Deletar</MenuItem>
+                      </MenuList>
+                    </Menu>
+                  </Flex>
+                </Td>
+              </Tr>
+            ))}
+          </Tbody>
+          <Tfoot>
+            <Tr>
+              <Th display='flex' flexDirection='row'>
+                <Flex align='center' mr={2}>
+                  Linhas por página
+                </Flex>
+
+                <Select
+                  w='75px'
+                  onChange={(event) => {
+                    setLimit(Number(event.target.value));
+                    setPage(Number(1));
+                  }}
+                >
+                  <option value='5'>5</option>
+                  <option value='10'>10</option>
+                  <option value='20'>20</option>
+                </Select>
+              </Th>
+              <Th></Th>
+              <Th></Th>
+              <Th></Th>
+              <Th></Th>
+              <Th maxW='100px'>
+                <Flex justify='end'>
+                  <HStack>
+                    {page === 1 && (
+                      <Text>
+                        {page * limit - (limit - 1)} - {page * limit} de {ticketsPages.count}
+                      </Text>
+                    )}
+
+                    {page !== 1 && (
+                      <Text>
+                        {page * limit - (limit - 1)} - {page * limit - limit + currentTotal} de{' '}
+                        {ticketsPages.count}
+                      </Text>
+                    )}
+                    <Tooltip label='Página anterior' placement='top' hasArrow>
+                      <Button
+                        disabled={!ticketsPages.previous || isLoading}
+                        variant='link'
+                        onClick={previousPage}
+                      >
+                        <ChevronLeft color={ticketsPages.previous ? 'black' : 'gray'} size={16} />
+                      </Button>
+                    </Tooltip>
+                    <Tooltip label='Próxima página' placement='top' hasArrow>
+                      <Button
+                        disabled={!ticketsPages.next || isLoading}
+                        variant='link'
+                        onClick={nextPage}
+                      >
+                        <ChevronRight color={ticketsPages.next ? 'black' : 'gray'} size={16} />
+                      </Button>
+                    </Tooltip>
+                  </HStack>
+                </Flex>
+              </Th>
+            </Tr>
+          </Tfoot>
+        </Table>
+      </TableContainer>
+    </>
   );
 };
 

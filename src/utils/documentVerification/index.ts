@@ -1,4 +1,4 @@
-export function isValidDocument(value: string) {
+export const isValidDocument = (value: string) => {
   if (typeof value !== 'string') {
     return false;
   }
@@ -20,4 +20,8 @@ export function isValidDocument(value: string) {
     10;
 
   return rest(10) === values[9] && rest(11) === values[10];
-}
+};
+
+export const regexOnlyNumber = (value: string) => {
+  return value.replace(/[^0-9]/g, '').trim();
+};

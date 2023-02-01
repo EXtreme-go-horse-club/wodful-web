@@ -1,4 +1,4 @@
-import { ChampionshipDTO } from '@/data/interfaces/championship';
+import { ChampionshipDTO, IChampionship } from '@/data/interfaces/championship';
 import useChampionshipData from '@/hooks/useChampionshipData';
 import { validationMessages } from '@/utils/messages';
 import {
@@ -12,23 +12,58 @@ import {
   Select,
   VStack,
 } from '@chakra-ui/react';
+import { useEffect } from 'react';
 
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { SubmitHandler, useForm, } from 'react-hook-form';
 
 interface IFormChampionshipProps {
   onClose: () => void;
+  oldChampionship?: IChampionship;
+  resetChampionship: () => void;
 }
 
-const FormChampionship = ({ onClose }: IFormChampionshipProps) => {
-  const { Create } = useChampionshipData();
+const FormChampionship = ({ onClose, oldChampionship, resetChampionship }: IFormChampionshipProps) => {
+  const { Create, Edit } = useChampionshipData();
 
   const {
     handleSubmit,
     register,
+    reset,
     formState: { errors, isSubmitting },
-  } = useForm<ChampionshipDTO>({ mode: 'onChange' });
+  } = useForm<ChampionshipDTO>({ mode: 'onChange'});
+
+  useEffect(() => {
+    let startDate = oldChampionship?.startDate+""
+    let endDate = oldChampionship?.endDate+""
+    if(oldChampionship?.startDate && oldChampionship?.endDate){
+      reset({
+        startDate: startDate.substring(0, 10),
+        endDate: endDate.substring(0, 10),
+        accessCode: oldChampionship?.accessCode,
+        name: oldChampionship?.name,
+        address: oldChampionship?.address,
+        resultType: oldChampionship?.resultType,
+      })
+    }
+    
+  }, [oldChampionship])
 
   const onSubmit: SubmitHandler<ChampionshipDTO> = async (championship) => {
+    
+    if(oldChampionship){
+      let editedChampionship = {
+        championshipId : oldChampionship.id,
+        name : championship.name,
+        startDate : championship.startDate,
+        endDate : championship.endDate,
+        accessCode : championship.accessCode,
+        address : championship.address,
+      };
+      await Edit(editedChampionship);
+      resetChampionship();
+      onClose();
+      return;
+    }
     const banner = championship.banner as FileList;
     championship.banner = banner[0];
     championship.accessCode = championship.accessCode.toUpperCase();
@@ -42,7 +77,7 @@ const FormChampionship = ({ onClose }: IFormChampionshipProps) => {
         <VStack align='start' pb={4} spacing='24px'>
           <VStack align='start' w='100%' flexDirection='column' gap='24px'>
             <FormControl isInvalid={!!errors.name}>
-              <FormLabel m={0}>Nome</FormLabel>
+              <FormLabel mb={2}>Nome</FormLabel>
               <Input
                 placeholder='Nome do campeonato'
                 {...register('name', {
@@ -56,9 +91,9 @@ const FormChampionship = ({ onClose }: IFormChampionshipProps) => {
 
             <HStack width='100%'>
               <FormControl alignItems='start' isInvalid={!!errors.startDate}>
-                <FormLabel m={0}>Data de início</FormLabel>
+                <FormLabel mb={2}>Data de início</FormLabel>
                 <Input
-                  type='datetime-local'
+                  type='date'
                   placeholder='DD/MM/AAAA'
                   {...register('startDate', {
                     required: validationMessages['required'],
@@ -68,9 +103,9 @@ const FormChampionship = ({ onClose }: IFormChampionshipProps) => {
               </FormControl>
 
               <FormControl isInvalid={!!errors.endDate}>
-                <FormLabel m={0}>Data de encerramento</FormLabel>
+                <FormLabel mb={2}>Data de encerramento</FormLabel>
                 <Input
-                  type='datetime-local'
+                  type='date'
                   placeholder='DD/MM/AAAA'
                   {...register('endDate', {
                     required: '* Campo obrigatório',
@@ -81,7 +116,7 @@ const FormChampionship = ({ onClose }: IFormChampionshipProps) => {
             </HStack>
 
             <FormControl isInvalid={!!errors.address}>
-              <FormLabel m={0}>Local</FormLabel>
+              <FormLabel mb={2}>Local</FormLabel>
               <Input
                 placeholder='Endereço'
                 {...register('address', {
@@ -94,7 +129,7 @@ const FormChampionship = ({ onClose }: IFormChampionshipProps) => {
             </FormControl>
 
             <FormControl isInvalid={!!errors.accessCode}>
-              <FormLabel m={0}>Código do campeonato</FormLabel>
+              <FormLabel mb={2}>Código do campeonato</FormLabel>
               <Input
                 textTransform='uppercase'
                 placeholder='Código'
@@ -108,31 +143,36 @@ const FormChampionship = ({ onClose }: IFormChampionshipProps) => {
             </FormControl>
 
             <FormControl isInvalid={!!errors.resultType}>
-              <FormLabel m={0}>Tipo de resultado</FormLabel>
+              <FormLabel mb={2}>Tipo de resultado</FormLabel>
               <Select
                 {...register('resultType', { required: validationMessages['required'] })}
                 placeholder='Selecione o tipo'
+                disabled={!!oldChampionship?.resultType}
               >
                 <option value='SCORE'>Pontuação</option>
                 <option value='RANKING'>Colocação</option>
               </Select>
               <FormErrorMessage>{errors.resultType && errors.resultType.message}</FormErrorMessage>
             </FormControl>
-
-            <FormControl isInvalid={!!errors.banner}>
-              <FormLabel m={0}>Capa do campeonato</FormLabel>
-              <Input
-                p={1}
-                type='file'
-                multiple={false}
-                {...register('banner', { required: validationMessages['required'] })}
-              />
-              <FormErrorMessage>{errors.banner && errors.banner.message}</FormErrorMessage>
-            </FormControl>
+            {!oldChampionship?.resultType &&
+            
+              <FormControl isInvalid={!!errors.banner}>
+                <FormLabel mb={2}>Capa do campeonato</FormLabel>
+                <Input
+                  p={1}
+                  type='file'
+                  multiple={false}
+                  {...register('banner', { required: validationMessages['required'] })}
+                />
+                <FormErrorMessage>{errors.banner && errors.banner.message}</FormErrorMessage>
+              </FormControl>
+            }
 
             <ButtonGroup flexDirection='column' alignItems='end' gap='12px' w='100%'>
               <Button w='100%' isLoading={isSubmitting} colorScheme='teal' type='submit'>
-                Adicionar
+              {
+                !oldChampionship ? 'Adicionar' : 'Editar'
+              }
               </Button>
             </ButtonGroup>
           </VStack>

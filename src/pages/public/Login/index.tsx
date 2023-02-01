@@ -32,10 +32,15 @@ const Login = () => {
       <Center h='90vh'>
         <Center maxW='xl' maxH='md' boxShadow='md' p='6' rounded='md'>
           <Stack gap='4' align='center' justify='center'>
-            <Image boxSize='48px' src={wodfulBlackLogo} alt='wodfull black logo' />
+            <Image
+              boxSize='48px'
+              src={wodfulBlackLogo}
+              alt='wodfull black logo'
+              data-cy='logo-wodful'
+            />
 
             <Stack align='center'>
-              <Heading as='h4' size='md'>
+              <Heading as='h4' size='md' data-cy='login-title'>
                 Acesso do Wodful
               </Heading>
               <Text color='gray.500'>Sistema de gerenciamento de campeonatos de crossfit</Text>
@@ -50,6 +55,7 @@ const Login = () => {
                       setEmail(event?.target.value);
                     }}
                     placeholder='E-mail'
+                    data-cy='input-email'
                   />
                   <Input
                     onChange={(event) => {
@@ -57,9 +63,14 @@ const Login = () => {
                     }}
                     type='password'
                     placeholder='Senha'
+                    data-cy='input-senha'
                   />
                 </Stack>
-                {isError && <FormErrorMessage>E-mail ou senha incorreto.</FormErrorMessage>}
+                {isError && (
+                  <FormErrorMessage data-cy='error-message'>
+                    E-mail ou senha incorreto.
+                  </FormErrorMessage>
+                )}
               </FormControl>
               <Button
                 isLoading={isLoading}
@@ -67,11 +78,12 @@ const Login = () => {
                 colorScheme='teal'
                 size='lg'
                 onClick={handleLogin}
+                data-cy='button-continuar'
               >
                 Continuar
               </Button>
               <Stack as='article' justify='center' align='center'>
-                <Link to='/access'>
+                <Link to='/access' data-cy='link-acesso'>
                   <Button variant='link'>Acessar campeonato com código</Button>
                 </Link>
               </Stack>

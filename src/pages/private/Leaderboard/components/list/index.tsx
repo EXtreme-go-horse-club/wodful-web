@@ -1,3 +1,4 @@
+import useCategoryData from '@/hooks/useCategoryData';
 import useLeaderboardData from '@/hooks/useLeaderboardData';
 import {
   Button,
@@ -16,7 +17,7 @@ import {
   Tr,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { ChevronLeft, ChevronRight, MoreHorizontal } from 'react-feather';
+import { ChevronLeft, ChevronRight } from 'react-feather';
 
 interface IListLeaderboard {
   champ: string;
@@ -25,6 +26,8 @@ interface IListLeaderboard {
 
 const ListLeaderboard = ({ champ, category }: IListLeaderboard) => {
   const [currentTotal, setCurrentTotal] = useState<number>(0);
+
+  const { categories } = useCategoryData();
 
   const { ListPaginated, leaderboardPages, page, limit, setLimit, setPage, isLoading } =
     useLeaderboardData();
@@ -61,11 +64,39 @@ const ListLeaderboard = ({ champ, category }: IListLeaderboard) => {
             <Th>
               <Text as='b'>PONTUAÇÃO GERAL</Text>
             </Th>
-            <Th></Th>
           </Tr>
         </Thead>
         <Tbody>
+          {categories?.length && !leaderboardPages.results && (
+            
+            <Tr>
+              <Td />
+              <Td p={6} textAlign='right'>
+                Busque por uma categoria
+              </Td>
+              <Td />
+              <Td />
+
+            </Tr>
+            
+          )}
+
+          {leaderboardPages.results?.length === 0 && (
+            
+            <Tr>
+              <Td />
+              <Td p={6} textAlign='right'>
+                Sua categoria não tem inscrições ainda.
+              </Td>
+              <Td />
+              
+              <Td />
+            </Tr>
+            
+          )}
+
           {leaderboardPages.results?.map((leaderboard) => (
+            
             <Tr key={`${leaderboard.nickname}_${leaderboard.generalScore}`}>
               <Td p={6} textTransform='capitalize'>
                 {leaderboard.nickname}
@@ -82,11 +113,6 @@ const ListLeaderboard = ({ champ, category }: IListLeaderboard) => {
                   : `${leaderboard.generalScore} ${
                       leaderboard.generalScore === 1 ? 'Ponto' : 'Pontos'
                     }`}
-              </Td>
-              <Td p={6}>
-                <Flex justify='end'>
-                  <MoreHorizontal cursor='pointer' size={18} />
-                </Flex>
               </Td>
             </Tr>
           ))}
@@ -110,7 +136,6 @@ const ListLeaderboard = ({ champ, category }: IListLeaderboard) => {
                 <option value='20'>20</option>
               </Select>
             </Th>
-            <Th />
             <Th />
             <Th />
             <Th>

@@ -79,7 +79,6 @@ const FormTicket = ({ onClose }: IFormChampionshipProps) => {
           <Textarea
             placeholder='Descrição do ticket'
             {...register('description', {
-              required: validationMessages['required'],
               minLength: { value: 4, message: validationMessages['minLength'] },
               maxLength: { value: 250, message: validationMessages['maxLengthSm'] },
             })}
@@ -122,7 +121,7 @@ const FormTicket = ({ onClose }: IFormChampionshipProps) => {
           <FormControl isInvalid={!!errors.startDate}>
             <FormLabel>Data de início</FormLabel>
             <Input
-              type='datetime-local'
+              type='date'
               placeholder='DD/MM/AAAA'
               {...register('startDate', {
                 required: validationMessages['required'],
@@ -134,7 +133,7 @@ const FormTicket = ({ onClose }: IFormChampionshipProps) => {
           <FormControl isInvalid={!!errors.endDate}>
             <FormLabel>Data de encerramento</FormLabel>
             <Input
-              type='datetime-local'
+              type='date'
               placeholder='DD/MM/AAAA'
               {...register('endDate', {
                 required: validationMessages['required'],
