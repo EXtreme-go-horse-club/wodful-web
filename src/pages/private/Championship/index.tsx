@@ -1,12 +1,12 @@
 import { Box, Button, Center, Flex, Heading, useDisclosure } from '@chakra-ui/react';
-import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
+import { Suspense, lazy, useMemo, useState } from 'react';
 
 import ComponentModal from '@/components/ComponentModal';
 import { EmptyList } from '@/components/EmptyList';
 import { Loader } from '@/components/Loader';
 import { ChampionshipProvider } from '@/contexts/championship';
-import useChampionshipData from '@/hooks/useChampionshipData';
 import { IChampionship } from '@/data/interfaces/championship';
+import useChampionshipData from '@/hooks/useChampionshipData';
 
 const ListChampionship = lazy(() => import('./components/list'));
 const FormChampionship = lazy(() => import('./components/form'));
@@ -35,7 +35,7 @@ const Championship = () => {
     resetChampionship();
     onOpen();
   };
-  
+
   const resetChampionship = () => {
     setChampionship(undefined);
   };
@@ -75,18 +75,19 @@ const Championship = () => {
           </Box>
 
           <ComponentModal
-            modalHeader={championship ? 'Editar Campeonato': ' Criar Campeonato'}
+            modalHeader={championship ? 'Editar Campeonato' : ' Criar Campeonato'}
             size='lg'
             isOpen={isOpen}
             onClose={onClose}
           >
-            <FormChampionship 
-              onClose={onClose } 
-              oldChampionship={championship} 
-              resetChampionship={resetChampionship} />
+            <FormChampionship
+              onClose={onClose}
+              oldChampionship={championship}
+              resetChampionship={resetChampionship}
+            />
           </ComponentModal>
 
-          {hasElements && <ListChampionship openEdit={openEdit}/>}
+          {hasElements && <ListChampionship openEdit={openEdit} />}
           {!hasElements && (
             <EmptyList
               text='Você não possui um campeonato ainda!'
