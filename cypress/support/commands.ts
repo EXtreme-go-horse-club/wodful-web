@@ -11,3 +11,5 @@ Cypress.Commands.add('login', () => {
     expect(cy.url().should('eq', 'http://localhost:3000/championships'));
   });
 });
+
+export {};
