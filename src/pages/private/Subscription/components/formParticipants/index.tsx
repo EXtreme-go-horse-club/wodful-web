@@ -1,3 +1,4 @@
+import { IParticipantDTO } from '@/data/interfaces/parcipants';
 import { IParticipantForm } from '@/data/interfaces/subscription';
 import useSubscriptionData from '@/hooks/useSubscriptionData';
 import { isValidDocument, regexOnlyNumber } from '@/utils/documentVerification';
@@ -28,7 +29,6 @@ const FormSubscriptionParticipants = ({
   onClose,
   resetStep,
 }: CreateModalProps) => {
-  const [formatDisplayCpf, setFormatDisplayCpf] = useState<string>('');
   const { Create } = useSubscriptionData();
   const [indexes, setIndexes] = useState<number[]>([]);
   const {
@@ -45,16 +45,19 @@ const FormSubscriptionParticipants = ({
     }
   }, [participantsNumber]);
 
+  function removeIdCodePoints(participants: IParticipantDTO[]) {
+    return participants.map((participant) => ({
+      ...participant,
+      identificationCode: regexOnlyNumber(participant.identificationCode),
+    }));
+  }
+
   function onSubmit(subscription: IParticipantForm) {
+    subscription.participants = removeIdCodePoints(subscription.participants);
     Create(subscription);
     onClose();
     resetStep(0, 0);
   }
-
-  const formatCpf = (cpfNumber: string) => {
-    cpfNumber = regexOnlyNumber(cpfNumber);
-    setFormatDisplayCpf(cpfNumber);
-  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -117,14 +120,10 @@ const FormSubscriptionParticipants = ({
                   as='input'
                   id={`${participants}.identificationCode`}
                   placeholder='Informe o CPF'
-                  value={formatDisplayCpf}
                   {...register(`participants.${index}.identificationCode`, {
                     required: validationMessages['required'],
                     minLength: { value: 9, message: validationMessages['minLength'] },
                     maxLength: { value: 20, message: validationMessages['maxLengthSm'] },
-                    onChange(event) {
-                      formatCpf(event.target.value);
-                    },
                     validate: (value) =>
                       isValidDocument(value) || validationMessages['invalidCode'],
                   })}
