@@ -1,9 +1,15 @@
+import { IParticipant, IParticipantDTO, IParticipants } from '@/data/interfaces/parcipants';
 import useParticipantData from '@/hooks/useParticipantData';
 import {
   Avatar,
   Button,
   Flex,
   HStack,
+  IconButton,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Select,
   Table,
   TableContainer,
@@ -22,11 +28,12 @@ import { useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight, MoreHorizontal } from 'react-feather';
 import { useParams } from 'react-router-dom';
 
-interface listParticipants {
+interface IListParticipants {
   participantName: string | null;
+  openEdit: (participant: IParticipant) => void;
 }
 
-const ListParticipants = ({ participantName }: listParticipants) => {
+const ListParticipants = ({ participantName, openEdit }: IListParticipants) => {
   const [currentTotal, setCurrentTotal] = useState<number>(0);
 
   const { ListPaginated, participantsPages, page, limit, setLimit, setPage, isLoading } =
@@ -82,7 +89,17 @@ const ListParticipants = ({ participantName }: listParticipants) => {
 
               <Td p={6}>
                 <Flex justify='end'>
-                  <MoreHorizontal cursor='pointer' size={18} />
+                <Menu>
+                      <MenuButton
+                        as={IconButton}
+                        aria-label='Options'
+                        icon={<MoreHorizontal />}
+                        variant='none'
+                      />
+                      <MenuList>
+                        <MenuItem onClick={() => openEdit(participant)}>Editar</MenuItem>
+                      </MenuList>
+                    </Menu>
                 </Flex>
               </Td>
             </Tr>
