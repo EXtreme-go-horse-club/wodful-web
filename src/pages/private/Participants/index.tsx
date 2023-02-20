@@ -36,7 +36,6 @@ const Participants = () => {
   };
 
   const openEdit = (participantObj: IParticipant) => {
-    console.log(participantObj);
     setParticipant(participantObj);
     onOpen();
   };
