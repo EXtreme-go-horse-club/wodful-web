@@ -1,6 +1,6 @@
 import { AxiosAdapter } from '@/adapters/AxiosAdapter';
 import { IPageResponse } from '@/data/interfaces/pageResponse';
-import { IParticipant, IParticipants } from '@/data/interfaces/parcipants';
+import { IParticipant, IParticipants } from '@/data/interfaces/participant';
 import { ParticipantsService } from '@/services/Participants';
 import { participantMessages } from '@/utils/messages';
 import { useToast } from '@chakra-ui/react';
@@ -19,14 +19,10 @@ export interface ParticipantContextData {
   page: number;
   setPage: (value: number) => void;
   ListPaginated: (id: string | null, name?: string) => Promise<void>;
-  Edit({
-    id,
-    affiliation,
-    city,
-    identificationCode,
-    name,
-    tShirtSize,
-  }: IParticipant, idChampionship: string): Promise<void>;
+  Edit(
+    { id, affiliation, city, identificationCode, name, tShirtSize }: IParticipant,
+    idChampionship: string,
+  ): Promise<void>;
 }
 
 const ParticipantContext = createContext({} as ParticipantContextData);
@@ -57,17 +53,13 @@ export const ParticipantProvider = ({ children }: TicketProviderProps) => {
   );
 
   const Edit = useCallback(
-    async ({
-      id,
-      affiliation,
-      city,
-      identificationCode,
-      name,
-      tShirtSize,
-    }: IParticipant, idChampionship: string) => {
+    async (
+      { id, affiliation, city, identificationCode, name, tShirtSize }: IParticipant,
+      idChampionship: string,
+    ) => {
       setIsLoading(true);
       await new ParticipantsService(axios)
-        .edit({ id, affiliation, city, identificationCode, name, tShirtSize, })
+        .edit({ id, affiliation, city, identificationCode, name, tShirtSize })
         .then(() => {
           toast({
             title: participantMessages['success_edit'],
@@ -84,7 +76,7 @@ export const ParticipantProvider = ({ children }: TicketProviderProps) => {
           });
         })
         .finally(() => {
-          setIsLoading(false)
+          setIsLoading(false);
         });
     },
     [toast, ListPaginated],

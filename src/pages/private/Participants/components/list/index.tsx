@@ -1,4 +1,4 @@
-import { IParticipant, IParticipantDTO, IParticipants } from '@/data/interfaces/parcipants';
+import { IParticipant } from '@/data/interfaces/participant';
 import useParticipantData from '@/hooks/useParticipantData';
 import {
   Avatar,
@@ -73,6 +73,16 @@ const ListParticipants = ({ participantName, openEdit }: IListParticipants) => {
           </Tr>
         </Thead>
         <Tbody>
+          {participantsPages.results?.length === 0 && (
+            <Tr>
+              <Td />
+              <Td p={6} textAlign='center'>
+                Sem registro de participantes
+              </Td>
+              <Td />
+              <Td />
+            </Tr>
+          )}
           {participantsPages.results?.map((participant) => (
             <Tr key={participant.id}>
               <Td p={6}>
@@ -89,17 +99,17 @@ const ListParticipants = ({ participantName, openEdit }: IListParticipants) => {
 
               <Td p={6}>
                 <Flex justify='end'>
-                <Menu>
-                      <MenuButton
-                        as={IconButton}
-                        aria-label='Options'
-                        icon={<MoreHorizontal />}
-                        variant='none'
-                      />
-                      <MenuList>
-                        <MenuItem onClick={() => openEdit(participant)}>Editar</MenuItem>
-                      </MenuList>
-                    </Menu>
+                  <Menu>
+                    <MenuButton
+                      as={IconButton}
+                      aria-label='Options'
+                      icon={<MoreHorizontal />}
+                      variant='none'
+                    />
+                    <MenuList>
+                      <MenuItem onClick={() => openEdit(participant)}>Editar</MenuItem>
+                    </MenuList>
+                  </Menu>
                 </Flex>
               </Td>
             </Tr>
