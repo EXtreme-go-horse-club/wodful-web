@@ -128,7 +128,7 @@ export const ChampionshipProvider = ({ children, onClose }: ChampionshipProps) =
         .edit({ championshipId, name, startDate, endDate, accessCode, address })
         .then(() => {
           toast({
-            title: championshipMessages['success'],
+            title: championshipMessages['success_edit'],
             status: 'success',
             isClosable: true,
           });

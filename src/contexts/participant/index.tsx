@@ -1,7 +1,9 @@
 import { AxiosAdapter } from '@/adapters/AxiosAdapter';
 import { IPageResponse } from '@/data/interfaces/pageResponse';
-import { IParticipants } from '@/data/interfaces/parcipants';
+import { IParticipant, IParticipants } from '@/data/interfaces/participant';
 import { ParticipantsService } from '@/services/Participants';
+import { participantMessages } from '@/utils/messages';
+import { useToast } from '@chakra-ui/react';
 import { createContext, useCallback, useState } from 'react';
 
 interface TicketProviderProps {
@@ -17,6 +19,10 @@ export interface ParticipantContextData {
   page: number;
   setPage: (value: number) => void;
   ListPaginated: (id: string | null, name?: string) => Promise<void>;
+  Edit(
+    { id, affiliation, city, identificationCode, name, tShirtSize }: IParticipant,
+    idChampionship: string,
+  ): Promise<void>;
 }
 
 const ParticipantContext = createContext({} as ParticipantContextData);
@@ -24,6 +30,7 @@ const ParticipantContext = createContext({} as ParticipantContextData);
 const axios = new AxiosAdapter();
 
 export const ParticipantProvider = ({ children }: TicketProviderProps) => {
+  const toast = useToast();
   const [participantsPages, setParticipantsPages] = useState<IPageResponse<IParticipants>>(
     {} as IPageResponse<IParticipants>,
   );
@@ -45,6 +52,36 @@ export const ParticipantProvider = ({ children }: TicketProviderProps) => {
     [limit, page],
   );
 
+  const Edit = useCallback(
+    async (
+      { id, affiliation, city, identificationCode, name, tShirtSize }: IParticipant,
+      idChampionship: string,
+    ) => {
+      setIsLoading(true);
+      await new ParticipantsService(axios)
+        .edit({ id, affiliation, city, identificationCode, name, tShirtSize })
+        .then(() => {
+          toast({
+            title: participantMessages['success_edit'],
+            status: 'success',
+            isClosable: true,
+          });
+          ListPaginated(idChampionship);
+        })
+        .catch(() => {
+          toast({
+            title: participantMessages['errorEdit'],
+            status: 'error',
+            isClosable: true,
+          });
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    },
+    [toast, ListPaginated],
+  );
+
   return (
     <ParticipantContext.Provider
       value={{
@@ -55,6 +92,7 @@ export const ParticipantProvider = ({ children }: TicketProviderProps) => {
         page,
         setLimit,
         setPage,
+        Edit,
         ListPaginated,
       }}
     >

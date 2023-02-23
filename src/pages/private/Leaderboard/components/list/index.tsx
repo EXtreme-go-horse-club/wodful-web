@@ -68,7 +68,6 @@ const ListLeaderboard = ({ champ, category }: IListLeaderboard) => {
         </Thead>
         <Tbody>
           {categories?.length && !leaderboardPages.results && (
-            
             <Tr>
               <Td />
               <Td p={6} textAlign='right'>
@@ -76,27 +75,22 @@ const ListLeaderboard = ({ champ, category }: IListLeaderboard) => {
               </Td>
               <Td />
               <Td />
-
             </Tr>
-            
           )}
 
           {leaderboardPages.results?.length === 0 && (
-            
             <Tr>
               <Td />
               <Td p={6} textAlign='right'>
                 Sua categoria não tem inscrições ainda.
               </Td>
               <Td />
-              
+
               <Td />
             </Tr>
-            
           )}
 
           {leaderboardPages.results?.map((leaderboard) => (
-            
             <Tr key={`${leaderboard.nickname}_${leaderboard.generalScore}`}>
               <Td p={6} textTransform='capitalize'>
                 {leaderboard.nickname}

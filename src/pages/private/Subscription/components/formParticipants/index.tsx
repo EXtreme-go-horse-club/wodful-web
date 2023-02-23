@@ -1,4 +1,4 @@
-import { IParticipantDTO } from '@/data/interfaces/parcipants';
+import { IParticipantDTO } from '@/data/interfaces/participant';
 import { IParticipantForm } from '@/data/interfaces/subscription';
 import useSubscriptionData from '@/hooks/useSubscriptionData';
 import { isValidDocument, regexOnlyNumber } from '@/utils/documentVerification';

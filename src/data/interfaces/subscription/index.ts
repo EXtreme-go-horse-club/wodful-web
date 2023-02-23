@@ -1,4 +1,4 @@
-import { IParticipantDTO } from '../parcipants';
+import { IParticipantDTO } from '../participant';
 
 export interface ISubscriptionDTO {
   responsibleName: string;
