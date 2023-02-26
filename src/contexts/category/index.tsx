@@ -118,14 +118,6 @@ export const CategoryProvider = ({ children, onClose }: CategoryProviderProps) =
       members,
       isTeam,
     }: ICategory) => {
-      console.log(
-        championshipId,
-        name,
-        id,
-        description,
-        members,
-        isTeam
-        );
       setIsLoading(true);
       await new CategoryService(axios)
         .edit({ championshipId,name,id,description,members, isTeam })
@@ -135,7 +127,6 @@ export const CategoryProvider = ({ children, onClose }: CategoryProviderProps) =
             status: 'success',
             isClosable: true,
           });
-          console.log(championshipId);
           ListPaginated(championshipId);
           onClose!();
         })
