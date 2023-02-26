@@ -1,4 +1,4 @@
-import { ICategoryDTO } from '@/data/interfaces/category';
+import { ICategory, ICategoryDTO } from '@/data/interfaces/category';
 import useCategoryData from '@/hooks/useCategoryData';
 import { validationMessages } from '@/utils/messages';
 import {
@@ -12,26 +12,48 @@ import {
   Textarea,
   VStack,
 } from '@chakra-ui/react';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
 interface IFormChampionshipProps {
   id: string;
   onClose: () => void;
+  oldCategory?: ICategory;
+  resetCategory: () => void;
 }
 
-const FormCategory = ({ id, onClose }: IFormChampionshipProps) => {
-  const { Create } = useCategoryData();
+const FormCategory = ({ id, onClose, oldCategory, resetCategory }: IFormChampionshipProps) => {
+  const { Create, Edit } = useCategoryData();
   const {
     register,
     handleSubmit,
     formState: { errors, isValid },
   } = useForm<ICategoryDTO>({
     mode: 'onChange',
+    defaultValues: {
+      name: oldCategory?.name,
+      description: oldCategory?.description,
+      members: oldCategory?.members,
+    },
   });
-  function onSubmit(category: ICategoryDTO) {
+  const onSubmit: SubmitHandler<ICategoryDTO> = async (category) => {
     category.championshipId = id;
     category.members = Number(category.members);
-    Create(category);
+
+    if(oldCategory){
+      let editedCategory = {
+        id: oldCategory?.id,
+        name: category.name,
+        description: category.description,
+        members: category.members,
+        championshipId: category.championshipId,
+        isTeam: oldCategory?.isTeam,
+      };
+      await Edit(editedCategory);
+      resetCategory();
+      onClose();
+      return;
+    }
+    await Create(category);
     onClose();
   }
   return (
@@ -87,7 +109,7 @@ const FormCategory = ({ id, onClose }: IFormChampionshipProps) => {
         </FormControl>
         <ButtonGroup flexDirection='column' alignItems='end' gap={6} w='100%'>
           <Button colorScheme='teal' w='100%' mt={4} type='submit' disabled={!isValid}>
-            Adicionar
+            { oldCategory ? "Editar": "Adicionar"}
           </Button>
         </ButtonGroup>
       </VStack>
