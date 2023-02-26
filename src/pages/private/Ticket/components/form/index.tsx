@@ -1,4 +1,4 @@
-import { TicketDTO } from '@/data/interfaces/ticket';
+import { ITicket, TicketDTO } from '@/data/interfaces/ticket';
 import useCategoryData from '@/hooks/useCategoryData';
 import useTicketData from '@/hooks/useTicketData';
 import { validationMessages } from '@/utils/messages';
@@ -15,33 +15,78 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 
 interface IFormChampionshipProps {
   onClose: () => void;
+  oldTicket?: ITicket;
+  resetTicket: () => void;
 }
 
-const FormTicket = ({ onClose }: IFormChampionshipProps) => {
+const FormTicket = ({ onClose, oldTicket, resetTicket }: IFormChampionshipProps) => {
   const { List, categories } = useCategoryData();
-  const { Create } = useTicketData();
+  const { Create, Edit } = useTicketData();
   const { id } = useParams();
-
-  useEffect(() => {
-    List(id as string);
-  }, [List, id]);
 
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isValid },
-  } = useForm<TicketDTO>({ mode: 'onChange' });
-  function onSubmit(ticket: TicketDTO) {
+  } = useForm<TicketDTO>({
+    mode: 'onChange',
+    defaultValues: {
+      name: oldTicket?.name,
+      description: oldTicket?.description,
+      price: oldTicket?.price,
+      quantity: oldTicket?.quantity,
+      endDate: oldTicket?.endDate?.toString().substring(0, 10),
+      startDate: oldTicket?.startDate?.toString().substring(0, 10),
+    },
+  });
+
+  const onSubmit: SubmitHandler<TicketDTO> = async (ticket) => {
     ticket.price = Number(ticket.price);
     ticket.quantity = Number(ticket.quantity);
-    Create(ticket);
+
+    if (oldTicket) {
+      const editedTicket = {
+        id: oldTicket?.id,
+        name: ticket.name,
+        description: ticket.description,
+        price: ticket.price,
+        quantity: ticket.quantity,
+        endDate: ticket.endDate,
+        startDate: ticket.startDate,
+        categoryId: ticket.categoryId,
+      };
+      await Edit(editedTicket);
+      resetTicket();
+      onClose();
+      return;
+    }
+
+    await Create(ticket);
     onClose();
-  }
+  };
+
+  useEffect(() => {
+    List(id as string);
+    if (oldTicket?.category.id) {
+      reset({
+        categoryId: oldTicket?.category.id,
+      });
+    }
+  }, [List, id, oldTicket?.category.id, reset]);
+
+  useEffect(() => {
+    if (oldTicket?.category.id) {
+      reset({
+        categoryId: oldTicket?.category.id,
+      });
+    }
+  }, [categories, oldTicket?.category.id, reset]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -50,6 +95,7 @@ const FormTicket = ({ onClose }: IFormChampionshipProps) => {
           <FormLabel>Categoria</FormLabel>
           <Select
             placeholder='Selecione a categoria'
+            disabled={!!oldTicket?.category.id}
             {...register('categoryId', { required: validationMessages['required'] })}
           >
             {categories.map((category) => (
@@ -145,7 +191,7 @@ const FormTicket = ({ onClose }: IFormChampionshipProps) => {
 
         <ButtonGroup flexDirection='column' alignItems='end' gap={6} w='100%'>
           <Button colorScheme='teal' w='100%' mt={4} type='submit' disabled={!isValid}>
-            Adicionar
+            {oldTicket ? 'Editar' : 'Criar'}
           </Button>
         </ButtonGroup>
       </VStack>
