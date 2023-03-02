@@ -1,5 +1,6 @@
 import ComponentModal from '@/components/ComponentModal';
 import DeleteData from '@/components/Delete';
+import { ICategory } from '@/data/interfaces/category';
 import useCategoryData from '@/hooks/useCategoryData';
 import {
   Button,
@@ -28,9 +29,10 @@ import { useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight, MoreHorizontal } from 'react-feather';
 interface IListCategory {
   id: string;
+  openEdit: (category: ICategory) => void;
 }
 
-const ListCategory = ({ id }: IListCategory) => {
+const ListCategory = ({ id, openEdit }: IListCategory) => {
   const [currentTotal, setCurrentTotal] = useState<number>(0);
   const [categoryId, setCategoryId] = useState<string>('');
 
@@ -105,6 +107,7 @@ const ListCategory = ({ id }: IListCategory) => {
                       />
                       <MenuList>
                         <MenuItem onClick={() => openDelete(category.id)}>Deletar</MenuItem>
+                        <MenuItem onClick={() => openEdit(category)}>Editar</MenuItem>
                       </MenuList>
                     </Menu>
                   </Flex>

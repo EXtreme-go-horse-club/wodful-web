@@ -2,9 +2,10 @@ import ComponentModal from '@/components/ComponentModal';
 import { EmptyList } from '@/components/EmptyList';
 import { Loader } from '@/components/Loader';
 import { CategoryProvider } from '@/contexts/category';
+import { ICategory } from '@/data/interfaces/category';
 import useCategoryData from '@/hooks/useCategoryData';
 import { Box, Button, HStack, Text, useDisclosure } from '@chakra-ui/react';
-import { lazy, Suspense, useMemo } from 'react';
+import { lazy, Suspense, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import FormCategory from './components/form';
 
@@ -21,10 +22,25 @@ const CategoryWithProvider = () => {
 };
 
 const Category = () => {
+  const [category, setCategory] = useState<ICategory>();
   const { categoriesPages } = useCategoryData();
 
   const { id } = useParams();
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const openEdit = (categoryObj: ICategory) => {
+    setCategory(categoryObj);
+    onOpen();
+  };
+
+  const openCreate = () => {
+    resetCategory();
+    onOpen();
+  };
+
+  const resetCategory = () => {
+    setCategory(undefined);
+  };
 
   const hasElements: boolean = useMemo(() => categoriesPages.count !== 0, [categoriesPages]);
 
@@ -37,20 +53,24 @@ const Category = () => {
               <Text fontSize='2xl' as='b'>
                 Lista de categorias
               </Text>
-              <Button colorScheme='teal' size='md' onClick={onOpen}>
+              <Button colorScheme='teal' size='md' onClick={openCreate}>
                 Adicionar categoria
               </Button>
             </>
           )}
         </HStack>
 
-        <ComponentModal modalHeader='Criar categoria' size='lg' isOpen={isOpen} onClose={onClose}>
-          <FormCategory id={id as string} onClose={onClose} />
+        <ComponentModal 
+          modalHeader={category ? 'Editar categoria' : ' Criar categoria'} 
+          size='lg' 
+          isOpen={isOpen} 
+          onClose={onClose}>
+            <FormCategory id={id as string} onClose={onClose} oldCategory={category} resetCategory={resetCategory}/>
         </ComponentModal>
 
         {hasElements && (
           <Box w='100%' marginTop={6}>
-            <ListCategory id={id as string} />
+            <ListCategory id={id as string} openEdit={openEdit}/>
           </Box>
         )}
 
