@@ -70,7 +70,7 @@ export const ParticipantProvider = ({ children }: TicketProviderProps) => {
         })
         .catch(() => {
           toast({
-            title: participantMessages['errorEdit'],
+            title: participantMessages['error_edit'],
             status: 'error',
             isClosable: true,
           });

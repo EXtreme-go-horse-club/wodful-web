@@ -28,6 +28,7 @@ export interface CategoryContextData {
   List: (id: string) => Promise<void>;
   ListPaginated: (id: string) => Promise<void>;
   Create: ({ championshipId, description, members, name }: ICategoryDTO) => Promise<void>;
+  Edit({ id, name, description, members, championshipId }: ICategory): Promise<void>;
 }
 
 const CategoryContext = createContext({} as CategoryContextData);
@@ -108,6 +109,39 @@ export const CategoryProvider = ({ children, onClose }: CategoryProviderProps) =
     [toast, ListPaginated, onClose],
   );
 
+  const Edit = useCallback(
+    async ({
+      championshipId,
+      name,
+      id,
+      description,
+      members,
+      isTeam,
+    }: ICategory) => {
+      setIsLoading(true);
+      await new CategoryService(axios)
+        .edit({ championshipId,name,id,description,members, isTeam })
+        .then(() => {
+          toast({
+            title: categoryMessages['success_edit'],
+            status: 'success',
+            isClosable: true,
+          });
+          ListPaginated(championshipId);
+          onClose!();
+        })
+        .catch(() => {
+          toast({
+            title: categoryMessages['error_edit'],
+            status: 'error',
+            isClosable: true,
+          });
+        })
+        .finally(() => setIsLoading(false));
+    },
+    [onClose, toast, ListPaginated],
+  );
+
   const Delete = useCallback(
     async (idCat: string) => {
       setIsLoading(true);
@@ -147,6 +181,7 @@ export const CategoryProvider = ({ children, onClose }: CategoryProviderProps) =
         PublicList,
         setLimit,
         setPage,
+        Edit,
         Create,
         List,
         ListPaginated,
