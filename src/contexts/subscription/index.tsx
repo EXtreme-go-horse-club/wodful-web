@@ -30,7 +30,7 @@ export interface SubscriptionContextData {
   Delete: (id: string) => Promise<void>;
   List: (id: string) => Promise<void>;
   UpdateStatus: (id: string, status: string) => Promise<void>;
-  ListPaginated: (id: string) => Promise<void>;
+  ListPaginated: (id: string, categoryId?:string) => Promise<void>;
   ListAllByCategory: (categoryId: string) => Promise<void>;
   Create: (participants: IParticipantForm) => Promise<void>;
 }
@@ -77,10 +77,10 @@ export const SubscriptionProvider = ({ children, onClose }: SubscriptionProvider
   );
 
   const ListPaginated = useCallback(
-    async (id: string) => {
+    async (id: string, categoryId?: string) => {
       setIsLoading(true);
       await new SubscriptionService(axios)
-        .listAll(id, limit, page)
+        .listAll(id, limit, page, categoryId)
         .then((paginatedSubscriptions) => {
           setSubscriptionsPages(paginatedSubscriptions as IPageResponse<ISubscription>);
         })

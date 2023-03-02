@@ -30,9 +30,10 @@ import { ChevronLeft, ChevronRight, MoreHorizontal } from 'react-feather';
 
 interface IListSubscription {
   id: string;
+  categoryId: string;
 }
 
-const ListSubscription = ({ id }: IListSubscription) => {
+const ListSubscription = ({ id, categoryId }: IListSubscription) => {
   const [currentTotal, setCurrentTotal] = useState<number>(0);
 
   const {
@@ -52,9 +53,9 @@ const ListSubscription = ({ id }: IListSubscription) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
-    ListPaginated(id);
+    ListPaginated(id, categoryId);
     setCurrentTotal(subscriptionsPages.results?.length);
-  }, [ListPaginated, subscriptionsPages.results?.length, id]);
+  }, [ListPaginated, subscriptionsPages.results?.length, id, categoryId]);
 
   const openDelete = (id: string) => {
     setSubscriptionId(id);
@@ -102,6 +103,17 @@ const ListSubscription = ({ id }: IListSubscription) => {
             </Tr>
           </Thead>
           <Tbody>
+          {subscriptionsPages.results?.length === 0 && (
+              <Tr>
+                <Td />
+                <Td />
+                <Td p={6}>
+                  Busque por uma categoria
+                </Td>
+                <Td />
+                <Td />
+              </Tr>
+            )}
             {subscriptionsPages.results?.map((subscription) => (
               <Tr key={subscription.id}>
                 <Td p={6} textTransform='capitalize'>
