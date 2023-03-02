@@ -59,6 +59,18 @@ const Result = () => {
     }
   }, [CategoryList, id]);
 
+  const resetSelectData= () =>{
+    setSelectedCategory("Todos");
+    setWorkoutId("");
+    setCategoryId('');
+  }
+
+  const openCreate = () => {
+    resetSelectData();
+    ListResultsData(id as string);
+    onOpen();
+  };
+
   const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
     const name = event.target.value;
     const nameLength = event.target.value.length;
@@ -153,6 +165,7 @@ const Result = () => {
               as='select'
               disabled={!categories.length || !categoryId}
               id='workout'
+              value={workoutId}
               placeholder='Selecione uma prova'
               onChange={(event) => handleChangeWorkout(event)}
             >
@@ -166,6 +179,7 @@ const Result = () => {
               as='select'
               id='category'
               placeholder='Selecione a categoria'
+              value={categoryId}
               onChange={(event) => handleChangeCategory(event)}
             >
               {categories?.map((category) => (
@@ -174,7 +188,7 @@ const Result = () => {
                 </option>
               ))}
             </Select>
-            <Button minW='170px' colorScheme='teal' size='md' onClick={onOpen}>
+            <Button minW='170px' colorScheme='teal' size='md' onClick={openCreate}>
               Adicionar resultado
             </Button>
           </Flex>
