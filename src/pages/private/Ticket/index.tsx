@@ -1,5 +1,5 @@
 import { Box, Button, HStack, Text, useDisclosure } from '@chakra-ui/react';
-import { lazy, Suspense, useMemo } from 'react';
+import { Suspense, lazy, useCallback, useMemo, useState } from 'react';
 
 import ComponentModal from '@/components/ComponentModal';
 import { CategoryProvider } from '@/contexts/category';
@@ -8,6 +8,7 @@ import { TicketProvider } from '@/contexts/ticket';
 import { EmptyList } from '@/components/EmptyList';
 import { Loader } from '@/components/Loader';
 import useTicketData from '@/hooks/useTicketData';
+import { ITicket } from '../../../data/interfaces/ticket/index';
 
 const ListTicket = lazy(() => import('./components/list'));
 const FormTicket = lazy(() => import('./components/form'));
@@ -26,8 +27,26 @@ const TicketWithProvider = () => {
 
 const Ticket = () => {
   const { ticketsPages } = useTicketData();
+  const [ticket, setTicket] = useState<ITicket>();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const openEdit = useCallback(
+    (ticketObj: ITicket) => {
+      setTicket(ticketObj);
+      onOpen();
+    },
+    [onOpen],
+  );
+
+  const openCreate = useCallback(() => {
+    resetTicket();
+    onOpen();
+  }, [onOpen]);
+
+  const resetTicket = () => {
+    setTicket(undefined);
+  };
 
   const hasElements: boolean = useMemo(() => ticketsPages.count !== 0, [ticketsPages]);
 
@@ -40,19 +59,24 @@ const Ticket = () => {
               <Text fontSize='2xl' as='b'>
                 Gestão de tickets
               </Text>
-              <Button colorScheme='teal' size='md' onClick={onOpen}>
+              <Button colorScheme='teal' size='md' onClick={openCreate}>
                 Adicionar ticket
               </Button>
             </>
           )}
         </HStack>
-        <ComponentModal modalHeader='Adicionar ticket' size='lg' isOpen={isOpen} onClose={onClose}>
-          <FormTicket onClose={onClose} />
+        <ComponentModal
+          modalHeader={ticket ? 'Editar ticket' : 'Adicionar ticket'}
+          size='lg'
+          isOpen={isOpen}
+          onClose={onClose}
+        >
+          <FormTicket onClose={onClose} oldTicket={ticket} resetTicket={resetTicket} />
         </ComponentModal>
 
         {hasElements && (
           <Box w='100%' marginTop={6}>
-            <ListTicket />
+            <ListTicket openEdit={openEdit} />
           </Box>
         )}
 

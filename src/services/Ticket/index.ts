@@ -31,6 +31,33 @@ export class TicketService {
     }
   }
 
+  async edit({
+    id,
+    name,
+    description,
+    startDate,
+    endDate,
+    price,
+    quantity,
+    categoryId,
+  }: TicketDTO): Promise<ITicket> {
+    const { statusCode, body } = await this.httpClient.request({
+      method: 'put',
+      url: this.path,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: { id, name, description, startDate, endDate, price, quantity, categoryId },
+    });
+
+    switch (statusCode) {
+      case HttpStatusCode.ok:
+        return body! as ITicket;
+      default:
+        throw new Error();
+    }
+  }
+
   async delete(id: string): Promise<ITicket> {
     const { statusCode, body } = await this.httpClient.request({
       method: 'delete',

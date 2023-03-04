@@ -31,9 +31,11 @@ export const categoryMessages = {
 
 export const ticketMessages = {
   success: 'Ticket adicionado com sucesso',
+  success_edit: 'Ticket editado com sucesso',
   error: 'Algo deu errado ao adicionar o ticket',
   remove: 'Ticket removido com sucesso',
   remove_err: 'Algo deu errado ao remover o Ticket',
+  error_edit: 'Algo deu errado ao editar o ticket',
 };
 
 export const workoutMessages = {

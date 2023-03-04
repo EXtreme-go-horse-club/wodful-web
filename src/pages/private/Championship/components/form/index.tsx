@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react';
 import { useEffect } from 'react';
 
-import { SubmitHandler, useForm, } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
 interface IFormChampionshipProps {
   onClose: () => void;
@@ -22,7 +22,11 @@ interface IFormChampionshipProps {
   resetChampionship: () => void;
 }
 
-const FormChampionship = ({ onClose, oldChampionship, resetChampionship }: IFormChampionshipProps) => {
+const FormChampionship = ({
+  onClose,
+  oldChampionship,
+  resetChampionship,
+}: IFormChampionshipProps) => {
   const { Create, Edit } = useChampionshipData();
 
   const {
@@ -30,12 +34,12 @@ const FormChampionship = ({ onClose, oldChampionship, resetChampionship }: IForm
     register,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<ChampionshipDTO>({ mode: 'onChange'});
+  } = useForm<ChampionshipDTO>({ mode: 'onChange' });
 
   useEffect(() => {
-    let startDate = oldChampionship?.startDate+""
-    let endDate = oldChampionship?.endDate+""
-    if(oldChampionship?.startDate && oldChampionship?.endDate){
+    const startDate = oldChampionship?.startDate + '';
+    const endDate = oldChampionship?.endDate + '';
+    if (oldChampionship?.startDate && oldChampionship?.endDate) {
       reset({
         startDate: startDate.substring(0, 10),
         endDate: endDate.substring(0, 10),
@@ -43,21 +47,19 @@ const FormChampionship = ({ onClose, oldChampionship, resetChampionship }: IForm
         name: oldChampionship?.name,
         address: oldChampionship?.address,
         resultType: oldChampionship?.resultType,
-      })
+      });
     }
-    
-  }, [oldChampionship])
+  }, [oldChampionship]);
 
   const onSubmit: SubmitHandler<ChampionshipDTO> = async (championship) => {
-    
-    if(oldChampionship){
-      let editedChampionship = {
-        championshipId : oldChampionship.id,
-        name : championship.name,
-        startDate : championship.startDate,
-        endDate : championship.endDate,
-        accessCode : championship.accessCode,
-        address : championship.address,
+    if (oldChampionship) {
+      const editedChampionship = {
+        championshipId: oldChampionship.id,
+        name: championship.name,
+        startDate: championship.startDate,
+        endDate: championship.endDate,
+        accessCode: championship.accessCode,
+        address: championship.address,
       };
       await Edit(editedChampionship);
       resetChampionship();
@@ -154,8 +156,7 @@ const FormChampionship = ({ onClose, oldChampionship, resetChampionship }: IForm
               </Select>
               <FormErrorMessage>{errors.resultType && errors.resultType.message}</FormErrorMessage>
             </FormControl>
-            {!oldChampionship?.resultType &&
-            
+            {!oldChampionship?.resultType && (
               <FormControl isInvalid={!!errors.banner}>
                 <FormLabel mb={2}>Capa do campeonato</FormLabel>
                 <Input
@@ -166,13 +167,11 @@ const FormChampionship = ({ onClose, oldChampionship, resetChampionship }: IForm
                 />
                 <FormErrorMessage>{errors.banner && errors.banner.message}</FormErrorMessage>
               </FormControl>
-            }
+            )}
 
             <ButtonGroup flexDirection='column' alignItems='end' gap='12px' w='100%'>
               <Button w='100%' isLoading={isSubmitting} colorScheme='teal' type='submit'>
-              {
-                !oldChampionship ? 'Adicionar' : 'Editar'
-              }
+                {!oldChampionship ? 'Adicionar' : 'Editar'}
               </Button>
             </ButtonGroup>
           </VStack>
