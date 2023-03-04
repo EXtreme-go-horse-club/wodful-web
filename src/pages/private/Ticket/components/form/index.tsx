@@ -72,13 +72,13 @@ const FormTicket = ({ onClose, oldTicket, resetTicket }: IFormChampionshipProps)
   };
 
   useEffect(() => {
-    List(id as string);
+    if (categories.length <= 0) List(id as string);
     if (oldTicket?.category.id) {
       reset({
         categoryId: oldTicket?.category.id,
       });
     }
-  }, [List, id, oldTicket?.category.id, reset]);
+  }, [List, id, oldTicket?.category.id, reset, categories]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
