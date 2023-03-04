@@ -80,14 +80,6 @@ const FormTicket = ({ onClose, oldTicket, resetTicket }: IFormChampionshipProps)
     }
   }, [List, id, oldTicket?.category.id, reset]);
 
-  useEffect(() => {
-    if (oldTicket?.category.id) {
-      reset({
-        categoryId: oldTicket?.category.id,
-      });
-    }
-  }, [categories, oldTicket?.category.id, reset]);
-
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <VStack align='start' w='100%' spacing={6} pb={6} flexDirection='column'>
