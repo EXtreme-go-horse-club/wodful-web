@@ -44,7 +44,7 @@ const FormCategory = ({ id, onClose, oldCategory, resetCategory }: IFormChampion
         id: oldCategory?.id,
         name: category.name,
         description: category.description,
-        members: category.members,
+        members: oldCategory?.members,
         championshipId: category.championshipId,
         isTeam: oldCategory?.isTeam,
       };
@@ -95,6 +95,7 @@ const FormCategory = ({ id, onClose, oldCategory, resetCategory }: IFormChampion
             as='select'
             id='members'
             placeholder='Selecione o número de membros'
+            disabled={!!oldCategory}
             {...register('members', {
               required: validationMessages['required'],
             })}
