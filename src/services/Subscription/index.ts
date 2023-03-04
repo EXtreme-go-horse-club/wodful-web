@@ -29,10 +29,12 @@ export class SubscriptionService {
     id: string,
     limit?: number,
     page?: number,
+    categoryId?: string,
   ): Promise<IPageResponse<ISubscription> | ISubscription[]> {
     let url = `championships/${id}${this.path}`;
 
     if (limit !== undefined && page !== undefined) url = `${url}?limit=${limit}&page=${page}`;
+    if (categoryId) url = `${url}&category=${categoryId}`;
 
     const { statusCode, body } = await this.httpClient.request({
       method: 'get',

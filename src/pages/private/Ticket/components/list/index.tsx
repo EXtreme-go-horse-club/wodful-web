@@ -1,5 +1,6 @@
 import ComponentModal from '@/components/ComponentModal';
 import DeleteData from '@/components/Delete';
+import { ITicket } from '@/data/interfaces/ticket';
 import useTicketData from '@/hooks/useTicketData';
 import { formatCurrency } from '@/utils/formatCurrency';
 import { incrementAndFormatDate } from '@/utils/formatDate';
@@ -29,15 +30,19 @@ import { useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight, MoreHorizontal } from 'react-feather';
 import { useParams } from 'react-router-dom';
 
-const ListTicket = () => {
+interface IListTicketProps {
+  openEdit: (ticket: ITicket) => void;
+}
+
+const ListTicket = ({ openEdit }: IListTicketProps) => {
   const [currentTotal, setCurrentTotal] = useState<number>(0);
 
   const { ListPaginated, ticketsPages, page, limit, setLimit, setPage, isLoading, Delete } =
     useTicketData();
 
-    const [ticketId, setTicketId] = useState<string>('');
+  const [ticketId, setTicketId] = useState<string>('');
 
-    const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const { id } = useParams();
 
@@ -66,7 +71,7 @@ const ListTicket = () => {
   return (
     <>
       <ComponentModal modalHeader='Remover ingresso' size='sm' isOpen={isOpen} onClose={onClose}>
-        <DeleteData onClose={onClose} removedData="o ingresso" confirmDelete={confirmDelete}/>
+        <DeleteData onClose={onClose} removedData='o ingresso' confirmDelete={confirmDelete} />
       </ComponentModal>
       <TableContainer border='1px' borderColor='gray.100' fontSize='sm' color='#2D3748'>
         <Table variant='simple'>
@@ -111,6 +116,7 @@ const ListTicket = () => {
                       />
                       <MenuList>
                         <MenuItem onClick={() => openDelete(ticket.id)}>Deletar</MenuItem>
+                        <MenuItem onClick={() => openEdit(ticket)}>Editar</MenuItem>
                       </MenuList>
                     </Menu>
                   </Flex>

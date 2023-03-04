@@ -23,6 +23,30 @@ export class CategoryService {
     }
   }
 
+  async edit({ id,championshipId, name, description, members }: ICategory): Promise<ICategory> {
+    const { statusCode, body } = await this.httpClient.request({
+      method: 'put',
+      url: this.path,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: {
+        id,
+        championshipId, 
+        name, 
+        description, 
+        members
+      },
+    });
+
+    switch (statusCode) {
+      case HttpStatusCode.ok:
+        return body! as ICategory;
+      default:
+        throw new Error();
+    }
+  }
+
   async delete(id: string): Promise<ICategory> {
     const { statusCode, body } = await this.httpClient.request({
       method: 'delete',

@@ -33,6 +33,16 @@ export interface TicketContextData {
     quantity,
     categoryId,
   }: TicketDTO) => Promise<void>;
+  Edit: ({
+    id,
+    name,
+    description,
+    startDate,
+    endDate,
+    price,
+    quantity,
+    categoryId,
+  }: TicketDTO) => Promise<void>;
 }
 
 const TicketContext = createContext({} as TicketContextData);
@@ -50,7 +60,7 @@ export const TicketProvider = ({ children, onClose }: TicketProviderProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isError] = useState<boolean>(false);
 
-  const { id } = useParams();
+  const { id: idPath } = useParams();
 
   const List = useCallback(async (id: string) => {
     setIsLoading(true);
@@ -96,7 +106,7 @@ export const TicketProvider = ({ children, onClose }: TicketProviderProps) => {
             status: 'success',
             isClosable: true,
           });
-          ListPaginated(id as string);
+          ListPaginated(idPath as string);
           onClose!();
         })
         .catch(() => {
@@ -108,7 +118,51 @@ export const TicketProvider = ({ children, onClose }: TicketProviderProps) => {
         })
         .finally(() => setIsLoading(false));
     },
-    [ListPaginated, onClose, toast, id],
+    [ListPaginated, onClose, toast, idPath],
+  );
+
+  const Edit = useCallback(
+    async ({
+      id,
+      description,
+      name,
+      price,
+      quantity,
+      endDate,
+      startDate,
+      categoryId,
+    }: TicketDTO) => {
+      setIsLoading(true);
+      await new TicketService(axios)
+        .edit({
+          id,
+          description,
+          name,
+          price,
+          quantity,
+          endDate,
+          startDate,
+          categoryId,
+        })
+        .then(() => {
+          toast({
+            title: ticketMessages['success_edit'],
+            status: 'success',
+            isClosable: true,
+          });
+          ListPaginated(idPath as string);
+          onClose!();
+        })
+        .catch(() => {
+          toast({
+            title: ticketMessages['error_edit'],
+            status: 'error',
+            isClosable: true,
+          });
+        })
+        .finally(() => setIsLoading(false));
+    },
+    [onClose, toast, ListPaginated, idPath],
   );
 
   const Delete = useCallback(
@@ -122,7 +176,7 @@ export const TicketProvider = ({ children, onClose }: TicketProviderProps) => {
             status: 'success',
             isClosable: true,
           });
-          ListPaginated(String(id));
+          ListPaginated(String(idPath));
         })
         .catch(() => {
           toast({
@@ -133,7 +187,7 @@ export const TicketProvider = ({ children, onClose }: TicketProviderProps) => {
         })
         .finally(() => setIsLoading(false));
     },
-    [ListPaginated, id, toast],
+    [ListPaginated, idPath, toast],
   );
 
   return (
@@ -151,6 +205,7 @@ export const TicketProvider = ({ children, onClose }: TicketProviderProps) => {
         Create,
         List,
         ListPaginated,
+        Edit,
       }}
     >
       {children}
