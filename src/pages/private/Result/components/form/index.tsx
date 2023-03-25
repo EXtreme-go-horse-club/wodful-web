@@ -133,7 +133,7 @@ const ResultForm = ({ onClose }: IFormResultProps) => {
           <Input
             as='input'
             id='result'
-            type={`${workoutType === 'AMRAP' ? 'number' : 'time'}`}
+            type={`${workoutType !== 'FORTIME' ? 'number' : 'time'}`}
             placeholder='Resultado'
             {...register('result', {
               required: validationMessages['required'],
