@@ -5,6 +5,7 @@ import {
   ISubscription,
   ISubscriptionDTO,
   ISubscriptionForm,
+  UpdateSubscriptionDTO,
 } from '@/data/interfaces/subscription';
 import { SubscriptionService } from '@/services/Subscription';
 import { subscriptionMessages } from '@/utils/messages';
@@ -21,6 +22,7 @@ export interface SubscriptionContextData {
   subscriptionForm: ISubscriptionForm;
   setSubscriptionForm: (value: ISubscriptionForm) => void;
   subscriptions: ISubscription[];
+  subscription: ISubscription;
   subscriptionsPages: IPageResponse<ISubscription>;
   isLoading: boolean;
   limit: number;
@@ -30,9 +32,11 @@ export interface SubscriptionContextData {
   Delete: (id: string) => Promise<void>;
   List: (id: string) => Promise<void>;
   UpdateStatus: (id: string, status: string) => Promise<void>;
-  ListPaginated: (id: string, categoryId?:string) => Promise<void>;
+  ListPaginated: (id: string, categoryId?: string) => Promise<void>;
   ListAllByCategory: (categoryId: string) => Promise<void>;
   Create: (participants: IParticipantForm) => Promise<void>;
+  Get: (id: string) => Promise<void>;
+  Update: (id: string, data: UpdateSubscriptionDTO) => Promise<void>;
 }
 
 const SubscriptionContext = createContext({} as SubscriptionContextData);
@@ -51,7 +55,16 @@ export const SubscriptionProvider = ({ children, onClose }: SubscriptionProvider
   const [limit, setLimit] = useState<number>(5);
   const [page, setPage] = useState<number>(1);
   const [subscriptions, setSubscriptions] = useState<ISubscription[]>([] as ISubscription[]);
+  const [subscription, setSubscription] = useState<ISubscription>({} as ISubscription);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const Get = useCallback(async (id: string) => {
+    setIsLoading(true);
+    await new SubscriptionService(axios)
+      .get(id)
+      .then((subs) => setSubscription(subs))
+      .finally(() => setIsLoading(false));
+  }, []);
 
   const List = useCallback(async (id: string) => {
     setIsLoading(true);
@@ -120,7 +133,16 @@ export const SubscriptionProvider = ({ children, onClose }: SubscriptionProvider
         })
         .finally(() => setIsLoading(false));
     },
-    [subscriptionForm, toast, onClose],
+    [
+      subscriptionForm.responsibleEmail,
+      subscriptionForm.responsibleName,
+      subscriptionForm.responsiblePhone,
+      subscriptionForm.ticketId,
+      toast,
+      ListPaginated,
+      id,
+      onClose,
+    ],
   );
 
   const Delete = useCallback(
@@ -146,6 +168,31 @@ export const SubscriptionProvider = ({ children, onClose }: SubscriptionProvider
         .finally(() => setIsLoading(false));
     },
     [ListPaginated, id, toast],
+  );
+
+  const Update = useCallback(
+    async (id: string, data: UpdateSubscriptionDTO) => {
+      setIsLoading(true);
+      await new SubscriptionService(axios)
+        .update(id, data)
+        .then(() => {
+          toast({
+            title: subscriptionMessages['update'],
+            status: 'success',
+            isClosable: true,
+          });
+          ListPaginated(String(id));
+        })
+        .catch(() => {
+          toast({
+            title: subscriptionMessages['update_err'],
+            status: 'error',
+            isClosable: true,
+          });
+        })
+        .finally(() => setIsLoading(false));
+    },
+    [ListPaginated, toast],
   );
 
   const UpdateStatus = useCallback(
@@ -191,6 +238,9 @@ export const SubscriptionProvider = ({ children, onClose }: SubscriptionProvider
         List,
         ListPaginated,
         ListAllByCategory,
+        Get,
+        subscription,
+        Update,
       }}
     >
       {children}
