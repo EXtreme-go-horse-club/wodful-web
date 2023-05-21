@@ -70,6 +70,8 @@ export const subscriptionMessages = {
   remove_err: 'Algo deu errado ao remover a inscrição',
   status_update: 'Status da inscrição alterado com sucesso',
   status_update_err: 'Algo deu errado ao alterar o status da inscrição',
+  update: 'Inscrição alterado com sucesso',
+  update_err: 'Algo deu errado ao alterar a inscrição',
 };
 
 export const subscriptionStatus = {
