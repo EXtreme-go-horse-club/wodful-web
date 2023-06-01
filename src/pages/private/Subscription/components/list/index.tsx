@@ -31,9 +31,10 @@ import { ChevronLeft, ChevronRight, MoreHorizontal } from 'react-feather';
 interface IListSubscription {
   id: string;
   categoryId: string;
+  onEdit: (subscriptionId: string) => void;
 }
 
-const ListSubscription = ({ id, categoryId }: IListSubscription) => {
+const ListSubscription = ({ id, categoryId, onEdit }: IListSubscription) => {
   const [currentTotal, setCurrentTotal] = useState<number>(0);
 
   const {
@@ -81,7 +82,7 @@ const ListSubscription = ({ id, categoryId }: IListSubscription) => {
   return (
     <>
       <ComponentModal modalHeader='Remover inscrição' size='sm' isOpen={isOpen} onClose={onClose}>
-        <DeleteData onClose={onClose} removedData="a inscrição" confirmDelete={confirmDelete}/>
+        <DeleteData onClose={onClose} removedData='a inscrição' confirmDelete={confirmDelete} />
       </ComponentModal>
       <TableContainer border='1px' borderColor='gray.100' fontSize='sm' color='#2D3748'>
         <Table variant='simple'>
@@ -103,13 +104,11 @@ const ListSubscription = ({ id, categoryId }: IListSubscription) => {
             </Tr>
           </Thead>
           <Tbody>
-          {subscriptionsPages.results?.length === 0 && (
+            {subscriptionsPages.results?.length === 0 && (
               <Tr>
                 <Td />
                 <Td />
-                <Td p={6}>
-                  Busque por uma categoria
-                </Td>
+                <Td p={6}>Busque por uma categoria</Td>
                 <Td />
                 <Td />
               </Tr>
@@ -162,9 +161,8 @@ const ListSubscription = ({ id, categoryId }: IListSubscription) => {
                         >
                           Recusar
                         </MenuItem>
-                        <MenuItem onClick={() => openDelete(subscription.id)}>
-                          Deletar
-                        </MenuItem>
+                        <MenuItem onClick={() => onEdit(subscription.id)}>Editar</MenuItem>
+                        <MenuItem onClick={() => openDelete(subscription.id)}>Deletar</MenuItem>
                       </MenuList>
                     </Menu>
                   </Flex>
@@ -227,7 +225,10 @@ const ListSubscription = ({ id, categoryId }: IListSubscription) => {
                         variant='link'
                         onClick={nextPage}
                       >
-                        <ChevronRight color={subscriptionsPages.next ? 'black' : 'gray'} size={16} />
+                        <ChevronRight
+                          color={subscriptionsPages.next ? 'black' : 'gray'}
+                          size={16}
+                        />
                       </Button>
                     </Tooltip>
                   </HStack>

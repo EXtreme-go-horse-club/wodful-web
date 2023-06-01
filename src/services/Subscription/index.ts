@@ -1,6 +1,10 @@
 import { HttpClient, HttpStatusCode } from '@/data/interfaces/http';
 import { IPageResponse } from '@/data/interfaces/pageResponse';
-import { ISubscription, ISubscriptionDTO } from '@/data/interfaces/subscription';
+import {
+  ISubscription,
+  ISubscriptionDTO,
+  UpdateSubscriptionDTO,
+} from '@/data/interfaces/subscription';
 
 export class SubscriptionService {
   constructor(
@@ -9,6 +13,22 @@ export class SubscriptionService {
     >,
     private readonly path = '/subscriptions',
   ) {}
+
+  async get(id: string): Promise<ISubscription> {
+    const url = `${this.path}/${id}`;
+
+    const { statusCode, body } = await this.httpClient.request({
+      method: 'get',
+      url: url,
+    });
+
+    switch (statusCode) {
+      case HttpStatusCode.ok:
+        return body as ISubscription;
+      default:
+        throw new Error();
+    }
+  }
 
   async create(subscription: ISubscriptionDTO): Promise<ISubscription> {
     const { statusCode, body } = await this.httpClient.request({
@@ -57,6 +77,21 @@ export class SubscriptionService {
 
     switch (statusCode) {
       case HttpStatusCode.noContent:
+        return body! as ISubscription;
+      default:
+        throw new Error();
+    }
+  }
+
+  async update(id: string, data: UpdateSubscriptionDTO): Promise<ISubscription> {
+    const { statusCode, body } = await this.httpClient.request({
+      method: 'put',
+      url: `${this.path}/${id}/`,
+      body: data,
+    });
+
+    switch (statusCode) {
+      case HttpStatusCode.ok:
         return body! as ISubscription;
       default:
         throw new Error();
