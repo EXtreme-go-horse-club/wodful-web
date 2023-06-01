@@ -29,9 +29,18 @@ export interface IParticipantForm {
 export interface ISubscription {
   id: string;
   responsibleName: string;
+  responsibleEmail?: string;
+  responsiblePhone?: string;
   nickname: string;
   status: 'APPROVED' | 'WAITING' | 'DECLINED';
   category: {
     name: string;
   };
+}
+
+export interface UpdateSubscriptionDTO {
+  responsibleName: string;
+  responsibleEmail: string;
+  responsiblePhone: string;
+  nickname: string;
 }

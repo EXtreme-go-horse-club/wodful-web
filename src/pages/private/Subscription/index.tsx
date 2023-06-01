@@ -10,6 +10,7 @@ import { Box, Button, Flex, HStack, Select, Text, useDisclosure } from '@chakra-
 import { ChangeEvent, Suspense, lazy, useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import FormSubscriptionParticipants from './components/formParticipants';
+import FormResponsible from './components/formResponsible';
 import FormSubscription from './components/formSubscription';
 
 const ListSubscription = lazy(() => import('./components/list'));
@@ -29,14 +30,17 @@ const SubscriptionWithProvider = () => {
 };
 
 const Subscription = () => {
-  const { id } = useParams();
   const [selectedCategory, setSelectedCategory] = useState<string>('Todos');
   const [categoryId, setCategoryId] = useState<string>('');
-  const { List: CategoryList, categories } = useCategoryData();
-  const { ListPaginated } = useSubscriptionData();
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [subscriptionId, setSubscriptionId] = useState<string>('');
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [participantsNumber, setParticipantsNumber] = useState<number>(0);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+
+  const { id } = useParams();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { ListPaginated } = useSubscriptionData();
+  const { List: CategoryList, categories } = useCategoryData();
 
   function handleSubscriptionInfo(step: number, participantsNumber: number) {
     setParticipantsNumber(participantsNumber);
@@ -49,8 +53,15 @@ const Subscription = () => {
   };
 
   const openCreate = () => {
+    setIsEditing(false);
     resetCategoryData();
     ListPaginated(id as string);
+    onOpen();
+  };
+
+  const openEdit = (subscriptionId: string) => {
+    setSubscriptionId(subscriptionId);
+    setIsEditing(true);
     onOpen();
   };
 
@@ -117,19 +128,24 @@ const Subscription = () => {
             </Flex>
           </HStack>
           <Box w='100%' marginTop={6}>
-            <ListSubscription id={id as string} categoryId={categoryId} />
+            <ListSubscription id={id as string} categoryId={categoryId} onEdit={openEdit} />
           </Box>
         </>
 
         <ComponentModal
-          modalHeader='Adicionar inscrição'
+          modalHeader={`${isEditing ? 'Editar' : 'Adicionar'} inscrição`}
           size='lg'
           isOpen={isOpen}
-          onClose={onClose}
+          onClose={() => {
+            handleSubscriptionInfo(0, 0);
+            onClose();
+          }}
         >
-          {currentStep == 0 ? (
+          {isEditing && <FormResponsible subId={subscriptionId} onClose={onClose} />}
+          {!isEditing && currentStep === 0 && (
             <FormSubscription id={id as string} openFormParticipants={handleSubscriptionInfo} />
-          ) : (
+          )}
+          {!isEditing && currentStep !== 0 && (
             <FormSubscriptionParticipants
               participantsNumber={participantsNumber as number}
               onClose={onClose}
