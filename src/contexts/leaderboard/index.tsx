@@ -3,7 +3,7 @@ import { ILeaderboard, IPublicLeaderboard } from '@/data/interfaces/leaderboard'
 import { IPageResponse } from '@/data/interfaces/pageResponse';
 import { LeaderboardService } from '@/services/Leaderboard';
 import { PublicLeaderboardService } from '@/services/Public/Leaderboard';
-import { createContext, useCallback, useState } from 'react';
+import { createContext, memo, useCallback, useState } from 'react';
 
 interface LeaderboardProps {
   children: React.ReactNode;
@@ -25,7 +25,7 @@ const LeaderboardContext = createContext({} as LeaderboardContextData);
 
 const axios = new AxiosAdapter();
 
-export const LeaderboardProvider = ({ children }: LeaderboardProps) => {
+const LeaderboardProvider = ({ children }: LeaderboardProps) => {
   const [leaderboardPages, setLeaderboardsPages] = useState<IPageResponse<ILeaderboard>>(
     {} as IPageResponse<ILeaderboard>,
   );
@@ -78,5 +78,7 @@ export const LeaderboardProvider = ({ children }: LeaderboardProps) => {
     </LeaderboardContext.Provider>
   );
 };
+
+export const LeaderboardProviderMemo = memo(LeaderboardProvider);
 
 export default LeaderboardContext;
