@@ -10,7 +10,7 @@ import {
 import { SubscriptionService } from '@/services/Subscription';
 import { subscriptionMessages } from '@/utils/messages';
 import { useToast } from '@chakra-ui/react';
-import { createContext, useCallback, useState } from 'react';
+import { createContext, memo, useCallback, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 interface SubscriptionProviderProps {
@@ -43,7 +43,7 @@ const SubscriptionContext = createContext({} as SubscriptionContextData);
 
 const axios = new AxiosAdapter();
 
-export const SubscriptionProvider = ({ children, onClose }: SubscriptionProviderProps) => {
+const SubscriptionProvider = ({ children, onClose }: SubscriptionProviderProps) => {
   const { id } = useParams();
   const toast = useToast();
   const [subscriptionsPages, setSubscriptionsPages] = useState<IPageResponse<ISubscription>>(
@@ -247,5 +247,7 @@ export const SubscriptionProvider = ({ children, onClose }: SubscriptionProvider
     </SubscriptionContext.Provider>
   );
 };
+
+export const SubscriptionProviderMemo = memo(SubscriptionProvider);
 
 export default SubscriptionContext;

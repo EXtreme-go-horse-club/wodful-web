@@ -2,7 +2,7 @@ import ComponentModal from '@/components/ComponentModal';
 import { Loader } from '@/components/Loader';
 import { CategoryProviderMemo as CategoryProvider } from '@/contexts/category';
 
-import { SubscriptionProvider } from '@/contexts/subscription';
+import { SubscriptionProviderMemo as SubscriptionProvider } from '@/contexts/subscription';
 import { TicketProvider } from '@/contexts/ticket';
 import useCategoryData from '@/hooks/useCategoryData';
 import useSubscriptionData from '@/hooks/useSubscriptionData';
