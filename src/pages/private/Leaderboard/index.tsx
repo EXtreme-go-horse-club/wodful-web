@@ -5,7 +5,7 @@ import { Loader } from '@/components/Loader';
 import { CategoryProviderMemo as CategoryProvider } from '@/contexts/category';
 import { LeaderboardProvider } from '@/contexts/leaderboard';
 import { SubscriptionProvider } from '@/contexts/subscription';
-import { WorkoutProvider } from '@/contexts/workout';
+import { WorkoutProviderMemo as WorkoutProvider } from '@/contexts/workout';
 import useCategoryData from '@/hooks/useCategoryData';
 import useLeaderboardData from '@/hooks/useLeaderboardData';
 import { Box, Flex, HStack, Select, Text } from '@chakra-ui/react';

@@ -2,7 +2,7 @@ import ComponentModal from '@/components/ComponentModal';
 import { EmptyList } from '@/components/EmptyList';
 import { Loader } from '@/components/Loader';
 import { CategoryProviderMemo as CategoryProvider } from '@/contexts/category';
-import { WorkoutProvider } from '@/contexts/workout';
+import { WorkoutProviderMemo as WorkoutProvider } from '@/contexts/workout';
 import useWorkoutData from '@/hooks/useWorkoutData';
 import { Box, Button, HStack, Text, useDisclosure } from '@chakra-ui/react';
 import { Suspense, lazy, useMemo } from 'react';

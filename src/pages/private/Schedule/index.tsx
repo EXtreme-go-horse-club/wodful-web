@@ -3,7 +3,7 @@ import { EmptyList } from '@/components/EmptyList';
 import { Loader } from '@/components/Loader';
 import { CategoryProviderMemo as CategoryProvider } from '@/contexts/category';
 import { ScheduleProvider } from '@/contexts/schedule';
-import { WorkoutProvider } from '@/contexts/workout';
+import { WorkoutProviderMemo as WorkoutProvider } from '@/contexts/workout';
 import useScheduleData from '@/hooks/useScheduleData';
 import { Box, Button, Flex, HStack, Text, useDisclosure } from '@chakra-ui/react';
 import { Suspense, useMemo } from 'react';

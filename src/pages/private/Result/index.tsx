@@ -5,7 +5,7 @@ import { Loader } from '@/components/Loader';
 import { CategoryProviderMemo as CategoryProvider } from '@/contexts/category';
 import { ResultProvider } from '@/contexts/result';
 import { SubscriptionProvider } from '@/contexts/subscription';
-import { WorkoutProvider } from '@/contexts/workout';
+import { WorkoutProviderMemo as WorkoutProvider } from '@/contexts/workout';
 import useCategoryData from '@/hooks/useCategoryData';
 import useResultData from '@/hooks/useResultData';
 import useWorkoutData from '@/hooks/useWorkoutData';

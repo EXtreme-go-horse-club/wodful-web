@@ -4,7 +4,7 @@ import { IWorkout, IWorkoutDTO } from '@/data/interfaces/workout';
 import { WorkoutService } from '@/services/Workout';
 import { workoutMessages } from '@/utils/messages';
 import { useToast } from '@chakra-ui/react';
-import { createContext, useCallback, useState } from 'react';
+import { createContext, memo, useCallback, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 interface WorkoutProviderProps {
@@ -37,7 +37,7 @@ const WorkoutContext = createContext({} as WorkoutContextData);
 
 const axios = new AxiosAdapter();
 
-export const WorkoutProvider = ({ children, onClose }: WorkoutProviderProps) => {
+const WorkoutProvider = ({ children, onClose }: WorkoutProviderProps) => {
   const toast = useToast();
   const [workoutsPages, setWorkoutsPages] = useState<IPageResponse<IWorkout>>(
     {} as IPageResponse<IWorkout>,
@@ -147,5 +147,7 @@ export const WorkoutProvider = ({ children, onClose }: WorkoutProviderProps) => 
     </WorkoutContext.Provider>
   );
 };
+
+export const WorkoutProviderMemo = memo(WorkoutProvider);
 
 export default WorkoutContext;
