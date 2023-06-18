@@ -1,6 +1,6 @@
 import { Loader } from '@/components/Loader';
 import { CategoryProviderMemo as CategoryProvider } from '@/contexts/category';
-import { LeaderboardProvider } from '@/contexts/leaderboard';
+import { LeaderboardProviderMemo as LeaderboardProvider } from '@/contexts/leaderboard';
 import useApp from '@/hooks/useApp';
 import useCategoryData from '@/hooks/useCategoryData';
 import useLeaderboardData from '@/hooks/useLeaderboardData';

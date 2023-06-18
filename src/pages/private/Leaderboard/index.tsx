@@ -3,7 +3,7 @@ import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { EmptyList } from '@/components/EmptyList';
 import { Loader } from '@/components/Loader';
 import { CategoryProviderMemo as CategoryProvider } from '@/contexts/category';
-import { LeaderboardProvider } from '@/contexts/leaderboard';
+import { LeaderboardProviderMemo as LeaderboardProvider } from '@/contexts/leaderboard';
 import { SubscriptionProviderMemo as SubscriptionProvider } from '@/contexts/subscription';
 import { WorkoutProviderMemo as WorkoutProvider } from '@/contexts/workout';
 import useCategoryData from '@/hooks/useCategoryData';

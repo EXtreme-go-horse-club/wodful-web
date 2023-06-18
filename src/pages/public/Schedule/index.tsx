@@ -1,6 +1,6 @@
 import { Loader } from '@/components/Loader';
 import { CategoryProviderMemo as CategoryProvider } from '@/contexts/category';
-import { ScheduleProvider } from '@/contexts/schedule';
+import { ScheduleProviderMemo as ScheduleProvider } from '@/contexts/schedule';
 import useScheduleData from '@/hooks/useScheduleData';
 import { Box, Button, Center, Flex, Text } from '@chakra-ui/react';
 import { Suspense, lazy, useCallback, useEffect, useState } from 'react';

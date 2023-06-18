@@ -1,7 +1,7 @@
 import { IPublicSchedule } from '@/data/interfaces/schedule';
 import { PublicScheduleService } from '@/services/Public/Schedule';
 import { useToast } from '@chakra-ui/react';
-import { createContext, useCallback, useState } from 'react';
+import { createContext, memo, useCallback, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { AxiosAdapter } from '@/adapters/AxiosAdapter';
@@ -40,7 +40,7 @@ interface ScheduleProviderProps {
   onClose?: () => void;
 }
 
-export const ScheduleProvider = ({ children, onClose }: ScheduleProviderProps) => {
+const ScheduleProvider = ({ children, onClose }: ScheduleProviderProps) => {
   const toast = useToast();
   const [schedulePages, setSchedulePages] = useState<IPageResponse<ISchedule>>(
     {} as IPageResponse<ISchedule>,
@@ -199,5 +199,7 @@ export const ScheduleProvider = ({ children, onClose }: ScheduleProviderProps) =
     </ScheduleContext.Provider>
   );
 };
+
+export const ScheduleProviderMemo = memo(ScheduleProvider);
 
 export default ScheduleContext;

@@ -2,7 +2,7 @@ import ComponentModal from '@/components/ComponentModal';
 import { EmptyList } from '@/components/EmptyList';
 import { Loader } from '@/components/Loader';
 import { CategoryProviderMemo as CategoryProvider } from '@/contexts/category';
-import { ScheduleProvider } from '@/contexts/schedule';
+import { ScheduleProviderMemo as ScheduleProvider } from '@/contexts/schedule';
 import { WorkoutProviderMemo as WorkoutProvider } from '@/contexts/workout';
 import useScheduleData from '@/hooks/useScheduleData';
 import { Box, Button, Flex, HStack, Text, useDisclosure } from '@chakra-ui/react';

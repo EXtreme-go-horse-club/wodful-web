@@ -3,7 +3,7 @@ import { ICreateResultRequestDTO, IResultByCategory } from '@/data/interfaces/re
 import { ResultService } from '@/services/Result';
 import { resultMessages } from '@/utils/messages';
 import { useToast } from '@chakra-ui/react';
-import { createContext, useCallback, useState } from 'react';
+import { createContext, memo, useCallback, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 interface ResultProps {
@@ -28,7 +28,7 @@ const ResultContext = createContext({} as ResultContextData);
 
 const axios = new AxiosAdapter();
 
-export const ResultProvider = ({ children, onClose }: ResultProps) => {
+const ResultProvider = ({ children, onClose }: ResultProps) => {
   const toast = useToast();
   const [resultPages, setResultPages] = useState<IResultByCategory[]>([] as IResultByCategory[]);
   const [page, setPage] = useState<number>(1);
@@ -123,5 +123,7 @@ export const ResultProvider = ({ children, onClose }: ResultProps) => {
     </ResultContext.Provider>
   );
 };
+
+export const ResultProviderMemo = memo(ResultProvider);
 
 export default ResultContext;
