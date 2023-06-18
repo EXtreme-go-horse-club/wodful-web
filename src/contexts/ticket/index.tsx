@@ -4,7 +4,7 @@ import { ITicket, TicketDTO } from '@/data/interfaces/ticket';
 import { TicketService } from '@/services/Ticket';
 import { ticketMessages } from '@/utils/messages';
 import { useToast } from '@chakra-ui/react';
-import { createContext, useCallback, useState } from 'react';
+import { createContext, memo, useCallback, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 interface TicketProviderProps {
@@ -49,7 +49,7 @@ const TicketContext = createContext({} as TicketContextData);
 
 const axios = new AxiosAdapter();
 
-export const TicketProvider = ({ children, onClose }: TicketProviderProps) => {
+const TicketProvider = ({ children, onClose }: TicketProviderProps) => {
   const toast = useToast();
   const [ticketsPages, setTicketsPages] = useState<IPageResponse<ITicket>>(
     {} as IPageResponse<ITicket>,
@@ -212,5 +212,7 @@ export const TicketProvider = ({ children, onClose }: TicketProviderProps) => {
     </TicketContext.Provider>
   );
 };
+
+export const TicketProviderMemo = memo(TicketProvider);
 
 export default TicketContext;

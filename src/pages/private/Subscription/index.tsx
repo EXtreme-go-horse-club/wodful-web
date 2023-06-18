@@ -3,7 +3,7 @@ import { Loader } from '@/components/Loader';
 import { CategoryProviderMemo as CategoryProvider } from '@/contexts/category';
 
 import { SubscriptionProviderMemo as SubscriptionProvider } from '@/contexts/subscription';
-import { TicketProvider } from '@/contexts/ticket';
+import { TicketProviderMemo as TicketProvider } from '@/contexts/ticket';
 import useCategoryData from '@/hooks/useCategoryData';
 import useSubscriptionData from '@/hooks/useSubscriptionData';
 import { Box, Button, Flex, HStack, Select, Text, useDisclosure } from '@chakra-ui/react';

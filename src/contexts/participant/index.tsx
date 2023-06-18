@@ -6,7 +6,7 @@ import { participantMessages } from '@/utils/messages';
 import { useToast } from '@chakra-ui/react';
 import { createContext, useCallback, useState } from 'react';
 
-interface TicketProviderProps {
+interface ParticipantProviderProps {
   children: React.ReactNode;
 }
 
@@ -29,7 +29,7 @@ const ParticipantContext = createContext({} as ParticipantContextData);
 
 const axios = new AxiosAdapter();
 
-export const ParticipantProvider = ({ children }: TicketProviderProps) => {
+export const ParticipantProvider = ({ children }: ParticipantProviderProps) => {
   const toast = useToast();
   const [participantsPages, setParticipantsPages] = useState<IPageResponse<IParticipants>>(
     {} as IPageResponse<IParticipants>,

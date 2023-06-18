@@ -3,7 +3,7 @@ import { Suspense, lazy, useCallback, useMemo, useState } from 'react';
 
 import ComponentModal from '@/components/ComponentModal';
 import { CategoryProviderMemo as CategoryProvider } from '@/contexts/category';
-import { TicketProvider } from '@/contexts/ticket';
+import { TicketProviderMemo as TicketProvider } from '@/contexts/ticket';
 
 import { EmptyList } from '@/components/EmptyList';
 import { Loader } from '@/components/Loader';
