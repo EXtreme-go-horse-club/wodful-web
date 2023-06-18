@@ -1,10 +1,10 @@
 import { Box, Button, Center, Flex, Heading, useDisclosure } from '@chakra-ui/react';
-import { Suspense, lazy, useMemo, useState } from 'react';
+import { Suspense, lazy, memo, useMemo, useState } from 'react';
 
 import ComponentModal from '@/components/ComponentModal';
 import { EmptyList } from '@/components/EmptyList';
 import { Loader } from '@/components/Loader';
-import { ChampionshipProvider } from '@/contexts/championship';
+import { ChampionshipProviderMemo as ChampionshipProvider } from '@/contexts/championship';
 import { IChampionship } from '@/data/interfaces/championship';
 import useChampionshipData from '@/hooks/useChampionshipData';
 
@@ -16,7 +16,7 @@ const ChampionshipWithProvider = () => {
 
   return (
     <ChampionshipProvider onClose={onClose}>
-      <Championship />
+      <ChampionshipMemo />
     </ChampionshipProvider>
   );
 };
@@ -101,4 +101,8 @@ const Championship = () => {
   );
 };
 
-export default ChampionshipWithProvider;
+const ChampionshipMemo = memo(Championship);
+
+const ChampionshipWithProviderMemo = memo(ChampionshipWithProvider);
+
+export default ChampionshipWithProviderMemo;

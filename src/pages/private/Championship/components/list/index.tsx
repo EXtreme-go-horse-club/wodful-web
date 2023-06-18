@@ -19,15 +19,15 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight, MapPin, MoreHorizontal } from 'react-feather';
 import { Link as ReactRouter } from 'react-router-dom';
 
+import ComponentModal from '@/components/ComponentModal';
+import DeleteData from '@/components/Delete';
 import { IChampionship } from '@/data/interfaces/championship';
 import useApp from '@/hooks/useApp';
 import { default as useChampionshipData } from '@/hooks/useChampionshipData';
-import ComponentModal from '@/components/ComponentModal';
-import DeleteData from '@/components/Delete';
 import { incrementAndFormatDate } from '@/utils/formatDate';
 
 const resultType: { [key: string]: string } = {
@@ -39,7 +39,7 @@ interface IListChampionship {
   openEdit: (championship: IChampionship) => void;
 }
 
-const ListChampionship = ( {openEdit}: IListChampionship) => {
+const ListChampionship = ({ openEdit }: IListChampionship) => {
   const [currentTotal, setCurrentTotal] = useState<number>(0);
   const [championshipId, setChampionshipId] = useState<string>('');
 
@@ -74,7 +74,7 @@ const ListChampionship = ( {openEdit}: IListChampionship) => {
   return (
     <>
       <ComponentModal modalHeader='Remover campeonato' size='sm' isOpen={isOpen} onClose={onClose}>
-        <DeleteData onClose={onClose} removedData="o campeonato" confirmDelete={confirmDelete}/>
+        <DeleteData onClose={onClose} removedData='o campeonato' confirmDelete={confirmDelete} />
       </ComponentModal>
       <SimpleGrid maxW='1200px' w='100%' color='gray.600' columns={[null, 1, 2, 3]} spacing='24px'>
         {championshipsPages.results?.map((championship) => (
@@ -143,12 +143,8 @@ const ListChampionship = ( {openEdit}: IListChampionship) => {
                       variant='none'
                     />
                     <MenuList>
-                      <MenuItem onClick={() => openDelete(championship.id)}>
-                        Deletar
-                      </MenuItem>
-                      <MenuItem onClick={() => openEdit(championship)}>
-                        Editar
-                      </MenuItem>
+                      <MenuItem onClick={() => openDelete(championship.id)}>Deletar</MenuItem>
+                      <MenuItem onClick={() => openEdit(championship)}>Editar</MenuItem>
                     </MenuList>
                   </Menu>
                 </HStack>
@@ -199,4 +195,6 @@ const ListChampionship = ( {openEdit}: IListChampionship) => {
   );
 };
 
-export default ListChampionship;
+const ListChampionshipMemorized = memo(ListChampionship);
+
+export default ListChampionshipMemorized;

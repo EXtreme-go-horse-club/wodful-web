@@ -1,10 +1,14 @@
 import { AxiosAdapter } from '@/adapters/AxiosAdapter';
-import { ChampionshipDTO, IChampionship, IChampionshipEditDTO } from '@/data/interfaces/championship';
+import {
+  ChampionshipDTO,
+  IChampionship,
+  IChampionshipEditDTO,
+} from '@/data/interfaces/championship';
 import { IPageResponse } from '@/data/interfaces/pageResponse';
 import { ChampionshipService } from '@/services/Championship';
 import { championshipMessages } from '@/utils/messages';
 import { useToast } from '@chakra-ui/react';
-import { createContext, useCallback, useState } from 'react';
+import { createContext, memo, useCallback, useState } from 'react';
 
 interface ChampionshipProps {
   children: React.ReactNode;
@@ -45,7 +49,7 @@ const ChampionshipContext = createContext({} as ChampionshipContextData);
 
 const axios = new AxiosAdapter();
 
-export const ChampionshipProvider = ({ children, onClose }: ChampionshipProps) => {
+const ChampionshipProvider = ({ children, onClose }: ChampionshipProps) => {
   const toast = useToast();
 
   const [championshipsPages, setChampionshipsPages] = useState<IPageResponse<IChampionship>>(
@@ -74,8 +78,8 @@ export const ChampionshipProvider = ({ children, onClose }: ChampionshipProps) =
     setIsLoading(true);
     await new ChampionshipService(axios)
       .listAll(limit, page)
-      .then((paginatedChampiships) => {
-        setChampionshipsPages(paginatedChampiships as IPageResponse<IChampionship>);
+      .then((paginatedChampionships) => {
+        setChampionshipsPages(paginatedChampionships as IPageResponse<IChampionship>);
       })
       .finally(() => setIsLoading(false));
   }, [page]);
@@ -193,5 +197,7 @@ export const ChampionshipProvider = ({ children, onClose }: ChampionshipProps) =
     </ChampionshipContext.Provider>
   );
 };
+
+export const ChampionshipProviderMemo = memo(ChampionshipProvider);
 
 export default ChampionshipContext;
