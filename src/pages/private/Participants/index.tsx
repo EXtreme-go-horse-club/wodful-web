@@ -1,6 +1,6 @@
 import ComponentModal from '@/components/ComponentModal';
 import { Loader } from '@/components/Loader';
-import { ParticipantProvider } from '@/contexts/participant';
+import { ParticipantProviderMemo as ParticipantProvider } from '@/contexts/participant';
 import { IParticipant } from '@/data/interfaces/participant';
 import {
   Box,

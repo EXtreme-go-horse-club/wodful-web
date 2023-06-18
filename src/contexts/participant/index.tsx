@@ -4,7 +4,7 @@ import { IParticipant, IParticipants } from '@/data/interfaces/participant';
 import { ParticipantsService } from '@/services/Participants';
 import { participantMessages } from '@/utils/messages';
 import { useToast } from '@chakra-ui/react';
-import { createContext, useCallback, useState } from 'react';
+import { createContext, memo, useCallback, useState } from 'react';
 
 interface ParticipantProviderProps {
   children: React.ReactNode;
@@ -29,7 +29,7 @@ const ParticipantContext = createContext({} as ParticipantContextData);
 
 const axios = new AxiosAdapter();
 
-export const ParticipantProvider = ({ children }: ParticipantProviderProps) => {
+const ParticipantProvider = ({ children }: ParticipantProviderProps) => {
   const toast = useToast();
   const [participantsPages, setParticipantsPages] = useState<IPageResponse<IParticipants>>(
     {} as IPageResponse<IParticipants>,
@@ -100,5 +100,7 @@ export const ParticipantProvider = ({ children }: ParticipantProviderProps) => {
     </ParticipantContext.Provider>
   );
 };
+
+export const ParticipantProviderMemo = memo(ParticipantProvider);
 
 export default ParticipantContext;
