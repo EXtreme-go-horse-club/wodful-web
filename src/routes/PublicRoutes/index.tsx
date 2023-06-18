@@ -1,5 +1,5 @@
 import { Header } from '@/components/Header';
-import { Navbar } from '@/components/Navbar';
+import { NavbarMemo as Navbar } from '@/components/Navbar';
 import Access from '@/pages/public/Access';
 import PublicLeaderboard from '@/pages/public/Leaderboard';
 import Login from '@/pages/public/Login';

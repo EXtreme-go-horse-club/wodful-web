@@ -1,7 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import { Header } from '@/components/Header';
-import { Navbar } from '@/components/Navbar';
+import { NavbarMemo as Navbar } from '@/components/Navbar';
 import Category from '@/pages/private/Category';
 import Championship from '@/pages/private/Championship';
 import PrivateLeaderboard from '@/pages/private/Leaderboard';
