@@ -2,7 +2,7 @@ import { ChangeEvent, lazy, Suspense, useCallback, useEffect, useState } from 'r
 
 import ComponentModal from '@/components/ComponentModal';
 import { Loader } from '@/components/Loader';
-import { CategoryProvider } from '@/contexts/category';
+import { CategoryProviderMemo as CategoryProvider } from '@/contexts/category';
 import { ResultProvider } from '@/contexts/result';
 import { SubscriptionProvider } from '@/contexts/subscription';
 import { WorkoutProvider } from '@/contexts/workout';
@@ -59,11 +59,11 @@ const Result = () => {
     }
   }, [CategoryList, id]);
 
-  const resetSelectData= () =>{
-    setSelectedCategory("Todos");
-    setWorkoutId("");
+  const resetSelectData = () => {
+    setSelectedCategory('Todos');
+    setWorkoutId('');
     setCategoryId('');
-  }
+  };
 
   const openCreate = () => {
     resetSelectData();

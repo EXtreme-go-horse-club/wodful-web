@@ -92,7 +92,7 @@ const Championship = () => {
             <EmptyList
               text='Você não possui um campeonato ainda!'
               contentButton=' Crie um campeonato'
-              onClose={onOpen}
+              onClick={onOpen}
             />
           )}
         </Box>

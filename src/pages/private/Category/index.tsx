@@ -1,11 +1,11 @@
 import ComponentModal from '@/components/ComponentModal';
 import { EmptyList } from '@/components/EmptyList';
 import { Loader } from '@/components/Loader';
-import { CategoryProvider } from '@/contexts/category';
+import { CategoryProviderMemo as CategoryProvider } from '@/contexts/category';
 import { ICategory } from '@/data/interfaces/category';
 import useCategoryData from '@/hooks/useCategoryData';
 import { Box, Button, HStack, Text, useDisclosure } from '@chakra-ui/react';
-import { lazy, Suspense, useMemo, useState } from 'react';
+import { Suspense, lazy, memo, useCallback, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import FormCategory from './components/form';
 
@@ -16,7 +16,7 @@ const CategoryWithProvider = () => {
 
   return (
     <CategoryProvider onClose={onClose}>
-      <Category />
+      <CategoryMemo />
     </CategoryProvider>
   );
 };
@@ -28,21 +28,31 @@ const Category = () => {
   const { id } = useParams();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const openEdit = (categoryObj: ICategory) => {
-    setCategory(categoryObj);
-    onOpen();
-  };
+  const openEdit = useCallback(
+    (categoryObj: ICategory) => {
+      setCategory(categoryObj);
+      onOpen();
+    },
+    [onOpen],
+  );
 
-  const openCreate = () => {
+  const openCreate = useCallback(() => {
     resetCategory();
     onOpen();
-  };
+  }, [onOpen]);
+
+  const CloseModal = useCallback(() => {
+    resetCategory();
+    onClose();
+  }, [onClose]);
 
   const resetCategory = () => {
     setCategory(undefined);
   };
 
   const hasElements: boolean = useMemo(() => categoriesPages.count !== 0, [categoriesPages]);
+
+  console.log({ hasElements, category });
 
   return (
     <Suspense fallback={<Loader title='Carregando ...' />}>
@@ -60,17 +70,9 @@ const Category = () => {
           )}
         </HStack>
 
-        <ComponentModal 
-          modalHeader={category ? 'Editar categoria' : ' Criar categoria'} 
-          size='lg' 
-          isOpen={isOpen} 
-          onClose={onClose}>
-            <FormCategory id={id as string} onClose={onClose} oldCategory={category} resetCategory={resetCategory}/>
-        </ComponentModal>
-
         {hasElements && (
           <Box w='100%' marginTop={6}>
-            <ListCategory id={id as string} openEdit={openEdit}/>
+            <ListCategory id={id as string} openEdit={openEdit} />
           </Box>
         )}
 
@@ -78,12 +80,29 @@ const Category = () => {
           <EmptyList
             text='Você não possui categorias ainda!'
             contentButton='Crie uma categoria'
-            onClose={onOpen}
+            onClick={onOpen}
           />
         )}
+
+        <ComponentModal
+          modalHeader={category ? 'Editar categoria' : ' Criar categoria'}
+          size='lg'
+          isOpen={isOpen}
+          onClose={CloseModal}
+        >
+          <FormCategory
+            id={id as string}
+            onClose={CloseModal}
+            oldCategory={category}
+            resetCategory={resetCategory}
+          />
+        </ComponentModal>
       </Box>
     </Suspense>
   );
 };
 
-export default CategoryWithProvider;
+const CategoryMemo = memo(Category);
+const CategoryWithProviderMemo = memo(CategoryWithProvider);
+
+export default CategoryWithProviderMemo;

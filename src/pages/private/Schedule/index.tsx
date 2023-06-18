@@ -1,7 +1,7 @@
 import ComponentModal from '@/components/ComponentModal';
 import { EmptyList } from '@/components/EmptyList';
 import { Loader } from '@/components/Loader';
-import { CategoryProvider } from '@/contexts/category';
+import { CategoryProviderMemo as CategoryProvider } from '@/contexts/category';
 import { ScheduleProvider } from '@/contexts/schedule';
 import { WorkoutProvider } from '@/contexts/workout';
 import useScheduleData from '@/hooks/useScheduleData';
@@ -79,7 +79,7 @@ const Schedule = () => {
           <EmptyList
             text='Você não possui um cronograma ainda!'
             contentButton='Crie um cronograma'
-            onClose={onOpen}
+            onClick={onOpen}
           />
         )}
       </Box>

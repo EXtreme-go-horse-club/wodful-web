@@ -2,7 +2,7 @@ import { Box, Button, HStack, Text, useDisclosure } from '@chakra-ui/react';
 import { Suspense, lazy, useCallback, useMemo, useState } from 'react';
 
 import ComponentModal from '@/components/ComponentModal';
-import { CategoryProvider } from '@/contexts/category';
+import { CategoryProviderMemo as CategoryProvider } from '@/contexts/category';
 import { TicketProvider } from '@/contexts/ticket';
 
 import { EmptyList } from '@/components/EmptyList';
@@ -84,7 +84,7 @@ const Ticket = () => {
           <EmptyList
             text='Você não possui tickets ainda!'
             contentButton='Crie um ticket'
-            onClose={onOpen}
+            onClick={onOpen}
           />
         )}
       </Box>

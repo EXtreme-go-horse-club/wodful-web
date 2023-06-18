@@ -1,9 +1,9 @@
 import { Loader } from '@/components/Loader';
-import { CategoryProvider } from '@/contexts/category';
+import { CategoryProviderMemo as CategoryProvider } from '@/contexts/category';
 import { ScheduleProvider } from '@/contexts/schedule';
 import useScheduleData from '@/hooks/useScheduleData';
 import { Box, Button, Center, Flex, Text } from '@chakra-ui/react';
-import { lazy, Suspense, useCallback, useEffect, useState } from 'react';
+import { Suspense, lazy, useCallback, useEffect, useState } from 'react';
 import { RefreshCw } from 'react-feather';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ValidateAccess } from '../Leaderboard/helper/ValidateAccess';

@@ -7,16 +7,16 @@ interface EmptyListProps {
   linkTo?: string;
   textLinkTo?: string;
   contentButton?: string;
-  onClose?: () => void;
+  onClick?: () => void;
 }
 
-export const EmptyList = ({ contentButton, onClose, text, linkTo, textLinkTo }: EmptyListProps) => {
+export const EmptyList = ({ contentButton, onClick, text, linkTo, textLinkTo }: EmptyListProps) => {
   return (
     <Box display='flex' flexDirection='column' alignItems='center' gap='8px' mt='20%'>
       <FolderPlus size={50} opacity='80%' />
       <Text>{text}</Text>
       {contentButton && (
-        <Button width='100%' colorScheme='teal' onClick={onClose}>
+        <Button width='100%' colorScheme='teal' onClick={onClick}>
           {contentButton}
         </Button>
       )}

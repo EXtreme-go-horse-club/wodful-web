@@ -1,5 +1,5 @@
 import { Loader } from '@/components/Loader';
-import { CategoryProvider } from '@/contexts/category';
+import { CategoryProviderMemo as CategoryProvider } from '@/contexts/category';
 import { LeaderboardProvider } from '@/contexts/leaderboard';
 import useApp from '@/hooks/useApp';
 import useCategoryData from '@/hooks/useCategoryData';

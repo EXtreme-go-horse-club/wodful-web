@@ -1,6 +1,6 @@
 import ComponentModal from '@/components/ComponentModal';
 import { Loader } from '@/components/Loader';
-import { CategoryProvider } from '@/contexts/category';
+import { CategoryProviderMemo as CategoryProvider } from '@/contexts/category';
 
 import { SubscriptionProvider } from '@/contexts/subscription';
 import { TicketProvider } from '@/contexts/ticket';

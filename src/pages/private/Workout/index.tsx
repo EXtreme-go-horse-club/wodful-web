@@ -1,11 +1,11 @@
 import ComponentModal from '@/components/ComponentModal';
 import { EmptyList } from '@/components/EmptyList';
 import { Loader } from '@/components/Loader';
-import { CategoryProvider } from '@/contexts/category';
+import { CategoryProviderMemo as CategoryProvider } from '@/contexts/category';
 import { WorkoutProvider } from '@/contexts/workout';
 import useWorkoutData from '@/hooks/useWorkoutData';
 import { Box, Button, HStack, Text, useDisclosure } from '@chakra-ui/react';
-import { lazy, Suspense, useMemo } from 'react';
+import { Suspense, lazy, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
 const ListWorkout = lazy(() => import('./components/list'));
@@ -60,7 +60,7 @@ const Workout = () => {
           <EmptyList
             text='Você não possui provas ainda!'
             contentButton='Crie uma prova'
-            onClose={onOpen}
+            onClick={onOpen}
           />
         )}
       </Box>

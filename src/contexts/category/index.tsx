@@ -5,7 +5,7 @@ import { CategoryService } from '@/services/Category';
 import { PublicCategoryService } from '@/services/Public/Category';
 import { categoryMessages } from '@/utils/messages';
 import { useToast } from '@chakra-ui/react';
-import { createContext, useCallback, useState } from 'react';
+import { createContext, memo, useCallback, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 interface CategoryProviderProps {
@@ -35,7 +35,7 @@ const CategoryContext = createContext({} as CategoryContextData);
 
 const axios = new AxiosAdapter();
 
-export const CategoryProvider = ({ children, onClose }: CategoryProviderProps) => {
+const CategoryProvider = ({ children, onClose }: CategoryProviderProps) => {
   const { id } = useParams();
   const toast = useToast();
   const [categoriesPages, setCategoriesPages] = useState<IPageResponse<ICategory>>(
@@ -110,17 +110,10 @@ export const CategoryProvider = ({ children, onClose }: CategoryProviderProps) =
   );
 
   const Edit = useCallback(
-    async ({
-      championshipId,
-      name,
-      id,
-      description,
-      members,
-      isTeam,
-    }: ICategory) => {
+    async ({ championshipId, name, id, description, members, isTeam }: ICategory) => {
       setIsLoading(true);
       await new CategoryService(axios)
-        .edit({ championshipId,name,id,description,members, isTeam })
+        .edit({ championshipId, name, id, description, members, isTeam })
         .then(() => {
           toast({
             title: categoryMessages['success_edit'],
@@ -191,5 +184,7 @@ export const CategoryProvider = ({ children, onClose }: CategoryProviderProps) =
     </CategoryContext.Provider>
   );
 };
+
+export const CategoryProviderMemo = memo(CategoryProvider);
 
 export default CategoryContext;

@@ -2,7 +2,7 @@ import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 
 import { EmptyList } from '@/components/EmptyList';
 import { Loader } from '@/components/Loader';
-import { CategoryProvider } from '@/contexts/category';
+import { CategoryProviderMemo as CategoryProvider } from '@/contexts/category';
 import { LeaderboardProvider } from '@/contexts/leaderboard';
 import { SubscriptionProvider } from '@/contexts/subscription';
 import { WorkoutProvider } from '@/contexts/workout';
@@ -107,7 +107,7 @@ const Leaderboard = () => {
           <EmptyList
             text='Você não possui um leaderboard ainda!'
             linkTo={`/championships/${id}/categories`}
-            textLinkTo='Comece seu campeonato aqui.'
+            textLinkTo='Comece seu campeonato aqui'
           />
         )}
       </Box>
