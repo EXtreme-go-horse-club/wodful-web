@@ -115,8 +115,8 @@ const ListTicket = ({ openEdit }: IListTicketProps) => {
                         variant='none'
                       />
                       <MenuList>
-                        <MenuItem onClick={() => openDelete(ticket.id)}>Deletar</MenuItem>
                         <MenuItem onClick={() => openEdit(ticket)}>Editar</MenuItem>
+                        <MenuItem onClick={() => openDelete(ticket.id)}>Deletar</MenuItem>
                       </MenuList>
                     </Menu>
                   </Flex>
