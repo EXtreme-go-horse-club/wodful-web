@@ -96,7 +96,7 @@ const ListTicket = ({ openEdit }: IListTicketProps) => {
                 <Text as='b'>Encerramento</Text>
               </Th>
               <Th>
-                <Text as='b'>qnt. máx</Text>
+                <Text as='b'>Quantidade</Text>
               </Th>
               <Th>
                 <Text as='b'>Restantes</Text>
