@@ -7,6 +7,7 @@ export interface ITicket {
   enabled: boolean;
   price: number;
   quantity: number;
+  inUse: number;
   category: {
     id: string;
     members: number;

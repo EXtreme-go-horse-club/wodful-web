@@ -26,7 +26,7 @@ import {
   Tr,
   useDisclosure,
 } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight, MoreHorizontal } from 'react-feather';
 import { useParams } from 'react-router-dom';
 
@@ -68,6 +68,12 @@ const ListTicket = ({ openEdit }: IListTicketProps) => {
     setPage(page + 1);
   };
 
+  const countRestTickets = useCallback((quantity: number, inUse: number) => {
+    if (quantity - inUse === 0) return 'Esgotado';
+
+    return quantity - inUse;
+  }, []);
+
   return (
     <>
       <ComponentModal modalHeader='Remover ingresso' size='sm' isOpen={isOpen} onClose={onClose}>
@@ -90,9 +96,11 @@ const ListTicket = ({ openEdit }: IListTicketProps) => {
                 <Text as='b'>Encerramento</Text>
               </Th>
               <Th>
-                <Text as='b'>qnt. máx</Text>
+                <Text as='b'>Quantidade</Text>
               </Th>
-              <Th></Th>
+              <Th>
+                <Text as='b'>Restantes</Text>
+              </Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -104,6 +112,7 @@ const ListTicket = ({ openEdit }: IListTicketProps) => {
                 <Td p={6}>{incrementAndFormatDate(ticket.startDate)}</Td>
                 <Td p={6}>{incrementAndFormatDate(ticket.endDate)}</Td>
                 <Td p={6}>{ticket.quantity}</Td>
+                <Td p={6}>{countRestTickets(ticket.quantity, ticket.inUse)}</Td>
 
                 <Td p={6}>
                   <Flex justify='end'>
