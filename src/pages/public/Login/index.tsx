@@ -12,20 +12,33 @@ import {
   Text,
 } from '@chakra-ui/react';
 
+import AnalyticsAdapter from '@/adapters/AnalyticsAdapter';
 import wodfulBlackLogo from '@/assets/icons/wodful-black-logo.svg';
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 
 const Login = () => {
   const { Login, isError, isLoading } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const location = useLocation();
+
   const isEmpty = !email.length || !password.length;
 
   function handleLogin() {
+    AnalyticsAdapter.event({
+      action: 'realizar_login',
+      category: 'ADM',
+      label: 'Realizando login na app',
+      value: `${email}`,
+    });
     Login({ email: email, password: password });
   }
+
+  useEffect(() => {
+    AnalyticsAdapter.pageview(location.pathname);
+  }, [location.pathname]);
 
   return (
     <Box>

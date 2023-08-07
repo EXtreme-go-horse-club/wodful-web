@@ -11,23 +11,35 @@ import {
   Text,
 } from '@chakra-ui/react';
 
+import AnalyticsAdapter from '@/adapters/AnalyticsAdapter';
 import wodfulBlackLogo from '@/assets/icons/wodful-black-logo.svg';
 import useAuth from '@/hooks/useAuth';
-import { useCallback, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Access = () => {
   const { Access, isError, isLoading } = useAuth();
   const [accessCode, setAccessCode] = useState('');
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handlePublicAccess = useCallback(() => {
+    AnalyticsAdapter.event({
+      action: 'buscar_competição_com_código',
+      category: 'Atleta',
+      label: 'Continuar com código',
+      value: `${accessCode}`,
+    });
     Access(accessCode).then(() => {
       return navigate(`/access/${accessCode}/leaderboards`);
     });
   }, [Access, accessCode, navigate]);
 
   const isEmpty = useMemo(() => !accessCode.length, [accessCode]);
+
+  useEffect(() => {
+    AnalyticsAdapter.pageview(location.pathname);
+  }, [location.pathname]);
 
   return (
     <Box>
