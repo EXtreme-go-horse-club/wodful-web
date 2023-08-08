@@ -1,3 +1,4 @@
+import AnalyticsAdapter from '@/adapters/AnalyticsAdapter';
 import { Loader } from '@/components/Loader';
 import { CategoryProvider } from '@/contexts/category';
 import { LeaderboardProvider } from '@/contexts/leaderboard';
@@ -7,7 +8,7 @@ import useLeaderboardData from '@/hooks/useLeaderboardData';
 import { Box, Center, Flex, Select, Text } from '@chakra-ui/react';
 import { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import { Server } from 'react-feather';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import ListPublicLeaderboard from './components';
 import { ValidateAccess } from './helper/ValidateAccess';
 
@@ -27,6 +28,7 @@ const PublicLeaderboardAccess = () => {
   const { setPublicChampionshipName } = useApp();
   const { PublicList, publicCategories } = useCategoryData();
   const { ListPublic } = useLeaderboardData();
+  const location = useLocation();
   const [selectedCategory, setSelectedCategory] = useState<{ name: string; value: string }>({
     name: 'Sem categoria',
     value: '0',
@@ -43,6 +45,13 @@ const PublicLeaderboardAccess = () => {
         ListPublic(String(event.target.value));
         const category = publicCategories.find((selected) => selected.id === event.target.value);
         setSelectedCategory({ name: category!.name, value: category!.id });
+
+        AnalyticsAdapter.event({
+          action: 'buscar_leaderboard_categoria',
+          category: 'Atleta',
+          label: 'Buscar leaderboard por categoria',
+          value: `${category!.name}`,
+        });
         return;
       }
       setSelectedCategory({
@@ -56,6 +65,10 @@ const PublicLeaderboardAccess = () => {
   useEffect(() => {
     if (code) PublicList(code);
   }, [PublicList, code]);
+
+  useEffect(() => {
+    AnalyticsAdapter.pageview(location.pathname);
+  }, [location.pathname]);
 
   useEffect(() => {
     const name = ValidateAccess.verify(code as string, navigate);

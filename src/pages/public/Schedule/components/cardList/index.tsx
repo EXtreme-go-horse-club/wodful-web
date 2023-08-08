@@ -20,6 +20,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { useCallback, useState } from 'react';
+import { Clipboard } from 'react-feather';
 import { incrementAndFormatDate } from '../../../../../utils/formatDate/index';
 import '../lists.css';
 
@@ -42,6 +43,19 @@ const ListCardPublicSchedule = () => {
   return (
     <>
       <SimpleGrid color='gray.600' columns={[null, 1, 2, 3]} spacing='24px' justifyItems='center'>
+        {schedules.length === 0 && (
+          <Box
+            display='flex'
+            flexDirection='column'
+            alignItems='center'
+            justifyContent='center'
+            gap='8px'
+            mt='20%'
+          >
+            <Clipboard size={80} color='#1A202C' />
+            <Text color='teal.500'>Cronograma sem atividades!</Text>
+          </Box>
+        )}
         {schedules?.map((schedule, index) => (
           <Box
             as='article'

@@ -1,11 +1,12 @@
+import AnalyticsAdapter from '@/adapters/AnalyticsAdapter';
 import { Loader } from '@/components/Loader';
 import { CategoryProvider } from '@/contexts/category';
 import { ScheduleProvider } from '@/contexts/schedule';
 import useScheduleData from '@/hooks/useScheduleData';
 import { Box, Button, Center, Flex, Text } from '@chakra-ui/react';
-import { lazy, Suspense, useCallback, useEffect, useState } from 'react';
+import { Suspense, lazy, useCallback, useEffect, useState } from 'react';
 import { RefreshCw } from 'react-feather';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { ValidateAccess } from '../Leaderboard/helper/ValidateAccess';
 
 const ListCardPublicSchedule = lazy(() => import('./components/cardList'));
@@ -23,10 +24,19 @@ const PublicSchedule = () => {
 const PublicScheduleAccess = () => {
   const { code } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+
   const { PublicList } = useScheduleData();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleIsAttList = useCallback(() => {
+    AnalyticsAdapter.event({
+      action: 'buscar_cronograma_atualizado',
+      category: 'Atleta',
+      label: 'Atualizar cronograma',
+      value: `${code}`,
+    });
+
     setIsLoading(true);
 
     setTimeout(() => setIsLoading(false), 1000);
@@ -35,6 +45,10 @@ const PublicScheduleAccess = () => {
   useEffect(() => {
     if (code) PublicList(code);
   }, [PublicList, code]);
+
+  useEffect(() => {
+    AnalyticsAdapter.pageview(location.pathname);
+  }, [location.pathname]);
 
   useEffect(() => {
     ValidateAccess.verify(code as string, navigate);

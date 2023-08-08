@@ -66,9 +66,9 @@ const ListCategory = ({ id, openEdit }: IListCategory) => {
   return (
     <>
       <ComponentModal modalHeader='Remover categoria' size='sm' isOpen={isOpen} onClose={onClose}>
-        <DeleteData onClose={onClose} removedData="a categoria" confirmDelete={confirmDelete}/>
+        <DeleteData onClose={onClose} removedData='a categoria' confirmDelete={confirmDelete} />
       </ComponentModal>
-      
+
       <TableContainer border='1px' borderColor='gray.100' fontSize='sm' color='#2D3748'>
         <Table variant='simple'>
           <Thead bg='gray.50' border='1px' borderColor='gray.100'>
@@ -106,8 +106,8 @@ const ListCategory = ({ id, openEdit }: IListCategory) => {
                         variant='none'
                       />
                       <MenuList>
-                        <MenuItem onClick={() => openDelete(category.id)}>Deletar</MenuItem>
                         <MenuItem onClick={() => openEdit(category)}>Editar</MenuItem>
+                        <MenuItem onClick={() => openDelete(category.id)}>Deletar</MenuItem>
                       </MenuList>
                     </Menu>
                   </Flex>
@@ -156,7 +156,10 @@ const ListCategory = ({ id, openEdit }: IListCategory) => {
                         variant='link'
                         onClick={previousPage}
                       >
-                        <ChevronLeft color={categoriesPages.previous ? 'black' : 'gray'} size={16} />
+                        <ChevronLeft
+                          color={categoriesPages.previous ? 'black' : 'gray'}
+                          size={16}
+                        />
                       </Button>
                     </Tooltip>
                     <Tooltip label='Próxima página' placement='top' hasArrow>
