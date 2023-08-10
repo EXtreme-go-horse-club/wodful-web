@@ -93,4 +93,19 @@ export class TicketService {
         throw new Error();
     }
   }
+  async listEnabled(id: string): Promise<ITicket[]> {
+    let url = `${this.path}/${id}/enabled`;
+
+    const { statusCode, body } = await this.httpClient.request({
+      method: 'get',
+      url: url,
+    });
+
+    switch (statusCode) {
+      case HttpStatusCode.ok:
+        return body! as ITicket[];
+      default:
+        throw new Error();
+    }
+  }
 }

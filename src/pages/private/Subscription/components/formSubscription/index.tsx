@@ -24,7 +24,7 @@ interface CreateModalProps {
 const FormSubscription = ({ id, openFormParticipants }: CreateModalProps) => {
   const [formatDisplayPhone, setFormatDisplayPhone] = useState<string>('');
   const { setSubscriptionForm } = useSubscriptionData();
-  const { List, tickets } = useTicketData();
+  const { ListEnabled, tickets } = useTicketData();
   const {
     register,
     handleSubmit,
@@ -34,8 +34,8 @@ const FormSubscription = ({ id, openFormParticipants }: CreateModalProps) => {
   });
 
   useEffect(() => {
-    List(id);
-  }, [List, id]);
+    ListEnabled(id);
+  }, [ListEnabled, id]);
 
   function onSubmit(subscription: ISubscriptionForm) {
     subscription.ticketId = tickets[subscription.ticketIndex as number].id;

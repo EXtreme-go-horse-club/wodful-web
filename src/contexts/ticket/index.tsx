@@ -24,6 +24,7 @@ export interface TicketContextData {
   Delete: (id: string) => Promise<void>;
   ListPaginated: (id: string) => Promise<void>;
   List: (id: string) => Promise<void>;
+  ListEnabled: (id: string) => Promise<void>;
   Create: ({
     name,
     description,
@@ -68,6 +69,18 @@ export const TicketProvider = ({ children, onClose }: TicketProviderProps) => {
       .listAll(id)
       .then((allTickets) => {
         setTickets(allTickets as ITicket[]);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, []);
+
+  const ListEnabled = useCallback(async (id: string) => {
+    setIsLoading(true);
+    await new TicketService(axios)
+      .listEnabled(id)
+      .then((enabledTickets) => {
+        setTickets(enabledTickets as ITicket[]);
       })
       .finally(() => {
         setIsLoading(false);
@@ -204,6 +217,7 @@ export const TicketProvider = ({ children, onClose }: TicketProviderProps) => {
         Delete,
         Create,
         List,
+        ListEnabled,
         ListPaginated,
         Edit,
       }}
