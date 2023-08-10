@@ -16,6 +16,7 @@ export interface AuthContextData {
   Logout(): void;
   isLoading: boolean;
   isError: boolean;
+  access: string | null;
   Access: (accessCode: string) => Promise<void>;
   Reset(): void;
 }
@@ -26,6 +27,7 @@ const axios = new AxiosAdapter();
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<IUserData | null>(null);
+  const [access, setAccessCode] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
 
@@ -57,6 +59,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       .access(accessCode)
       .then((access: PublicUser) => {
         setIsError(false);
+        setAccessCode(access.code);
         localStorage.setItem('@Wodful:access', access.code);
         localStorage.setItem('@Wodful:pcname', access.championship.name);
       })
@@ -65,6 +68,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, []);
 
   const Reset = useCallback(() => {
+    setAccessCode(null);
     localStorage.removeItem('@Wodful:access');
     localStorage.removeItem('@Wodful:pcname');
   }, []);
@@ -72,7 +76,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   useEffect(() => {
     const storagedUser = localStorage.getItem('@Wodful:usr');
     const storagedToken = localStorage.getItem('@Wodful:tkn');
+    const storagedCode = localStorage.getItem('@Wodful:access');
 
+    if (storagedCode) setAccessCode(storagedCode);
     if (storagedToken && storagedUser) {
       setUser(JSON.parse(storagedUser));
     }
@@ -80,7 +86,17 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   return (
     <AuthContext.Provider
-      value={{ signed: Boolean(user), user, Login, Logout, isLoading, isError, Access, Reset }}
+      value={{
+        signed: Boolean(user),
+        user,
+        Login,
+        Logout,
+        isLoading,
+        isError,
+        Access,
+        Reset,
+        access,
+      }}
     >
       {children}
     </AuthContext.Provider>
