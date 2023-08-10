@@ -101,6 +101,7 @@ const ListTicket = ({ openEdit }: IListTicketProps) => {
               <Th>
                 <Text as='b'>Restantes</Text>
               </Th>
+              <Th></Th>
             </Tr>
           </Thead>
           <Tbody>
