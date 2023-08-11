@@ -2,10 +2,14 @@ import { HttpClient, HttpStatusCode } from '@/data/interfaces/http';
 import { IPageResponse } from '@/data/interfaces/pageResponse';
 import { IParticipant, IParticipants } from '@/data/interfaces/participant';
 
+interface DownloadLink {
+  downloadUrl: string;
+}
+
 export class ParticipantsService {
   constructor(
     private readonly httpClient: HttpClient<
-      IPageResponse<IParticipants> | IParticipants[] | IParticipant
+      IPageResponse<IParticipants> | IParticipants[] | IParticipant | DownloadLink
     >,
     private readonly path = '/participants/',
   ) {}
@@ -60,6 +64,22 @@ export class ParticipantsService {
     switch (statusCode) {
       case HttpStatusCode.ok:
         return body! as IParticipant;
+      default:
+        throw new Error();
+    }
+  }
+
+  async exportToCsv(champID: string): Promise<DownloadLink> {
+    const url = `${this.path}/${champID}/exports`;
+
+    const { statusCode, body } = await this.httpClient.request({
+      method: 'get',
+      url: url,
+    });
+
+    switch (statusCode) {
+      case HttpStatusCode.ok:
+        return body! as DownloadLink;
       default:
         throw new Error();
     }

@@ -23,6 +23,7 @@ export interface ParticipantContextData {
     { id, affiliation, city, identificationCode, name, tShirtSize }: IParticipant,
     idChampionship: string,
   ): Promise<void>;
+  ExportToCSV(champId: string): Promise<void>;
 }
 
 const ParticipantContext = createContext({} as ParticipantContextData);
@@ -38,6 +39,13 @@ export const ParticipantProvider = ({ children }: TicketProviderProps) => {
   const [page, setPage] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isError] = useState<boolean>(false);
+
+  const ExportToCSV = useCallback(async (champId: string) => {
+    setIsLoading(true);
+    await new ParticipantsService(axios).exportToCsv(`${champId}`).then((url) => {
+      window.open(`${import.meta.env.VITE_BASE_SERVER_URL}/${url.downloadUrl}`, 'blank');
+    });
+  }, []);
 
   const ListPaginated = useCallback(
     async (id: string | null, name?: string) => {
@@ -94,6 +102,7 @@ export const ParticipantProvider = ({ children }: TicketProviderProps) => {
         setPage,
         Edit,
         ListPaginated,
+        ExportToCSV,
       }}
     >
       {children}

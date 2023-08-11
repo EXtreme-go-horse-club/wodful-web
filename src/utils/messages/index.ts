@@ -17,6 +17,7 @@ export const championshipMessages = {
 
 export const participantMessages = {
   success_edit: 'Competidor atualizado com sucesso',
+  success_export: 'Relatório de camisetas exportado com sucesso',
   error_edit: 'Algo deu errado ao editar o competidor',
 };
 
