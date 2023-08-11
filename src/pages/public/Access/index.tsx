@@ -18,7 +18,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const Access = () => {
-  const { Access, isError, isLoading } = useAuth();
+  const { Access, isError, isLoading, access } = useAuth();
   const [accessCode, setAccessCode] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
@@ -38,8 +38,9 @@ const Access = () => {
   const isEmpty = useMemo(() => !accessCode.length, [accessCode]);
 
   useEffect(() => {
+    if (access) navigate(`/access/${access}/leaderboards`);
     AnalyticsAdapter.pageview(location.pathname);
-  }, [location.pathname]);
+  }, [location.pathname, access]);
 
   return (
     <Box>
