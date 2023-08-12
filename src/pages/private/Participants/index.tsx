@@ -1,15 +1,22 @@
+import AnalyticsAdapter from '@/adapters/AnalyticsAdapter';
 import ComponentModal from '@/components/ComponentModal';
 import { Loader } from '@/components/Loader';
 import { ParticipantProvider } from '@/contexts/participant';
 import { IParticipant } from '@/data/interfaces/participant';
+import useApp from '@/hooks/useApp';
+import useParticipantData from '@/hooks/useParticipantData';
+import { participantMessages } from '@/utils/messages';
 import {
   Box,
+  Button,
   HStack,
   Input,
   InputGroup,
   InputLeftElement,
   Text,
+  Tooltip,
   useDisclosure,
+  useToast,
 } from '@chakra-ui/react';
 import { ChangeEvent, Suspense, lazy, useState } from 'react';
 import { Search } from 'react-feather';
@@ -30,6 +37,10 @@ const Participants = () => {
   const [participant, setParticipant] = useState<IParticipant>();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  const { ExportToCSV } = useParticipantData();
+  const { currentChampionship } = useApp();
+  const toast = useToast();
+
   const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
     const name = event.target.value.length;
     return name >= 3 ? setParticipantName(event.target.value) : setParticipantName('');
@@ -38,6 +49,23 @@ const Participants = () => {
   const openEdit = (participantObj: IParticipant) => {
     setParticipant(participantObj);
     onOpen();
+  };
+
+  const exportToCsv = () => {
+    AnalyticsAdapter.event({
+      action: 'exportar_camisetas_participantes',
+      category: 'ADM',
+      label: 'Exportar camisetas',
+      value: `camisetas`,
+    });
+
+    ExportToCSV(currentChampionship.id);
+
+    toast({
+      title: participantMessages['success_export'],
+      status: 'success',
+      isClosable: true,
+    });
   };
 
   return (
@@ -61,6 +89,11 @@ const Participants = () => {
                   placeholder='Buscar participante'
                 />
               </InputGroup>
+              <Tooltip label='Relação de camisetas entre os participantes' hasArrow>
+                <Button onClick={exportToCsv} colorScheme='teal' w='100%' type='button'>
+                  Baixar Relatório
+                </Button>
+              </Tooltip>
             </HStack>
           </>
         </HStack>
