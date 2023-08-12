@@ -14,6 +14,7 @@ import {
 import { ChangeEvent, Suspense, lazy, useState } from 'react';
 import { Search } from 'react-feather';
 import FormParticipant from './components/form';
+import FormMedal from './components/formMedal';
 
 const ListParticipants = lazy(() => import('./components/list'));
 
@@ -27,6 +28,7 @@ const ParticipantWithProvider = () => {
 
 const Participants = () => {
   const [participantName, setParticipantName] = useState<string>('');
+  const [whichModal, setWhichModal] = useState<'EDIT' | 'MEDAL' | 'KIT'>('EDIT');
   const [participant, setParticipant] = useState<IParticipant>();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -35,7 +37,8 @@ const Participants = () => {
     return name >= 3 ? setParticipantName(event.target.value) : setParticipantName('');
   };
 
-  const openEdit = (participantObj: IParticipant) => {
+  const openModal = (whichOne: 'EDIT' | 'MEDAL' | 'KIT', participantObj: IParticipant) => {
+    setWhichModal(whichOne);
     setParticipant(participantObj);
     onOpen();
   };
@@ -66,16 +69,27 @@ const Participants = () => {
         </HStack>
 
         <ComponentModal
-          modalHeader={'Editar participante'}
+          modalHeader={
+            whichModal == 'EDIT'
+              ? 'Editar participante'
+              : whichModal == 'MEDAL'
+              ? 'Retirar medalha'
+              : 'Retirar kit'
+          }
           size='lg'
           isOpen={isOpen}
           onClose={onClose}
         >
-          <FormParticipant onClose={onClose} oldParticipant={participant} />
+          {whichModal === 'EDIT' && (
+            <FormParticipant onClose={onClose} oldParticipant={participant} />
+          )}
+          {whichModal === 'MEDAL' && (
+            <FormMedal onClose={onClose} idParticipant={participant!.id} />
+          )}
         </ComponentModal>
 
         <Box w='100%' marginTop={6}>
-          <ListParticipants participantName={participantName} openEdit={openEdit} />
+          <ListParticipants participantName={participantName} openModal={openModal} />
         </Box>
       </Box>
     </Suspense>

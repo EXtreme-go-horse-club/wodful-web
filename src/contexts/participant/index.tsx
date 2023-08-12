@@ -19,6 +19,11 @@ export interface ParticipantContextData {
   page: number;
   setPage: (value: number) => void;
   ListPaginated: (id: string | null, name?: string) => Promise<void>;
+  PatchMedal(
+    idParticipant: string,
+    medalTakenBy: string | null,
+    idChampionship: string,
+  ): Promise<void>;
   Edit(
     { id, affiliation, city, identificationCode, name, tShirtSize }: IParticipant,
     idChampionship: string,
@@ -82,6 +87,33 @@ export const ParticipantProvider = ({ children }: TicketProviderProps) => {
     [toast, ListPaginated],
   );
 
+  const PatchMedal = useCallback(
+    async (idParticipant: string, medalTakenBy: string | null, idChampionship: string) => {
+      setIsLoading(true);
+      await new ParticipantsService(axios)
+        .patchMedal(idParticipant, medalTakenBy)
+        .then(() => {
+          toast({
+            title: participantMessages['success_edit'],
+            status: 'success',
+            isClosable: true,
+          });
+          ListPaginated(idChampionship);
+        })
+        .catch(() => {
+          toast({
+            title: participantMessages['error_edit'],
+            status: 'error',
+            isClosable: true,
+          });
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    },
+    [toast, ListPaginated],
+  );
+
   return (
     <ParticipantContext.Provider
       value={{
@@ -92,6 +124,7 @@ export const ParticipantProvider = ({ children }: TicketProviderProps) => {
         page,
         setLimit,
         setPage,
+        PatchMedal,
         Edit,
         ListPaginated,
       }}

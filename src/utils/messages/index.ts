@@ -18,6 +18,8 @@ export const championshipMessages = {
 export const participantMessages = {
   success_edit: 'Competidor atualizado com sucesso',
   error_edit: 'Algo deu errado ao editar o competidor',
+  success_medal: 'Medalha do competidor atualizada com sucesso',
+  error_medal: 'Algo deu errado ao editar a medalha do competidor',
 };
 
 export const categoryMessages = {
