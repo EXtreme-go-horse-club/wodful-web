@@ -21,6 +21,8 @@ export const participantMessages = {
   error_edit: 'Algo deu errado ao editar o competidor',
   success_medal: 'Medalha do competidor atualizada com sucesso',
   error_medal: 'Algo deu errado ao editar a medalha do competidor',
+  success_kit: 'Kit do competidor atualizada com sucesso',
+  error_kit: 'Algo deu errado ao editar o kit do competidor',
 };
 
 export const categoryMessages = {

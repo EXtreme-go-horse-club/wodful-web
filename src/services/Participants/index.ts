@@ -57,6 +57,26 @@ export class ParticipantsService {
     }
   }
 
+  async patchKit(idParticipant: string, kitTakenBy: string | null): Promise<IParticipant> {
+    const { statusCode, body } = await this.httpClient.request({
+      method: 'patch',
+      url: `${this.path}${idParticipant}/kits`,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: {
+        kitTakenBy,
+      },
+    });
+
+    switch (statusCode) {
+      case HttpStatusCode.noContent:
+        return body! as IParticipant;
+      default:
+        throw new Error();
+    }
+  }
+
   async edit({
     id,
     affiliation,
