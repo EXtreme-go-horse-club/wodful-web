@@ -22,6 +22,7 @@ import { ChangeEvent, Suspense, lazy, useState } from 'react';
 import { Search } from 'react-feather';
 import FormParticipant from './components/form';
 import FormMedal from './components/formMedal';
+import FormKit from './components/formKit';
 
 const ListParticipants = lazy(() => import('./components/list'));
 
@@ -119,6 +120,7 @@ const Participants = () => {
           {whichModal === 'MEDAL' && (
             <FormMedal onClose={onClose} idParticipant={participant!.id} />
           )}
+          {whichModal === 'KIT' && <FormKit onClose={onClose} idParticipant={participant!.id} />}
         </ComponentModal>
 
         <Box w='100%' marginTop={6}>

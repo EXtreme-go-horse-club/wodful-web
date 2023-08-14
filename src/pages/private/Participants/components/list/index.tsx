@@ -28,7 +28,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { ChevronLeft, ChevronRight, MoreHorizontal } from 'react-feather';
+import { ChevronLeft, ChevronRight, MoreHorizontal, Info } from 'react-feather';
 import { useParams } from 'react-router-dom';
 
 interface IListParticipants {
@@ -37,12 +37,13 @@ interface IListParticipants {
 }
 
 const ListParticipants = ({ participantName, openModal }: IListParticipants) => {
-  const { PatchMedal } = useParticipantData();
+  const { PatchMedal, PatchKit } = useParticipantData();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [currentTotal, setCurrentTotal] = useState<number>(0);
   const [idParticipant, setIdParticipant] = useState<string>('');
+  const [whichModal, setWhichModal] = useState<'MEDAL' | 'KIT'>('MEDAL');
 
   const { ListPaginated, participantsPages, page, limit, setLimit, setPage, isLoading } =
     useParticipantData();
@@ -64,10 +65,12 @@ const ListParticipants = ({ participantName, openModal }: IListParticipants) => 
   };
 
   const confirmDelete = () => {
-    PatchMedal(idParticipant, null, id!);
+    if (whichModal === 'MEDAL') PatchMedal(idParticipant, null, id!);
+    if (whichModal === 'KIT') PatchKit(idParticipant, null, id!);
   };
 
-  const openDelete = (idParticipant: string) => {
+  const openDelete = (idParticipant: string, whichOne: 'MEDAL' | 'KIT') => {
+    setWhichModal(whichOne);
     setIdParticipant(idParticipant);
     onOpen();
   };
@@ -77,7 +80,7 @@ const ListParticipants = ({ participantName, openModal }: IListParticipants) => 
       <ComponentModal modalHeader='Desvincular' size='sm' isOpen={isOpen} onClose={onClose}>
         <DeleteData
           onClose={onClose}
-          removedData='a retirada de medalha'
+          removedData={whichModal == 'MEDAL' ? 'a retirada de medalha' : 'a retirada de kit'}
           confirmDelete={confirmDelete}
         />
       </ComponentModal>
@@ -97,6 +100,9 @@ const ListParticipants = ({ participantName, openModal }: IListParticipants) => 
               </Th>
               <Th>
                 <Text as='b'>Medalha</Text>
+              </Th>
+              <Th>
+                <Text as='b'>Kit</Text>
               </Th>
               <Th></Th>
             </Tr>
@@ -126,7 +132,30 @@ const ListParticipants = ({ participantName, openModal }: IListParticipants) => 
 
                 <Td p={6}>{participant.nickname}</Td>
                 <Td p={6}>{participant.category.name}</Td>
-                <Td p={6}>{participant.medalTakenBy ? 'Retirada' : 'Aguardando'}</Td>
+                <Td p={6}>
+                  {participant.medalTakenBy ? (
+                    <Tooltip label={participant.medalTakenBy} placement='top-start'>
+                      <Text display='flex' alignItems='center' gap={2} cursor={'pointer'}>
+                        Retirado
+                        <Info color={'black'} size={16} />
+                      </Text>
+                    </Tooltip>
+                  ) : (
+                    'Aguardando'
+                  )}
+                </Td>
+                <Td p={6}>
+                  {participant.kitTakenBy ? (
+                    <Tooltip label={participant.kitTakenBy} placement='top-start'>
+                      <Text display='flex' alignItems='center' gap={2} cursor={'pointer'}>
+                        Retirado
+                        <Info color={'black'} size={16} />
+                      </Text>
+                    </Tooltip>
+                  ) : (
+                    'Aguardando'
+                  )}
+                </Td>
 
                 <Td p={6}>
                   <Flex justify='end'>
@@ -143,10 +172,19 @@ const ListParticipants = ({ participantName, openModal }: IListParticipants) => 
                           onClick={() =>
                             !participant.medalTakenBy
                               ? openModal('MEDAL', participant)
-                              : openDelete(participant.id)
+                              : openDelete(participant.id, 'MEDAL')
                           }
                         >
                           {!participant.medalTakenBy ? 'Retirar medalha' : 'Devolver medalha'}
+                        </MenuItem>
+                        <MenuItem
+                          onClick={() =>
+                            !participant.kitTakenBy
+                              ? openModal('KIT', participant)
+                              : openDelete(participant.id, 'KIT')
+                          }
+                        >
+                          {!participant.kitTakenBy ? 'Retirar kit' : 'Devolver kit'}
                         </MenuItem>
                       </MenuList>
                     </Menu>
