@@ -15,6 +15,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { useCallback } from 'react';
+import { Info } from 'react-feather';
 
 const ListPublicLeaderboard = () => {
   const { publicLeaderboards } = useLeaderboardData();
@@ -48,11 +49,57 @@ const ListPublicLeaderboard = () => {
                 </HStack>
               </VStack>
 
-              <HStack fontSize='14px' align='start' gap='24px'>
-                <VStack align='start' spacing={0}>
-                  <Text as='b' color='gray.700' textTransform='capitalize'>
-                    {leaderboard.nickname}
-                  </Text>
+              <HStack fontSize='14px' align='start' gap='24px' w='100%'>
+                <VStack align='start' spacing={0} w='100%'>
+                  <Accordion allowToggle width='100%'>
+                    <AccordionItem border='none'>
+                      {({ isExpanded }) => (
+                        <>
+                          <AccordionButton p={'0'}>
+                            <HStack justify='flex-start' w='100%'>
+                              <Text
+                                as='b'
+                                color='gray.700'
+                                textTransform='capitalize'
+                                textOverflow={'ellipsis'}
+                                whiteSpace={'nowrap'}
+                                overflow={'hidden'}
+                              >
+                                {leaderboard.nickname}
+                              </Text>
+                              <Box textAlign='left'>
+                                {isExpanded ? (
+                                  <Info size={'14px'} />
+                                ) : (
+                                  <Info color='#2b6cb0' size={'14px'} />
+                                )}
+                              </Box>
+                            </HStack>
+                          </AccordionButton>
+                          <AccordionPanel py={0.5} px={0}>
+                            <VStack align='start' spacing={0}>
+                              <Text as='small' textTransform='capitalize'>
+                                {leaderboard.participants
+                                  .map((participant) => {
+                                    const splitName = participant.name.split(' ');
+                                    return splitName.length > 1
+                                      ? `${splitName[0]} ${splitName[splitName.length - 1]}`
+                                      : splitName[0];
+                                  })
+                                  .join(' - ')}
+                              </Text>
+                              <Text as='small' textTransform='capitalize'>
+                                {leaderboard.participants
+                                  .map((participant) => participant.affiliation)
+                                  .join(' - ')}
+                              </Text>
+                            </VStack>
+                          </AccordionPanel>
+                        </>
+                      )}
+                    </AccordionItem>
+                  </Accordion>
+
                   <Text fontSize='sm'>{leaderboard.category.name}</Text>
                 </VStack>
               </HStack>
