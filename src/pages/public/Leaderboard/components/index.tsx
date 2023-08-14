@@ -15,8 +15,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { useCallback } from 'react';
-
-import { Eye, EyeOff } from 'react-feather';
+import { Info } from 'react-feather';
 
 const ListPublicLeaderboard = () => {
   const { publicLeaderboards } = useLeaderboardData();
@@ -70,9 +69,9 @@ const ListPublicLeaderboard = () => {
                               </Text>
                               <Box textAlign='left'>
                                 {isExpanded ? (
-                                  <Eye color='#2b6cb0' size={'14px'} />
+                                  <Info size={'14px'} />
                                 ) : (
-                                  <EyeOff color='#2b6cb0' size={'14px'} />
+                                  <Info color='#2b6cb0' size={'14px'} />
                                 )}
                               </Box>
                             </HStack>
