@@ -19,6 +19,8 @@ export const participantMessages = {
   success_edit: 'Competidor atualizado com sucesso',
   success_export: 'Relatório de camisetas exportado com sucesso',
   error_edit: 'Algo deu errado ao editar o competidor',
+  success_medal: 'Medalha do competidor atualizada com sucesso',
+  error_medal: 'Algo deu errado ao editar a medalha do competidor',
 };
 
 export const categoryMessages = {

@@ -37,6 +37,26 @@ export class ParticipantsService {
     }
   }
 
+  async patchMedal(idParticipant: string, medalTakenBy: string | null): Promise<IParticipant> {
+    const { statusCode, body } = await this.httpClient.request({
+      method: 'patch',
+      url: `${this.path}${idParticipant}/medals`,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: {
+        medalTakenBy,
+      },
+    });
+
+    switch (statusCode) {
+      case HttpStatusCode.noContent:
+        return body! as IParticipant;
+      default:
+        throw new Error();
+    }
+  }
+
   async edit({
     id,
     affiliation,
