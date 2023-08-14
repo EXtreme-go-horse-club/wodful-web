@@ -28,7 +28,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { ChevronLeft, ChevronRight, MoreHorizontal } from 'react-feather';
+import { ChevronLeft, ChevronRight, MoreHorizontal, Info } from 'react-feather';
 import { useParams } from 'react-router-dom';
 
 interface IListParticipants {
@@ -132,8 +132,30 @@ const ListParticipants = ({ participantName, openModal }: IListParticipants) => 
 
                 <Td p={6}>{participant.nickname}</Td>
                 <Td p={6}>{participant.category.name}</Td>
-                <Td p={6}>{participant.medalTakenBy ? participant.medalTakenBy : 'Aguardando'}</Td>
-                <Td p={6}>{participant.kitTakenBy ? participant.kitTakenBy : 'Aguardando'}</Td>
+                <Td p={6}>
+                  {participant.medalTakenBy ? (
+                    <Tooltip label={participant.medalTakenBy} placement='top-start'>
+                      <Text display='flex' alignItems='center' gap={2} cursor={'pointer'}>
+                        Retirado
+                        <Info color={'black'} size={16} />
+                      </Text>
+                    </Tooltip>
+                  ) : (
+                    'Aguardando'
+                  )}
+                </Td>
+                <Td p={6}>
+                  {participant.kitTakenBy ? (
+                    <Tooltip label={participant.kitTakenBy} placement='top-start'>
+                      <Text display='flex' alignItems='center' gap={2} cursor={'pointer'}>
+                        Retirado
+                        <Info color={'black'} size={16} />
+                      </Text>
+                    </Tooltip>
+                  ) : (
+                    'Aguardando'
+                  )}
+                </Td>
 
                 <Td p={6}>
                   <Flex justify='end'>
