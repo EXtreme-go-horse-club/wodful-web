@@ -24,6 +24,7 @@ export interface ParticipantContextData {
     medalTakenBy: string | null,
     idChampionship: string,
   ): Promise<void>;
+  PatchKit(idParticipant: string, kitTakenBy: string | null, idChampionship: string): Promise<void>;
   Edit(
     { id, affiliation, city, identificationCode, name, tShirtSize }: IParticipant,
     idChampionship: string,
@@ -95,14 +96,14 @@ export const ParticipantProvider = ({ children }: TicketProviderProps) => {
     [toast, ListPaginated],
   );
 
-  const PatchMedal = useCallback(
-    async (idParticipant: string, medalTakenBy: string | null, idChampionship: string) => {
+  const PatchKit = useCallback(
+    async (idParticipant: string, kitTakenBy: string | null, idChampionship: string) => {
       setIsLoading(true);
       await new ParticipantsService(axios)
-        .patchMedal(idParticipant, medalTakenBy)
+        .patchKit(idParticipant, kitTakenBy)
         .then(() => {
           toast({
-            title: participantMessages['success_edit'],
+            title: participantMessages['success_kit'],
             status: 'success',
             isClosable: true,
           });
@@ -110,7 +111,34 @@ export const ParticipantProvider = ({ children }: TicketProviderProps) => {
         })
         .catch(() => {
           toast({
-            title: participantMessages['error_edit'],
+            title: participantMessages['error_kit'],
+            status: 'error',
+            isClosable: true,
+          });
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    },
+    [toast, ListPaginated],
+  );
+
+  const PatchMedal = useCallback(
+    async (idParticipant: string, medalTakenBy: string | null, idChampionship: string) => {
+      setIsLoading(true);
+      await new ParticipantsService(axios)
+        .patchMedal(idParticipant, medalTakenBy)
+        .then(() => {
+          toast({
+            title: participantMessages['success_medal'],
+            status: 'success',
+            isClosable: true,
+          });
+          ListPaginated(idChampionship);
+        })
+        .catch(() => {
+          toast({
+            title: participantMessages['error_medal'],
             status: 'error',
             isClosable: true,
           });
@@ -133,6 +161,7 @@ export const ParticipantProvider = ({ children }: TicketProviderProps) => {
         setLimit,
         setPage,
         PatchMedal,
+        PatchKit,
         Edit,
         ListPaginated,
         ExportToCSV,
