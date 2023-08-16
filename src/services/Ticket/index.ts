@@ -5,7 +5,7 @@ import { ITicket, TicketDTO } from '@/data/interfaces/ticket';
 export class TicketService {
   constructor(
     private readonly httpClient: HttpClient<IPageResponse<ITicket> | ITicket[] | ITicket>,
-    private readonly path = '/tickets/',
+    private readonly path = '/tickets',
   ) {}
 
   async create({
@@ -94,7 +94,7 @@ export class TicketService {
     }
   }
   async listEnabled(id: string): Promise<ITicket[]> {
-    let url = `${this.path}/${id}/enabled`;
+    const url = `${this.path}/${id}/enabled`;
 
     const { statusCode, body } = await this.httpClient.request({
       method: 'get',

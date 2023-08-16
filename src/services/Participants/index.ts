@@ -22,7 +22,7 @@ export class ParticipantsService {
   ): Promise<IPageResponse<IParticipants> | IParticipants[]> {
     let url = `championships/${id}${this.path}${limit && page && `?limit=${limit}&page=${page}`}`;
 
-    if (search) url = `${url}&name=${search}`;
+    if (search) url = `${url}&search=${search}`;
 
     const { statusCode, body } = await this.httpClient.request({
       method: 'get',

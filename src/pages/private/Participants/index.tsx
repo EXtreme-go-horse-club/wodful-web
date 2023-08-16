@@ -21,8 +21,8 @@ import {
 import { ChangeEvent, Suspense, lazy, useState } from 'react';
 import { Search } from 'react-feather';
 import FormParticipant from './components/form';
-import FormMedal from './components/formMedal';
 import FormKit from './components/formKit';
+import FormMedal from './components/formMedal';
 
 const ListParticipants = lazy(() => import('./components/list'));
 
@@ -35,7 +35,7 @@ const ParticipantWithProvider = () => {
 };
 
 const Participants = () => {
-  const [participantName, setParticipantName] = useState<string>('');
+  const [searchBy, setSearchBy] = useState<string>('');
   const [whichModal, setWhichModal] = useState<'EDIT' | 'MEDAL' | 'KIT'>('EDIT');
   const [participant, setParticipant] = useState<IParticipant>();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -46,7 +46,7 @@ const Participants = () => {
 
   const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
     const name = event.target.value.length;
-    return name >= 3 ? setParticipantName(event.target.value) : setParticipantName('');
+    return name >= 3 ? setSearchBy(event.target.value) : setSearchBy('');
   };
 
   const openModal = (whichOne: 'EDIT' | 'MEDAL' | 'KIT', participantObj: IParticipant) => {
@@ -90,7 +90,7 @@ const Participants = () => {
                   as='input'
                   w='100%'
                   minW='320px'
-                  placeholder='Buscar participante'
+                  placeholder='Buscar participante ou time'
                 />
               </InputGroup>
               <Tooltip label='Relação de camisetas entre os participantes' hasArrow>
@@ -124,7 +124,7 @@ const Participants = () => {
         </ComponentModal>
 
         <Box w='100%' marginTop={6}>
-          <ListParticipants participantName={participantName} openModal={openModal} />
+          <ListParticipants participantOrTeamName={searchBy} openModal={openModal} />
         </Box>
       </Box>
     </Suspense>

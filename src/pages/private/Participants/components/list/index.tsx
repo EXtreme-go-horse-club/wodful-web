@@ -28,15 +28,16 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { ChevronLeft, ChevronRight, MoreHorizontal, Info } from 'react-feather';
+import { ChevronLeft, ChevronRight, Info, MoreHorizontal } from 'react-feather';
 import { useParams } from 'react-router-dom';
 
 interface IListParticipants {
-  participantName: string | null;
+  participantOrTeamName: string | null;
+
   openModal: (whichOne: 'EDIT' | 'MEDAL' | 'KIT', participant: IParticipant) => void;
 }
 
-const ListParticipants = ({ participantName, openModal }: IListParticipants) => {
+const ListParticipants = ({ participantOrTeamName, openModal }: IListParticipants) => {
   const { PatchMedal, PatchKit } = useParticipantData();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -51,10 +52,10 @@ const ListParticipants = ({ participantName, openModal }: IListParticipants) => 
   const { id } = useParams();
 
   useEffect(() => {
-    ListPaginated(id as string, participantName as string);
+    ListPaginated(id as string, participantOrTeamName as string);
 
     setCurrentTotal(participantsPages.results?.length);
-  }, [ListPaginated, id, participantName, participantsPages.results?.length]);
+  }, [ListPaginated, id, participantOrTeamName, participantsPages.results?.length]);
 
   const previousPage = () => {
     setPage(page - 1);
@@ -212,6 +213,8 @@ const ListParticipants = ({ participantName, openModal }: IListParticipants) => 
                   <option value='20'>20</option>
                 </Select>
               </Th>
+              <Th></Th>
+              <Th></Th>
               <Th></Th>
               <Th></Th>
               <Th maxW='100px'>
