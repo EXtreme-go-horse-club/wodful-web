@@ -21,12 +21,15 @@ import {
 import { useState } from 'react';
 import { MoreHorizontal } from 'react-feather';
 
-const ListResults = () => {
+interface IListResultProps {
+  openEdit: (id: string) => void;
+}
+
+const ListResults = ({ openEdit }: IListResultProps) => {
   const { resultPages, Delete } = useResultData();
   const [resultId, setResultId] = useState<string>('');
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-
 
   const openDelete = (id: string) => {
     setResultId(id);
@@ -40,7 +43,7 @@ const ListResults = () => {
   return (
     <>
       <ComponentModal modalHeader='Remover resultado' size='sm' isOpen={isOpen} onClose={onClose}>
-        <DeleteData onClose={onClose} removedData="o resultado" confirmDelete={confirmDelete}/>
+        <DeleteData onClose={onClose} removedData='o resultado' confirmDelete={confirmDelete} />
       </ComponentModal>
       <TableContainer border='1px' borderColor='gray.100' fontSize='sm' color='#2D3748'>
         <Table variant='simple'>
@@ -85,7 +88,9 @@ const ListResults = () => {
                 <Td p={6}>
                   {Number(result.points) === 0
                     ? 'Sem pontuação'
-                    : `${Number(result.points)} ${Number(result.points) === 1 ? 'Ponto' : 'Pontos'}`}
+                    : `${Number(result.points)} ${
+                        Number(result.points) === 1 ? 'Ponto' : 'Pontos'
+                      }`}
                 </Td>
                 <Td p={6}>
                   <Flex justify='end'>
@@ -97,6 +102,7 @@ const ListResults = () => {
                         variant='none'
                       />
                       <MenuList>
+                        <MenuItem onClick={() => openEdit(result.id)}>Editar</MenuItem>
                         <MenuItem onClick={() => openDelete(result.id)}>Deletar</MenuItem>
                       </MenuList>
                     </Menu>

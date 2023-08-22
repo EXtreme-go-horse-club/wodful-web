@@ -1,9 +1,11 @@
+import { ICreateResultRequestDTO } from '@/data/interfaces/result';
 import useCategoryData from '@/hooks/useCategoryData';
 import useResultData from '@/hooks/useResultData';
 import useSubscriptionData from '@/hooks/useSubscriptionData';
 import useWorkoutData from '@/hooks/useWorkoutData';
 import { validationMessages } from '@/utils/messages';
 import {
+  Box,
   Button,
   ButtonGroup,
   FormControl,
@@ -11,121 +13,157 @@ import {
   FormLabel,
   Input,
   Select,
+  Text,
   VStack,
 } from '@chakra-ui/react';
-import { useCallback, useState } from 'react';
-import { useForm } from 'react-hook-form';
-
-interface ResultFormProps {
-  category: string;
-  workout: string;
-  subscription: string;
-  result: string;
-}
+import { useEffect, useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
 interface IFormResultProps {
   onClose: () => void;
+  oldResultId?: string;
 }
 
-const ResultForm = ({ onClose }: IFormResultProps) => {
+const ResultForm = ({ onClose, oldResultId }: IFormResultProps) => {
   const { categories } = useCategoryData();
   const { ListAllByCategory, subscriptions } = useSubscriptionData();
   const { workouts, ListByCategory } = useWorkoutData();
   const [isTeam, setIsTeam] = useState(false);
   const [workoutType, setWorkoutType] = useState('AMRAP');
-  const { Create } = useResultData();
+  const { Create, Get, result, Edit } = useResultData();
 
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isValid },
-  } = useForm<ResultFormProps>({
+  } = useForm<ICreateResultRequestDTO>({
     mode: 'onChange',
   });
+  useEffect(() => {
+    if (oldResultId) {
+      Get(oldResultId);
+    }
+  }, [oldResultId]);
 
-  const onSubmit = useCallback(
-    ({
-      subscription: subscriptionId,
-      workout: workoutId,
-      result,
-      category: categoryId,
-    }: ResultFormProps) => {
-      Create({ subscriptionId, workoutId, result, categoryId });
+  useEffect(() => {
+    if (oldResultId) {
+      reset({
+        categoryId: result.Workout?.Category?.id,
+        result: result.result,
+        workoutId: result.Workout?.id,
+        subscriptionId: result.Subscription?.id,
+      });
+    }
+  }, [result, reset]);
+
+  const onSubmit: SubmitHandler<ICreateResultRequestDTO> = async (resultData) => {
+    if (oldResultId) {
+      await Edit({
+        id: oldResultId,
+        result: resultData.result,
+        categoryId: resultData.categoryId,
+      });
       onClose();
-    },
-    [Create, onClose],
-  );
+      return;
+    }
+    await Create(resultData);
+    onClose();
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <VStack align='start' w='100%' spacing={6} pb={4} flexDirection='column'>
-        <FormControl isInvalid={!!errors.category}>
-          <FormLabel>Categoria</FormLabel>
-          <Select
-            as='select'
-            id='category'
-            placeholder='Selecione a categoria'
-            {...register('category', {
-              required: validationMessages['required'],
-              onChange: (e) => {
-                setIsTeam(
-                  categories.find((selected) => selected.id === e.target.value)?.isTeam || false,
-                );
-                ListAllByCategory(e.target.value);
-                ListByCategory(e.target.value);
-              },
-            })}
-          >
-            {categories?.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.name}
-              </option>
-            ))}
-          </Select>
-          <FormErrorMessage>{errors.category && errors.category.message}</FormErrorMessage>
-        </FormControl>
-        <FormControl isInvalid={!!errors.workout}>
-          <FormLabel>Prova</FormLabel>
-          <Select
-            as='select'
-            id='workout'
-            placeholder='Selecione a prova'
-            {...register('workout', {
-              required: validationMessages['required'],
-              onChange: (event) => {
-                setWorkoutType(
-                  workouts.find((selected) => selected.id === event.target.value)?.workoutType ||
-                    'AMRAP',
-                );
-              },
-            })}
-          >
-            {workouts?.map((workout) => (
-              <option key={workout.id} value={workout.id}>
-                {workout.name}
-              </option>
-            ))}
-          </Select>
-          <FormErrorMessage>{errors.workout && errors.workout.message}</FormErrorMessage>
-        </FormControl>
-        <FormControl isInvalid={!!errors.subscription}>
-          <FormLabel>{isTeam ? 'Equipe' : 'Atleta'}</FormLabel>
-          <Select
-            as='select'
-            id='subscription'
-            placeholder={isTeam ? 'Selecione uma equipe' : 'Selecione um atleta'}
-            {...register('subscription', {
-              required: validationMessages['required'],
-            })}
-          >
-            {subscriptions?.map((subscription) => (
-              <option key={subscription.id} value={subscription.id}>
-                {subscription.nickname}
-              </option>
-            ))}
-          </Select>
-          <FormErrorMessage>{errors.subscription && errors.subscription.message}</FormErrorMessage>
-        </FormControl>
+        {oldResultId && (
+          <>
+            <Box>
+              <Text as='b'>Categoria</Text>
+              <Text mt='8px'>{result.Workout?.Category?.name}</Text>
+            </Box>
+            <Box>
+              <Text as='b'>Prova</Text>
+              <Text mt='8px'>{result.Workout?.name}</Text>
+            </Box>
+            <Box>
+              <Text as='b'>Apelido</Text>
+              <Text mt='8px'>{result.Subscription?.nickname}</Text>
+            </Box>
+          </>
+        )}
+        {!oldResultId && (
+          <>
+            <FormControl isInvalid={!!errors.categoryId}>
+              <FormLabel>Categoria</FormLabel>
+              <Select
+                as='select'
+                id='categoryId'
+                placeholder='Selecione a categoria'
+                {...register('categoryId', {
+                  required: validationMessages['required'],
+                  onChange: (e) => {
+                    setIsTeam(
+                      categories.find((selected) => selected.id === e.target.value)?.isTeam ||
+                        false,
+                    );
+                    ListAllByCategory(e.target.value);
+                    ListByCategory(e.target.value);
+                  },
+                })}
+              >
+                {categories?.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
+              </Select>
+              <FormErrorMessage>{errors.categoryId && errors.categoryId.message}</FormErrorMessage>
+            </FormControl>
+            <FormControl isInvalid={!!errors.workoutId}>
+              <FormLabel>Prova</FormLabel>
+              <Select
+                as='select'
+                id='workoutId'
+                placeholder='Selecione a prova'
+                {...register('workoutId', {
+                  required: validationMessages['required'],
+                  onChange: (event) => {
+                    setWorkoutType(
+                      workouts.find((selected) => selected.id === event.target.value)
+                        ?.workoutType || 'AMRAP',
+                    );
+                  },
+                })}
+              >
+                {workouts?.map((workout) => (
+                  <option key={workout.id} value={workout.id}>
+                    {workout.name}
+                  </option>
+                ))}
+              </Select>
+              <FormErrorMessage>{errors.workoutId && errors.workoutId.message}</FormErrorMessage>
+            </FormControl>
+            <FormControl isInvalid={!!errors.subscriptionId}>
+              <FormLabel>{isTeam ? 'Equipe' : 'Atleta'}</FormLabel>
+              <Select
+                as='select'
+                id='subscriptionId'
+                placeholder={isTeam ? 'Selecione uma equipe' : 'Selecione um atleta'}
+                {...register('subscriptionId', {
+                  required: validationMessages['required'],
+                })}
+              >
+                {subscriptions?.map((subscription) => (
+                  <option key={subscription.id} value={subscription.id}>
+                    {subscription.nickname}
+                  </option>
+                ))}
+              </Select>
+              <FormErrorMessage>
+                {errors.subscriptionId && errors.subscriptionId.message}
+              </FormErrorMessage>
+            </FormControl>
+          </>
+        )}
         <FormControl isInvalid={!!errors.result}>
           <FormLabel htmlFor='result' m={0}>
             Resultado
@@ -144,7 +182,7 @@ const ResultForm = ({ onClose }: IFormResultProps) => {
 
         <ButtonGroup flexDirection='column' alignItems='end' gap={6} w='100%'>
           <Button colorScheme='teal' w='100%' mt={4} type='submit' disabled={!isValid}>
-            Adicionar
+            {oldResultId ? 'Editar' : 'Adicionar'}
           </Button>
         </ButtonGroup>
       </VStack>

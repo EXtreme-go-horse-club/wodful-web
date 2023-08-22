@@ -46,6 +46,7 @@ const ResultWithProvider = () => {
 const Result = () => {
   const { id } = useParams();
   const [selectedCategory, setSelectedCategory] = useState<string>('Sem categoria');
+  const [resultId, setResultId] = useState<string | undefined>(undefined);
   const [categoryId, setCategoryId] = useState<string>('');
   const [workoutId, setWorkoutId] = useState<string>('');
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -59,17 +60,26 @@ const Result = () => {
     }
   }, [CategoryList, id]);
 
-  const resetSelectData= () =>{
-    setSelectedCategory("Todos");
-    setWorkoutId("");
+  const resetSelectData = () => {
+    setSelectedCategory('Todos');
+    setResultId(undefined);
+    setWorkoutId('');
     setCategoryId('');
-  }
+  };
 
   const openCreate = () => {
     resetSelectData();
     ListResultsData(id as string);
     onOpen();
   };
+
+  const openEdit = useCallback(
+    (id: string) => {
+      setResultId(id);
+      onOpen();
+    },
+    [onOpen],
+  );
 
   const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
     const name = event.target.value;
@@ -199,10 +209,10 @@ const Result = () => {
           isOpen={isOpen}
           onClose={onClose}
         >
-          <ResultForm onClose={onClose} />
+          <ResultForm onClose={onClose} oldResultId={resultId} />
         </ComponentModal>
         <Box as='section' w='100%' marginTop={6}>
-          <ListResults />
+          <ListResults openEdit={openEdit} />
         </Box>
       </Box>
     </Suspense>

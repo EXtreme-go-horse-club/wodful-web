@@ -1,5 +1,11 @@
 import { HttpClient, HttpStatusCode } from '@/data/interfaces/http';
-import { ICreateResultRequestDTO, IResult, IResultByCategory } from '@/data/interfaces/result';
+import {
+  ICreateResultRequestDTO,
+  IEditResultDTO,
+  IResult,
+  IResultByCategory,
+  IResultData,
+} from '@/data/interfaces/result';
 
 export class ResultService {
   constructor(
@@ -21,6 +27,38 @@ export class ResultService {
     switch (statusCode) {
       case HttpStatusCode.created:
         return body! as IResult;
+      default:
+        throw new Error();
+    }
+  }
+
+  async edit({ id, result }: IEditResultDTO): Promise<IResult> {
+    const { statusCode, body } = await this.httpClient.request({
+      method: 'patch',
+      url: this.path,
+      body: {
+        id,
+        result,
+      },
+    });
+
+    switch (statusCode) {
+      case HttpStatusCode.ok:
+        return body! as IResult;
+      default:
+        throw new Error();
+    }
+  }
+
+  async get(id: string): Promise<IResultData> {
+    const { statusCode, body } = await this.httpClient.request({
+      method: 'get',
+      url: `${this.path}/${id}`,
+    });
+
+    switch (statusCode) {
+      case HttpStatusCode.ok:
+        return body! as unknown as IResultData;
       default:
         throw new Error();
     }
