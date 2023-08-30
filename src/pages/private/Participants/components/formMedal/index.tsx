@@ -43,7 +43,7 @@ const FormMedal = ({ onClose, idParticipant }: EditMedalProps) => {
           <Input
             as='input'
             id='medalTakenBy'
-            placeholder='Nome de quem vai retirar'
+            placeholder='Responsável pela retirada'
             {...register('medalTakenBy', {
               required: validationMessages['required'],
               minLength: { value: 4, message: validationMessages['minLength'] },

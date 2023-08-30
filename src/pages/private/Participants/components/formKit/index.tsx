@@ -43,7 +43,7 @@ const FormKit = ({ onClose, idParticipant }: EditKitProps) => {
           <Input
             as='input'
             id='kitTakenBy'
-            placeholder='Nome de quem vai retirar'
+            placeholder='Responsável pela retirada'
             {...register('kitTakenBy', {
               required: validationMessages['required'],
               minLength: { value: 4, message: validationMessages['minLength'] },
