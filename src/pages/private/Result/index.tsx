@@ -204,7 +204,7 @@ const Result = () => {
           </Flex>
         </HStack>
         <ComponentModal
-          modalHeader='Adicionar resultado'
+          modalHeader={resultId ? 'Editar resultado' : 'Adicionar resultado'}
           size='lg'
           isOpen={isOpen}
           onClose={onClose}

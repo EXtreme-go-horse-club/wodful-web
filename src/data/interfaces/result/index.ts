@@ -27,6 +27,7 @@ export interface IResultData {
   Workout?: {
     id: string;
     name: string;
+    workoutType: string;
     Category?: {
       id: string;
       name: string;
