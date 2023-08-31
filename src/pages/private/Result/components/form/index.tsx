@@ -43,8 +43,9 @@ const ResultForm = ({ onClose, oldResultId }: IFormResultProps) => {
   useEffect(() => {
     if (oldResultId) {
       Get(oldResultId);
+      setWorkoutType(result.Workout?.workoutType || 'AMRAP');
     }
-  }, [oldResultId]);
+  }, [oldResultId, result]);
 
   useEffect(() => {
     if (oldResultId) {
