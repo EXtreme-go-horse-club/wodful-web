@@ -16,6 +16,10 @@ export interface IPublicLeaderboard {
   category: {
     name: string;
   };
+  participants: Array<{
+    name: string;
+    affiliation: string;
+  }>;
   ranking: number;
   results: Array<{
     result: string;

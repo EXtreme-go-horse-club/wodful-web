@@ -1,5 +1,10 @@
 import { AxiosAdapter } from '@/adapters/AxiosAdapter';
-import { ICreateResultRequestDTO, IResultByCategory } from '@/data/interfaces/result';
+import {
+  ICreateResultRequestDTO,
+  IEditResultDTO,
+  IResultByCategory,
+  IResultData,
+} from '@/data/interfaces/result';
 import { ResultService } from '@/services/Result';
 import { resultMessages } from '@/utils/messages';
 import { useToast } from '@chakra-ui/react';
@@ -13,6 +18,7 @@ interface ResultProps {
 
 export interface ResultContextData {
   resultPages: IResultByCategory[];
+  result: IResultData;
   isLoading: boolean;
   page: number;
   limit: number;
@@ -22,6 +28,8 @@ export interface ResultContextData {
   setPage: (value: number) => void;
   Delete: (id: string) => Promise<void>;
   Create: (data: ICreateResultRequestDTO) => void;
+  Get: (id: string) => Promise<void>;
+  Edit: (data: IEditResultDTO) => void;
 }
 
 const ResultContext = createContext({} as ResultContextData);
@@ -32,6 +40,7 @@ export const ResultProvider = ({ children, onClose }: ResultProps) => {
   const toast = useToast();
   const [resultPages, setResultPages] = useState<IResultByCategory[]>([] as IResultByCategory[]);
   const [page, setPage] = useState<number>(1);
+  const [result, setResult] = useState<IResultData>({} as IResultData);
   const [limit, setLimit] = useState<number>(5);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -43,6 +52,16 @@ export const ResultProvider = ({ children, onClose }: ResultProps) => {
       .listByCategory(categoryId, name)
       .then((results) => {
         setResultPages(results as IResultByCategory[]);
+      })
+      .finally(() => setIsLoading(false));
+  }, []);
+
+  const Get = useCallback(async (id: string) => {
+    setIsLoading(true);
+    await new ResultService(axios)
+      .get(id)
+      .then((results) => {
+        setResult(results as IResultData);
       })
       .finally(() => setIsLoading(false));
   }, []);
@@ -86,6 +105,32 @@ export const ResultProvider = ({ children, onClose }: ResultProps) => {
     [ListPaginated, onClose, toast],
   );
 
+  const Edit = useCallback(
+    async ({ id, result, categoryId }: IEditResultDTO) => {
+      setIsLoading(true);
+      await new ResultService(axios)
+        .edit({ id, result })
+        .then(() => {
+          toast({
+            title: resultMessages['success_edit'],
+            status: 'success',
+            isClosable: true,
+          });
+          ListPaginated(categoryId!);
+          onClose!();
+        })
+        .catch(() => {
+          toast({
+            title: resultMessages['error_edit'],
+            status: 'error',
+            isClosable: true,
+          });
+        })
+        .finally(() => setIsLoading(false));
+    },
+    [ListPaginated, onClose, toast],
+  );
+
   const Delete = useCallback(
     async (idCat: string) => {
       setIsLoading(true);
@@ -113,9 +158,12 @@ export const ResultProvider = ({ children, onClose }: ResultProps) => {
         limit,
         page,
         resultPages,
+        result,
         ListPaginated,
         ListPaginatedByWorkout,
         setLimit,
+        Get,
+        Edit,
         setPage,
       }}
     >

@@ -17,7 +17,12 @@ export const championshipMessages = {
 
 export const participantMessages = {
   success_edit: 'Competidor atualizado com sucesso',
+  success_export: 'Relatório de camisetas exportado com sucesso',
   error_edit: 'Algo deu errado ao editar o competidor',
+  success_medal: 'Medalha do competidor atualizada com sucesso',
+  error_medal: 'Algo deu errado ao editar a medalha do competidor',
+  success_kit: 'Kit do competidor atualizada com sucesso',
+  error_kit: 'Algo deu errado ao editar o kit do competidor',
 };
 
 export const categoryMessages = {
@@ -48,6 +53,8 @@ export const workoutMessages = {
 export const resultMessages = {
   success: 'Resultado adicionado com sucesso',
   error: 'Algo deu errado ao adicionar um resultado',
+  success_edit: 'Resultado editado com sucesso',
+  error_edit: 'Algo deu errado ao editar um resultado',
   remove: 'Resultado removido com sucesso',
   remove_err: 'Algo deu errado ao remover o Resultado',
 };

@@ -19,10 +19,17 @@ export interface ParticipantContextData {
   page: number;
   setPage: (value: number) => void;
   ListPaginated: (id: string | null, name?: string) => Promise<void>;
+  PatchMedal(
+    idParticipant: string,
+    medalTakenBy: string | null,
+    idChampionship: string,
+  ): Promise<void>;
+  PatchKit(idParticipant: string, kitTakenBy: string | null, idChampionship: string): Promise<void>;
   Edit(
     { id, affiliation, city, identificationCode, name, tShirtSize }: IParticipant,
     idChampionship: string,
   ): Promise<void>;
+  ExportToCSV(champId: string): Promise<void>;
 }
 
 const ParticipantContext = createContext({} as ParticipantContextData);
@@ -38,6 +45,13 @@ export const ParticipantProvider = ({ children }: TicketProviderProps) => {
   const [page, setPage] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isError] = useState<boolean>(false);
+
+  const ExportToCSV = useCallback(async (champId: string) => {
+    setIsLoading(true);
+    await new ParticipantsService(axios).exportToCsv(`${champId}`).then((url) => {
+      window.open(`${import.meta.env.VITE_BASE_SERVER_URL}/${url.downloadUrl}`, 'blank');
+    });
+  }, []);
 
   const ListPaginated = useCallback(
     async (id: string | null, name?: string) => {
@@ -82,6 +96,60 @@ export const ParticipantProvider = ({ children }: TicketProviderProps) => {
     [toast, ListPaginated],
   );
 
+  const PatchKit = useCallback(
+    async (idParticipant: string, kitTakenBy: string | null, idChampionship: string) => {
+      setIsLoading(true);
+      await new ParticipantsService(axios)
+        .patchKit(idParticipant, kitTakenBy)
+        .then(() => {
+          toast({
+            title: participantMessages['success_kit'],
+            status: 'success',
+            isClosable: true,
+          });
+          ListPaginated(idChampionship);
+        })
+        .catch(() => {
+          toast({
+            title: participantMessages['error_kit'],
+            status: 'error',
+            isClosable: true,
+          });
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    },
+    [toast, ListPaginated],
+  );
+
+  const PatchMedal = useCallback(
+    async (idParticipant: string, medalTakenBy: string | null, idChampionship: string) => {
+      setIsLoading(true);
+      await new ParticipantsService(axios)
+        .patchMedal(idParticipant, medalTakenBy)
+        .then(() => {
+          toast({
+            title: participantMessages['success_medal'],
+            status: 'success',
+            isClosable: true,
+          });
+          ListPaginated(idChampionship);
+        })
+        .catch(() => {
+          toast({
+            title: participantMessages['error_medal'],
+            status: 'error',
+            isClosable: true,
+          });
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    },
+    [toast, ListPaginated],
+  );
+
   return (
     <ParticipantContext.Provider
       value={{
@@ -92,8 +160,11 @@ export const ParticipantProvider = ({ children }: TicketProviderProps) => {
         page,
         setLimit,
         setPage,
+        PatchMedal,
+        PatchKit,
         Edit,
         ListPaginated,
+        ExportToCSV,
       }}
     >
       {children}
