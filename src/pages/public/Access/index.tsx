@@ -66,7 +66,7 @@ const Access = () => {
                     type='text'
                     placeholder='Código do Campeonato'
                     onChange={(event) => {
-                      setAccessCode(event?.target.value.toUpperCase());
+                      setAccessCode(event?.target.value.toUpperCase().trim());
                     }}
                   />
                 </Stack>

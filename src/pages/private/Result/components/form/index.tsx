@@ -31,6 +31,7 @@ const ResultForm = ({ onClose, oldResultId }: IFormResultProps) => {
   const [isTeam, setIsTeam] = useState(false);
   const [workoutType, setWorkoutType] = useState('AMRAP');
   const { Create, Get, result, Edit } = useResultData();
+  const [alreadyCallOldResult, setAlreadyCallOldResult] = useState(false);
 
   const {
     register,
@@ -41,11 +42,11 @@ const ResultForm = ({ onClose, oldResultId }: IFormResultProps) => {
     mode: 'onChange',
   });
   useEffect(() => {
-    if (oldResultId) {
+    if (oldResultId && !alreadyCallOldResult) {
       Get(oldResultId);
-      setWorkoutType(result.Workout?.workoutType || 'AMRAP');
+      setAlreadyCallOldResult(true);
     }
-  }, [oldResultId, result]);
+  }, [Get, alreadyCallOldResult, oldResultId, result]);
 
   useEffect(() => {
     if (oldResultId) {
@@ -55,8 +56,9 @@ const ResultForm = ({ onClose, oldResultId }: IFormResultProps) => {
         workoutId: result.Workout?.id,
         subscriptionId: result.Subscription?.id,
       });
+      setWorkoutType(result.Workout?.workoutType || 'AMRAP');
     }
-  }, [result, reset]);
+  }, [result, reset, oldResultId]);
 
   const onSubmit: SubmitHandler<ICreateResultRequestDTO> = async (resultData) => {
     if (oldResultId) {
@@ -86,7 +88,7 @@ const ResultForm = ({ onClose, oldResultId }: IFormResultProps) => {
               <Text mt='8px'>{result.Workout?.name}</Text>
             </Box>
             <Box>
-              <Text as='b'>Apelido</Text>
+              <Text as='b'>{!isTeam ? 'Apelido' : 'Time'}</Text>
               <Text mt='8px'>{result.Subscription?.nickname}</Text>
             </Box>
           </>
