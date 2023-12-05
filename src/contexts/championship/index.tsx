@@ -1,5 +1,9 @@
 import { AxiosAdapter } from '@/adapters/AxiosAdapter';
-import { ChampionshipDTO, IChampionship, IChampionshipEditDTO } from '@/data/interfaces/championship';
+import {
+  ChampionshipDTO,
+  IChampionship,
+  IChampionshipEditDTO,
+} from '@/data/interfaces/championship';
 import { IPageResponse } from '@/data/interfaces/pageResponse';
 import { ChampionshipService } from '@/services/Championship';
 import { championshipMessages } from '@/utils/messages';
@@ -30,6 +34,7 @@ export interface ChampionshipContextData {
     banner,
     resultType,
     address,
+    description,
   }: ChampionshipDTO): Promise<void>;
   Edit({
     championshipId,
@@ -38,6 +43,7 @@ export interface ChampionshipContextData {
     endDate,
     accessCode,
     address,
+    description,
   }: IChampionshipEditDTO): Promise<void>;
 }
 
@@ -89,10 +95,11 @@ export const ChampionshipProvider = ({ children, onClose }: ChampionshipProps) =
       banner,
       resultType,
       address,
+      description,
     }: ChampionshipDTO) => {
       setIsLoading(true);
       await new ChampionshipService(axios)
-        .create({ name, startDate, endDate, accessCode, banner, resultType, address })
+        .create({ name, startDate, endDate, accessCode, banner, resultType, address, description })
         .then(() => {
           toast({
             title: championshipMessages['success'],
@@ -122,10 +129,11 @@ export const ChampionshipProvider = ({ children, onClose }: ChampionshipProps) =
       endDate,
       accessCode,
       address,
+      description,
     }: IChampionshipEditDTO) => {
       setIsLoading(true);
       await new ChampionshipService(axios)
-        .edit({ championshipId, name, startDate, endDate, accessCode, address })
+        .edit({ championshipId, name, startDate, endDate, accessCode, address, description })
         .then(() => {
           toast({
             title: championshipMessages['success_edit'],
