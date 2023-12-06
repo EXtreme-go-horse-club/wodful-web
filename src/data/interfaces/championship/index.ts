@@ -8,6 +8,7 @@ export interface IChampionship {
   resultType: string;
   address: string;
   description: string;
+  isActive: boolean;
 }
 
 export interface ChampionshipDTO {

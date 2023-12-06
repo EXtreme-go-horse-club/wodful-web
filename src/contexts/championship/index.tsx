@@ -25,6 +25,8 @@ export interface ChampionshipContextData {
   setPage: (value: number) => void;
   ListPaginated: () => void;
   Delete: (id: string) => Promise<void>;
+  Activate: (id: string) => Promise<void>;
+  Deactivate: (id: string) => Promise<void>;
   List: () => Promise<void>;
   Create({
     name,
@@ -180,6 +182,55 @@ export const ChampionshipProvider = ({ children, onClose }: ChampionshipProps) =
     [ListPaginated, toast],
   );
 
+  const Activate = useCallback(
+    async (idChamp: string) => {
+      setIsLoading(true);
+      await new ChampionshipService(axios)
+        .activate(idChamp)
+        .then(() => {
+          toast({
+            title: championshipMessages['success_activate'],
+            status: 'success',
+            isClosable: true,
+          });
+          ListPaginated();
+        })
+        .catch(() => {
+          toast({
+            title: championshipMessages['error_activate'],
+            status: 'error',
+            isClosable: true,
+          });
+        })
+        .finally(() => setIsLoading(false));
+    },
+    [ListPaginated, toast],
+  );
+  const Deactivate = useCallback(
+    async (idChamp: string) => {
+      setIsLoading(true);
+      await new ChampionshipService(axios)
+        .deactivate(idChamp)
+        .then(() => {
+          toast({
+            title: championshipMessages['success_deactivate'],
+            status: 'success',
+            isClosable: true,
+          });
+          ListPaginated();
+        })
+        .catch(() => {
+          toast({
+            title: championshipMessages['error_deactivate'],
+            status: 'error',
+            isClosable: true,
+          });
+        })
+        .finally(() => setIsLoading(false));
+    },
+    [ListPaginated, toast],
+  );
+
   return (
     <ChampionshipContext.Provider
       value={{
@@ -195,6 +246,8 @@ export const ChampionshipProvider = ({ children, onClose }: ChampionshipProps) =
         Delete,
         List,
         ListPaginated,
+        Activate,
+        Deactivate,
       }}
     >
       {children}

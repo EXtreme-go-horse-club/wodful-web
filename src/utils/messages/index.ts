@@ -9,8 +9,12 @@ export const validationMessages = {
 export const championshipMessages = {
   success: 'Campeonato adicionado com sucesso',
   success_edit: 'Campeonato editado com sucesso',
+  success_activate: 'Seu campeonato está público',
+  success_deactivate: 'Seu campeonato está privado',
   error: 'Algo deu errado ao adicionar o campeonato',
   error_edit: 'Algo deu errado ao editar o campeonato',
+  error_activate: 'Algo deu errado ao tornar seu campeonato público',
+  error_deactivate: 'Algo deu errado ao tornar seu campeonato privado',
   remove: 'Campeonato removido com sucesso',
   remove_err: 'Algo deu errado ao remover o campeonato',
 };
