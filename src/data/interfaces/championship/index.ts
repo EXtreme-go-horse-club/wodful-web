@@ -7,6 +7,7 @@ export interface IChampionship {
   banner: File;
   resultType: string;
   address: string;
+  description: string;
 }
 
 export interface ChampionshipDTO {
@@ -17,6 +18,7 @@ export interface ChampionshipDTO {
   banner: File | FileList;
   resultType: string;
   address: string;
+  description: string;
 }
 
 export interface IChampionshipEditDTO {
@@ -26,4 +28,5 @@ export interface IChampionshipEditDTO {
   endDate: Date | string;
   accessCode: string;
   address: string;
+  description: string;
 }

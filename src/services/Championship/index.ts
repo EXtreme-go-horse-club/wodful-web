@@ -20,6 +20,7 @@ export class ChampionshipService {
     banner,
     resultType,
     address,
+    description,
   }: ChampionshipDTO): Promise<IChampionship> {
     const { statusCode, body } = await this.httpClient.request({
       method: 'post',
@@ -35,6 +36,7 @@ export class ChampionshipService {
         banner,
         resultType,
         address,
+        description,
       },
     });
 
@@ -53,6 +55,7 @@ export class ChampionshipService {
     endDate,
     accessCode,
     address,
+    description,
   }: IChampionshipEditDTO): Promise<IChampionship> {
     const { statusCode, body } = await this.httpClient.request({
       method: 'put',
@@ -67,6 +70,7 @@ export class ChampionshipService {
         endDate,
         accessCode: accessCode.toUpperCase(),
         address,
+        description,
       },
     });
 
