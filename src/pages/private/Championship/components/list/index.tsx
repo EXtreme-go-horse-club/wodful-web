@@ -45,8 +45,17 @@ const ListChampionship = ({ openEdit }: IListChampionship) => {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const { ListPaginated, championshipsPages, page, limit, setPage, isLoading, Delete } =
-    useChampionshipData();
+  const {
+    ListPaginated,
+    championshipsPages,
+    page,
+    limit,
+    setPage,
+    isLoading,
+    Delete,
+    Activate,
+    Deactivate,
+  } = useChampionshipData();
 
   const { setCurrentChampionship } = useApp();
 
@@ -94,7 +103,7 @@ const ListChampionship = ({ openEdit }: IListChampionship) => {
                 setCurrentChampionship(championship as IChampionship);
               }}
             >
-              <Stack h='100px' overflow='hidden'>
+              <Stack h='180px' overflow='hidden'>
                 <Image
                   borderTopRadius='lg'
                   src={`${import.meta.env.VITE_BASE_SERVER_URL}/banner/${championship.banner}`}
@@ -130,6 +139,20 @@ const ListChampionship = ({ openEdit }: IListChampionship) => {
                       <Text>{resultType[championship.resultType]}</Text>
                     </VStack>
                   </HStack>
+                  <HStack fontSize='14px' align='start' gap='24px'>
+                    <VStack align='start' spacing={0}>
+                      <HStack align='end' justify={'center'}>
+                        <Text as='b'>Visibilidade</Text>
+                      </HStack>
+                      {championship.isActive ? (
+                        <Text fontSize='sm' color={'green.500'}>
+                          Público
+                        </Text>
+                      ) : (
+                        <Text fontSize='sm'>Privado</Text>
+                      )}
+                    </VStack>
+                  </HStack>
                 </LinkOverlay>
                 <HStack fontSize='14px' width='100%'>
                   <MapPin size={16} />
@@ -143,6 +166,15 @@ const ListChampionship = ({ openEdit }: IListChampionship) => {
                       variant='none'
                     />
                     <MenuList>
+                      {championship.isActive ? (
+                        <MenuItem onClick={() => Deactivate(championship.id)}>
+                          Tornar privado
+                        </MenuItem>
+                      ) : (
+                        <MenuItem onClick={() => Activate(championship.id)}>
+                          Tornar público
+                        </MenuItem>
+                      )}
                       <MenuItem onClick={() => openEdit(championship)}>Editar</MenuItem>
                       <MenuItem onClick={() => openDelete(championship.id)}>Deletar</MenuItem>
                     </MenuList>

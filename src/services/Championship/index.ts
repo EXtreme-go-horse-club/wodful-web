@@ -96,6 +96,34 @@ export class ChampionshipService {
     }
   }
 
+  async activate(id: string): Promise<IChampionship> {
+    const { statusCode, body } = await this.httpClient.request({
+      method: 'patch',
+      url: `${this.path}/${id}/activate`,
+    });
+
+    switch (statusCode) {
+      case HttpStatusCode.ok:
+        return body! as IChampionship;
+      default:
+        throw new Error();
+    }
+  }
+
+  async deactivate(id: string): Promise<IChampionship> {
+    const { statusCode, body } = await this.httpClient.request({
+      method: 'patch',
+      url: `${this.path}/${id}/deactivate`,
+    });
+
+    switch (statusCode) {
+      case HttpStatusCode.ok:
+        return body! as IChampionship;
+      default:
+        throw new Error();
+    }
+  }
+
   async listAll(
     limit?: number,
     page?: number,
