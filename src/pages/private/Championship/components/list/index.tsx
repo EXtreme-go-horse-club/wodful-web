@@ -17,6 +17,7 @@ import {
   Text,
   Tooltip,
   useDisclosure,
+  useToast,
   VStack,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
@@ -29,6 +30,8 @@ import { IChampionship } from '@/data/interfaces/championship';
 import useApp from '@/hooks/useApp';
 import { default as useChampionshipData } from '@/hooks/useChampionshipData';
 import { incrementAndFormatDate } from '@/utils/formatDate';
+import { championshipMessages } from '@/utils/messages';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 const resultType: { [key: string]: string } = {
   SCORE: 'Pontuação',
@@ -42,6 +45,7 @@ interface IListChampionship {
 const ListChampionship = ({ openEdit }: IListChampionship) => {
   const [currentTotal, setCurrentTotal] = useState<number>(0);
   const [championshipId, setChampionshipId] = useState<string>('');
+  const toast = useToast();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -166,6 +170,8 @@ const ListChampionship = ({ openEdit }: IListChampionship) => {
                       variant='none'
                     />
                     <MenuList>
+                      <MenuItem onClick={() => openEdit(championship)}>Editar</MenuItem>
+                      <MenuItem onClick={() => openDelete(championship.id)}>Deletar</MenuItem>
                       {championship.isActive ? (
                         <MenuItem onClick={() => Deactivate(championship.id)}>
                           Tornar privado
@@ -175,8 +181,23 @@ const ListChampionship = ({ openEdit }: IListChampionship) => {
                           Tornar público
                         </MenuItem>
                       )}
-                      <MenuItem onClick={() => openEdit(championship)}>Editar</MenuItem>
-                      <MenuItem onClick={() => openDelete(championship.id)}>Deletar</MenuItem>
+
+                      <CopyToClipboard
+                        text={`${import.meta.env.VITE_BASE_WODFUL_SITE}/event/${
+                          championship.accessCode
+                        }`}
+                        onCopy={() =>
+                          toast({
+                            title: championshipMessages['success_copy_link'],
+                            status: 'success',
+                            isClosable: true,
+                          })
+                        }
+                      >
+                        <MenuItem>
+                          <span>Copiar link de inscrição</span>
+                        </MenuItem>
+                      </CopyToClipboard>
                     </MenuList>
                   </Menu>
                 </HStack>
