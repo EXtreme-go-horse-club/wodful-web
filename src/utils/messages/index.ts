@@ -11,6 +11,7 @@ export const championshipMessages = {
   success_edit: 'Campeonato editado com sucesso',
   success_activate: 'Seu campeonato está público',
   success_deactivate: 'Seu campeonato está privado',
+  success_copy_link: 'Link copiado com sucesso',
   error: 'Algo deu errado ao adicionar o campeonato',
   error_edit: 'Algo deu errado ao editar o campeonato',
   error_activate: 'Algo deu errado ao tornar seu campeonato público',
