@@ -26,6 +26,7 @@ const FormParticipant = ({ onClose, oldParticipant }: EditModalProps) => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isValid },
   } = useForm<IParticipant>({
     mode: 'onChange',
@@ -43,6 +44,11 @@ const FormParticipant = ({ onClose, oldParticipant }: EditModalProps) => {
     Edit(participant, id!);
     onClose();
   }
+
+  const formatDocument = (document: string) => {
+    document = document.replace(/[^0-9]/g, '').trim();
+    setValue(`identificationCode`, document);
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -78,6 +84,9 @@ const FormParticipant = ({ onClose, oldParticipant }: EditModalProps) => {
                 minLength: { value: 9, message: validationMessages['minLength'] },
                 maxLength: { value: 20, message: validationMessages['maxLengthSm'] },
                 validate: (value) => isValidDocument(value) || validationMessages['invalidCode'],
+                onChange(event) {
+                  formatDocument(event.target.value);
+                },
               })}
             />
 
