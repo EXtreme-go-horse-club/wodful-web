@@ -32,6 +32,15 @@ interface IListCategory {
   openEdit: (category: ICategory) => void;
 }
 
+const tagMembers: { [key: number]: { label: string; color: string } } = {
+  1: { label: 'Individual', color: 'blue' },
+  2: { label: 'Dupla', color: 'green' },
+  3: { label: 'Trio', color: 'cyan' },
+  4: { label: 'Time', color: 'teal' },
+  5: { label: 'Time', color: 'teal' },
+  6: { label: 'Time', color: 'teal' },
+};
+
 const ListCategory = ({ id, openEdit }: IListCategory) => {
   const [currentTotal, setCurrentTotal] = useState<number>(0);
   const [categoryId, setCategoryId] = useState<string>('');
@@ -91,9 +100,9 @@ const ListCategory = ({ id, openEdit }: IListCategory) => {
                     size='md'
                     key='md'
                     variant='solid'
-                    colorScheme={category.isTeam ? 'teal' : 'blue'}
+                    colorScheme={tagMembers[category.members].color}
                   >
-                    {category.isTeam ? 'Time' : 'Individual'}
+                    {tagMembers[category.members].label}
                   </Tag>
                 </Td>
                 <Td p={6}>

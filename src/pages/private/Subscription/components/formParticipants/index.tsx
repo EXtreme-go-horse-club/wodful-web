@@ -34,6 +34,7 @@ const FormSubscriptionParticipants = ({
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isValid },
   } = useForm<IParticipantForm>({
     mode: 'onChange',
@@ -58,6 +59,11 @@ const FormSubscriptionParticipants = ({
     onClose();
     resetStep(0, 0);
   }
+
+  const formatDocument = (document: string, index: number) => {
+    document = document.replace(/[^0-9]/g, '').trim();
+    setValue(`participants.${index}.identificationCode`, document);
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -126,6 +132,9 @@ const FormSubscriptionParticipants = ({
                     maxLength: { value: 20, message: validationMessages['maxLengthSm'] },
                     validate: (value) =>
                       isValidDocument(value) || validationMessages['invalidCode'],
+                    onChange(event) {
+                      formatDocument(event.target.value, index);
+                    },
                   })}
                 />
 

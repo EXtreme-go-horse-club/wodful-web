@@ -17,6 +17,7 @@ import {
   Text,
   Tooltip,
   useDisclosure,
+  useToast,
   VStack,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
@@ -29,6 +30,8 @@ import { IChampionship } from '@/data/interfaces/championship';
 import useApp from '@/hooks/useApp';
 import { default as useChampionshipData } from '@/hooks/useChampionshipData';
 import { incrementAndFormatDate } from '@/utils/formatDate';
+import { championshipMessages } from '@/utils/messages';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 const resultType: { [key: string]: string } = {
   SCORE: 'Pontuação',
@@ -42,11 +45,21 @@ interface IListChampionship {
 const ListChampionship = ({ openEdit }: IListChampionship) => {
   const [currentTotal, setCurrentTotal] = useState<number>(0);
   const [championshipId, setChampionshipId] = useState<string>('');
+  const toast = useToast();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const { ListPaginated, championshipsPages, page, limit, setPage, isLoading, Delete } =
-    useChampionshipData();
+  const {
+    ListPaginated,
+    championshipsPages,
+    page,
+    limit,
+    setPage,
+    isLoading,
+    Delete,
+    Activate,
+    Deactivate,
+  } = useChampionshipData();
 
   const { setCurrentChampionship } = useApp();
 
@@ -94,7 +107,7 @@ const ListChampionship = ({ openEdit }: IListChampionship) => {
                 setCurrentChampionship(championship as IChampionship);
               }}
             >
-              <Stack h='100px' overflow='hidden'>
+              <Stack h='180px' overflow='hidden'>
                 <Image
                   borderTopRadius='lg'
                   src={`${import.meta.env.VITE_BASE_SERVER_URL}/banner/${championship.banner}`}
@@ -130,6 +143,20 @@ const ListChampionship = ({ openEdit }: IListChampionship) => {
                       <Text>{resultType[championship.resultType]}</Text>
                     </VStack>
                   </HStack>
+                  <HStack fontSize='14px' align='start' gap='24px'>
+                    <VStack align='start' spacing={0}>
+                      <HStack align='end' justify={'center'}>
+                        <Text as='b'>Visibilidade</Text>
+                      </HStack>
+                      {championship.isActive ? (
+                        <Text fontSize='sm' color={'green.500'}>
+                          Público
+                        </Text>
+                      ) : (
+                        <Text fontSize='sm'>Privado</Text>
+                      )}
+                    </VStack>
+                  </HStack>
                 </LinkOverlay>
                 <HStack fontSize='14px' width='100%'>
                   <MapPin size={16} />
@@ -145,6 +172,32 @@ const ListChampionship = ({ openEdit }: IListChampionship) => {
                     <MenuList>
                       <MenuItem onClick={() => openEdit(championship)}>Editar</MenuItem>
                       <MenuItem onClick={() => openDelete(championship.id)}>Deletar</MenuItem>
+                      {championship.isActive ? (
+                        <MenuItem onClick={() => Deactivate(championship.id)}>
+                          Tornar privado
+                        </MenuItem>
+                      ) : (
+                        <MenuItem onClick={() => Activate(championship.id)}>
+                          Tornar público
+                        </MenuItem>
+                      )}
+
+                      <CopyToClipboard
+                        text={`${import.meta.env.VITE_BASE_WODFUL_SITE}/event/${
+                          championship.accessCode
+                        }`}
+                        onCopy={() =>
+                          toast({
+                            title: championshipMessages['success_copy_link'],
+                            status: 'success',
+                            isClosable: true,
+                          })
+                        }
+                      >
+                        <MenuItem>
+                          <span>Copiar link de inscrição</span>
+                        </MenuItem>
+                      </CopyToClipboard>
                     </MenuList>
                   </Menu>
                 </HStack>

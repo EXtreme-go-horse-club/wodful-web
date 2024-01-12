@@ -20,6 +20,7 @@ export class ChampionshipService {
     banner,
     resultType,
     address,
+    description,
   }: ChampionshipDTO): Promise<IChampionship> {
     const { statusCode, body } = await this.httpClient.request({
       method: 'post',
@@ -35,6 +36,7 @@ export class ChampionshipService {
         banner,
         resultType,
         address,
+        description,
       },
     });
 
@@ -53,6 +55,7 @@ export class ChampionshipService {
     endDate,
     accessCode,
     address,
+    description,
   }: IChampionshipEditDTO): Promise<IChampionship> {
     const { statusCode, body } = await this.httpClient.request({
       method: 'put',
@@ -67,6 +70,7 @@ export class ChampionshipService {
         endDate,
         accessCode: accessCode.toUpperCase(),
         address,
+        description,
       },
     });
 
@@ -86,6 +90,34 @@ export class ChampionshipService {
 
     switch (statusCode) {
       case HttpStatusCode.noContent:
+        return body! as IChampionship;
+      default:
+        throw new Error();
+    }
+  }
+
+  async activate(id: string): Promise<IChampionship> {
+    const { statusCode, body } = await this.httpClient.request({
+      method: 'patch',
+      url: `${this.path}/${id}/activate`,
+    });
+
+    switch (statusCode) {
+      case HttpStatusCode.ok:
+        return body! as IChampionship;
+      default:
+        throw new Error();
+    }
+  }
+
+  async deactivate(id: string): Promise<IChampionship> {
+    const { statusCode, body } = await this.httpClient.request({
+      method: 'patch',
+      url: `${this.path}/${id}/deactivate`,
+    });
+
+    switch (statusCode) {
+      case HttpStatusCode.ok:
         return body! as IChampionship;
       default:
         throw new Error();

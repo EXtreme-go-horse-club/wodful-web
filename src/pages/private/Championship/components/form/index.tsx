@@ -10,6 +10,7 @@ import {
   HStack,
   Input,
   Select,
+  Textarea,
   VStack,
 } from '@chakra-ui/react';
 import { useEffect } from 'react';
@@ -47,6 +48,7 @@ const FormChampionship = ({
         name: oldChampionship?.name,
         address: oldChampionship?.address,
         resultType: oldChampionship?.resultType,
+        description: oldChampionship.description,
       });
     }
   }, [oldChampionship]);
@@ -60,6 +62,7 @@ const FormChampionship = ({
         endDate: championship.endDate,
         accessCode: championship.accessCode,
         address: championship.address,
+        description: championship.description,
       };
       await Edit(editedChampionship);
       resetChampionship();
@@ -128,6 +131,21 @@ const FormChampionship = ({
                 })}
               />
               <FormErrorMessage>{errors.address && errors.address.message}</FormErrorMessage>
+            </FormControl>
+
+            <FormControl isInvalid={!!errors.description}>
+              <FormLabel mb={2}>Descrição</FormLabel>
+              <Textarea
+                placeholder='Descrição do evento'
+                {...register('description', {
+                  required: validationMessages['required'],
+                  minLength: { value: 4, message: validationMessages['minLength'] },
+                  maxLength: { value: 500, message: validationMessages['maxLengthSm'] },
+                })}
+              />
+              <FormErrorMessage>
+                {errors.description && errors.description.message}
+              </FormErrorMessage>
             </FormControl>
 
             <FormControl isInvalid={!!errors.accessCode}>
