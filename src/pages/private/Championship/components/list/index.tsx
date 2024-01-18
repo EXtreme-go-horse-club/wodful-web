@@ -84,6 +84,18 @@ const ListChampionship = ({ openEdit }: IListChampionship) => {
   const nextPage = () => {
     setPage(page + 1);
   };
+
+  function getBannerUrl(championship: IChampionship) {
+    const storageType = import.meta.env.VITE_STORAGE_TYPE;
+    const baseUrl = import.meta.env.VITE_BASE_SERVER_URL;
+    const awsBucketUrl = import.meta.env.VITE_AWS_PUBLIC_BUCKET;
+    const bannerPath = `banner/${championship.banner}`;
+
+    return storageType === 'local'
+      ? `${baseUrl}/${bannerPath}`
+      : `${awsBucketUrl}/${championship.banner}`;
+  }
+
   return (
     <>
       <ComponentModal modalHeader='Remover campeonato' size='sm' isOpen={isOpen} onClose={onClose}>
@@ -108,10 +120,7 @@ const ListChampionship = ({ openEdit }: IListChampionship) => {
               }}
             >
               <Stack h='180px' overflow='hidden'>
-                <Image
-                  borderTopRadius='lg'
-                  src={`${import.meta.env.VITE_BASE_SERVER_URL}/banner/${championship.banner}`}
-                />
+                <Image borderTopRadius='lg' src={getBannerUrl(championship)} />
               </Stack>
             </LinkOverlay>
             <Box p={6}>
