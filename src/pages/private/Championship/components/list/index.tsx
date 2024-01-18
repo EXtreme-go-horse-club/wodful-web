@@ -89,7 +89,7 @@ const ListChampionship = ({ openEdit }: IListChampionship) => {
     const storageType = import.meta.env.VITE_STORAGE_TYPE;
     const baseUrl = import.meta.env.VITE_BASE_SERVER_URL;
     const awsBucketUrl = import.meta.env.VITE_AWS_PUBLIC_BUCKET;
-    const bannerPath = `banner/${championship.banner}`;
+    const bannerPath = `${championship.banner}`;
 
     return storageType === 'local'
       ? `${baseUrl}/${bannerPath}`
