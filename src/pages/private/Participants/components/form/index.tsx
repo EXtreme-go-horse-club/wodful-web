@@ -105,7 +105,7 @@ const FormParticipant = ({ onClose, oldParticipant }: EditModalProps) => {
               {...register('tShirtSize', {
                 required: validationMessages['required'],
                 minLength: { value: 1, message: validationMessages['minLength'] },
-                maxLength: { value: 10, message: validationMessages['maxLengthSm'] },
+                maxLength: { value: 50, message: validationMessages['maxLengthSm'] },
               })}
             />
 
