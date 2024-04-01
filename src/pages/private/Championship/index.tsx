@@ -7,6 +7,7 @@ import { Loader } from '@/components/Loader';
 import { ChampionshipProvider } from '@/contexts/championship';
 import { IChampionship } from '@/data/interfaces/championship';
 import useChampionshipData from '@/hooks/useChampionshipData';
+import FormConfiguration from '../Configuration/form';
 
 const ListChampionship = lazy(() => import('./components/list'));
 const FormChampionship = lazy(() => import('./components/form'));
@@ -26,13 +27,23 @@ const Championship = () => {
   const [championship, setChampionship] = useState<IChampionship>();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  const [modalType, setModalType] = useState<'EDIT' | 'CREATE' | 'CONFIG'>('CREATE');
+
   const openEdit = (championshipObj: IChampionship) => {
     setChampionship(championshipObj);
+    setModalType('EDIT');
+    onOpen();
+  };
+
+  const openConfig = (championshipObj: IChampionship) => {
+    setChampionship(championshipObj);
+    setModalType('CONFIG');
     onOpen();
   };
 
   const openCreate = () => {
     resetChampionship();
+    setModalType('CREATE');
     onOpen();
   };
 
@@ -74,20 +85,33 @@ const Championship = () => {
             </Flex>
           </Box>
 
-          <ComponentModal
-            modalHeader={championship ? 'Editar Campeonato' : ' Criar Campeonato'}
-            size='lg'
-            isOpen={isOpen}
-            onClose={onClose}
-          >
-            <FormChampionship
+          {(modalType === 'EDIT' || modalType === 'CREATE') && (
+            <ComponentModal
+              modalHeader={championship ? 'Editar Campeonato' : ' Criar Campeonato'}
+              size='lg'
+              isOpen={isOpen}
               onClose={onClose}
-              oldChampionship={championship}
-              resetChampionship={resetChampionship}
-            />
-          </ComponentModal>
+            >
+              <FormChampionship
+                onClose={onClose}
+                oldChampionship={championship}
+                resetChampionship={resetChampionship}
+              />
+            </ComponentModal>
+          )}
 
-          {hasElements && <ListChampionship openEdit={openEdit} />}
+          {modalType === 'CONFIG' && (
+            <ComponentModal
+              modalHeader='Configurações do campeonato'
+              size='lg'
+              isOpen={isOpen}
+              onClose={onClose}
+            >
+              <FormConfiguration onClose={onClose} champId={championship?.id as string} />
+            </ComponentModal>
+          )}
+
+          {hasElements && <ListChampionship openEdit={openEdit} openConfig={openConfig} />}
           {!hasElements && (
             <EmptyList
               text='Você não possui um campeonato ainda!'

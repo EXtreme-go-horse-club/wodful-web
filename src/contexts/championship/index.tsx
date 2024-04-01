@@ -4,8 +4,11 @@ import {
   IChampionship,
   IChampionshipEditDTO,
 } from '@/data/interfaces/championship';
+import { IConfiguration } from '@/data/interfaces/configuration';
 import { IPageResponse } from '@/data/interfaces/pageResponse';
+import { IConfigurationForm } from '@/pages/private/Configuration/form';
 import { ChampionshipService } from '@/services/Championship';
+import { ConfigurationService } from '@/services/Configuration';
 import { championshipMessages } from '@/utils/messages';
 import { useToast } from '@chakra-ui/react';
 import { createContext, useCallback, useState } from 'react';
@@ -27,6 +30,11 @@ export interface ChampionshipContextData {
   Delete: (id: string) => Promise<void>;
   Activate: (id: string) => Promise<void>;
   Deactivate: (id: string) => Promise<void>;
+  GetConfiguration: (id: string) => Promise<void | IConfiguration>;
+  CreateConfiguration(
+    idChamp: string,
+    { hasTshirt, hasNameInTshirt, tShirtSizes }: IConfigurationForm,
+  ): Promise<void | IConfiguration>;
   List: () => Promise<void>;
   Create({
     name,
@@ -231,6 +239,33 @@ export const ChampionshipProvider = ({ children, onClose }: ChampionshipProps) =
     [ListPaginated, toast],
   );
 
+  const GetConfiguration = useCallback(async (idChamp: string) => {
+    setIsLoading(true);
+
+    const config = await new ConfigurationService(axios)
+      .get(idChamp)
+      .then((config) => config)
+      .catch(() => setIsError(true))
+      .finally(() => setIsLoading(false));
+
+    return config;
+  }, []);
+
+  const CreateConfiguration = useCallback(
+    async (idChamp: string, { hasNameInTshirt, hasTshirt, tShirtSizes }: IConfigurationForm) => {
+      setIsLoading(true);
+
+      const config = await new ConfigurationService(axios)
+        .create(idChamp, { hasNameInTshirt, hasTshirt, tShirtSizes })
+        .then((config) => config)
+        .catch(() => setIsError(true))
+        .finally(() => setIsLoading(false));
+
+      return config;
+    },
+    [],
+  );
+
   return (
     <ChampionshipContext.Provider
       value={{
@@ -248,6 +283,8 @@ export const ChampionshipProvider = ({ children, onClose }: ChampionshipProps) =
         ListPaginated,
         Activate,
         Deactivate,
+        GetConfiguration,
+        CreateConfiguration,
       }}
     >
       {children}
