@@ -140,7 +140,7 @@ const FormChampionship = ({
                 {...register('description', {
                   required: validationMessages['required'],
                   minLength: { value: 4, message: validationMessages['minLength'] },
-                  maxLength: { value: 500, message: validationMessages['maxLengthSm'] },
+                  maxLength: { value: 1500, message: validationMessages['maxLengthSm'] },
                 })}
               />
               <FormErrorMessage>
