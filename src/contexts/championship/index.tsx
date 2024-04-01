@@ -257,13 +257,25 @@ export const ChampionshipProvider = ({ children, onClose }: ChampionshipProps) =
 
       const config = await new ConfigurationService(axios)
         .create(idChamp, { hasNameInTshirt, hasTshirt, tShirtSizes })
-        .then((config) => config)
-        .catch(() => setIsError(true))
+        .then(() => {
+          toast({
+            title: championshipMessages['success_config'],
+            status: 'success',
+            isClosable: true,
+          });
+        })
+        .catch(() => {
+          toast({
+            title: championshipMessages['remove_config_err'],
+            status: 'error',
+            isClosable: true,
+          });
+        })
         .finally(() => setIsLoading(false));
 
       return config;
     },
-    [],
+    [toast],
   );
 
   return (
