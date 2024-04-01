@@ -40,9 +40,10 @@ const resultType: { [key: string]: string } = {
 
 interface IListChampionship {
   openEdit: (championship: IChampionship) => void;
+  openConfig: (championship: IChampionship) => void;
 }
 
-const ListChampionship = ({ openEdit }: IListChampionship) => {
+const ListChampionship = ({ openEdit, openConfig }: IListChampionship) => {
   const [currentTotal, setCurrentTotal] = useState<number>(0);
   const [championshipId, setChampionshipId] = useState<string>('');
   const toast = useToast();
@@ -207,6 +208,7 @@ const ListChampionship = ({ openEdit }: IListChampionship) => {
                           <span>Copiar link de inscrição</span>
                         </MenuItem>
                       </CopyToClipboard>
+                      <MenuItem onClick={() => openConfig(championship)}>Configurações</MenuItem>
                     </MenuList>
                   </Menu>
                 </HStack>
