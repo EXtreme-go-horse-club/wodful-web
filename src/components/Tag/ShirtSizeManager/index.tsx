@@ -5,7 +5,7 @@ import Tag from '..';
 
 interface IShirtSizeManager {
   sizes: string[];
-  setSizes: any;
+  setSizes: (sizes: string[]) => void;
 }
 
 const ShirtSizeManager = ({ sizes, setSizes }: IShirtSizeManager) => {
