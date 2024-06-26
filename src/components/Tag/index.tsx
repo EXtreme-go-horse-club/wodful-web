@@ -8,7 +8,14 @@ interface TagProps {
 
 const Tag: React.FC<TagProps> = ({ label, onRemove }) => {
   return (
-    <CTag size={'md'} key={label} borderRadius='full' variant='solid' colorScheme='blackAlpha'>
+    <CTag
+      size={'md'}
+      margin={'0 !important'}
+      key={label}
+      borderRadius='full'
+      variant='solid'
+      colorScheme='blackAlpha'
+    >
       <TagLabel>{label.toUpperCase()}</TagLabel>
       <TagCloseButton onClick={onRemove} />
     </CTag>

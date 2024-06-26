@@ -23,7 +23,7 @@ const ShirtSizeManager = ({ sizes, setSizes }: IShirtSizeManager) => {
   };
 
   return (
-    <VStack align='start' pb={4} w='100%'>
+    <VStack align='start' w='100%'>
       <HStack width='100%' align={'end'}>
         <FormControl alignItems='center' justifyContent={'end'}>
           <FormLabel mb={2}>Tamanhos</FormLabel>
@@ -40,7 +40,7 @@ const ShirtSizeManager = ({ sizes, setSizes }: IShirtSizeManager) => {
         </Button>
       </HStack>
 
-      <Stack direction={['row']} spacing='4px' w={'100%'}>
+      <Stack flexWrap={'wrap'} direction={['row']} gap={'8px'} mt='1.0rem !important' w={'100%'}>
         {sizes.map((s, index) => (
           <Tag key={index} label={s} onRemove={() => removeSize(index)} />
         ))}
