@@ -48,8 +48,11 @@ const ListTicket = ({ openEdit }: IListTicketProps) => {
 
   useEffect(() => {
     ListPaginated(id as string);
+  }, [ListPaginated, id]);
+
+  useEffect(() => {
     setCurrentTotal(ticketsPages.results?.length);
-  }, [ListPaginated, id, ticketsPages.results?.length]);
+  }, [ticketsPages.results?.length]);
 
   const openDelete = (id: string) => {
     setTicketId(id);

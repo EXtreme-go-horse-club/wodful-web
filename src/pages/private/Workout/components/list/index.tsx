@@ -44,8 +44,11 @@ const ListWorkout = ({ id }: IListWorkout) => {
 
   useEffect(() => {
     ListPaginated(id);
+  }, [ListPaginated, id]);
+
+  useEffect(() => {
     setCurrentTotal(workoutsPages.results?.length);
-  }, [ListPaginated, id, workoutsPages.results?.length]);
+  }, [workoutsPages.results?.length]);
 
   const previousPage = () => {
     setPage(page - 1);

@@ -52,8 +52,11 @@ const ListCategory = ({ id, openEdit }: IListCategory) => {
 
   useEffect(() => {
     ListPaginated(id);
+  }, [ListPaginated, id]);
+
+  useEffect(() => {
     setCurrentTotal(categoriesPages.results?.length);
-  }, [ListPaginated, categoriesPages.results?.length, id]);
+  }, [categoriesPages.results?.length]);
 
   const previousPage = () => {
     setPage(page - 1);

@@ -70,7 +70,7 @@ const ListLeaderboard = ({ champ, category }: IListLeaderboard) => {
           {categories?.length && !leaderboardPages.results && (
             <Tr>
               <Td />
-              <Td p={6} textAlign='right'>
+              <Td p={6} textAlign='center'>
                 Busque por uma categoria
               </Td>
               <Td />
@@ -112,63 +112,73 @@ const ListLeaderboard = ({ champ, category }: IListLeaderboard) => {
           ))}
         </Tbody>
         <Tfoot>
-          <Tr>
-            <Th display='flex' flexDirection='row'>
-              <Flex align='center' mr={2}>
-                Linhas por página
-              </Flex>
+          {leaderboardPages.results?.length && (
+            <>
+              <Tr>
+                <Th display='flex' flexDirection='row'>
+                  <Flex align='center' mr={2}>
+                    Linhas por página
+                  </Flex>
 
-              <Select
-                w='75px'
-                onChange={(event) => {
-                  setLimit(Number(event.target.value));
-                  setPage(Number(1));
-                }}
-              >
-                <option value='5'>5</option>
-                <option value='10'>10</option>
-                <option value='20'>20</option>
-              </Select>
-            </Th>
-            <Th />
-            <Th />
-            <Th>
-              <Flex justify='end'>
-                <HStack>
-                  {page === 1 && (
-                    <Text>
-                      {page * limit - (limit - 1)} - {page * limit} de {leaderboardPages.count}
-                    </Text>
-                  )}
+                  <Select
+                    w='75px'
+                    onChange={(event) => {
+                      setLimit(Number(event.target.value));
+                      setPage(Number(1));
+                    }}
+                  >
+                    <option value='5'>5</option>
+                    <option value='10'>10</option>
+                    <option value='20'>20</option>
+                  </Select>
+                </Th>
+                <Th />
+                <Th />
+                <Th>
+                  <Flex justify='end'>
+                    <HStack>
+                      {page === 1 && (
+                        <Text>
+                          {page * limit - (limit - 1)} - {page * limit} de {leaderboardPages.count}
+                        </Text>
+                      )}
 
-                  {page !== 1 && (
-                    <Text>
-                      {page * limit - (limit - 1)} - {page * limit - limit + currentTotal} de{' '}
-                      {leaderboardPages.count}
-                    </Text>
-                  )}
-                  <Tooltip label='Página anterior' placement='top' hasArrow>
-                    <Button
-                      disabled={!leaderboardPages.previous || isLoading}
-                      variant='link'
-                      onClick={previousPage}
-                    >
-                      <ChevronLeft color={leaderboardPages.previous ? 'black' : 'gray'} size={16} />
-                    </Button>
-                  </Tooltip>
-                  <Tooltip label='Próxima página' placement='top' hasArrow>
-                    <Button
-                      disabled={!leaderboardPages.next || isLoading}
-                      variant='link'
-                      onClick={nextPage}
-                    >
-                      <ChevronRight color={leaderboardPages.next ? 'black' : 'gray'} size={16} />
-                    </Button>
-                  </Tooltip>
-                </HStack>
-              </Flex>
-            </Th>
-          </Tr>
+                      {page !== 1 && (
+                        <Text>
+                          {page * limit - (limit - 1)} - {page * limit - limit + currentTotal} de{' '}
+                          {leaderboardPages.count}
+                        </Text>
+                      )}
+                      <Tooltip label='Página anterior' placement='top' hasArrow>
+                        <Button
+                          disabled={!leaderboardPages.previous || isLoading}
+                          variant='link'
+                          onClick={previousPage}
+                        >
+                          <ChevronLeft
+                            color={leaderboardPages.previous ? 'black' : 'gray'}
+                            size={16}
+                          />
+                        </Button>
+                      </Tooltip>
+                      <Tooltip label='Próxima página' placement='top' hasArrow>
+                        <Button
+                          disabled={!leaderboardPages.next || isLoading}
+                          variant='link'
+                          onClick={nextPage}
+                        >
+                          <ChevronRight
+                            color={leaderboardPages.next ? 'black' : 'gray'}
+                            size={16}
+                          />
+                        </Button>
+                      </Tooltip>
+                    </HStack>
+                  </Flex>
+                </Th>
+              </Tr>
+            </>
+          )}
         </Tfoot>
       </Table>
     </TableContainer>
