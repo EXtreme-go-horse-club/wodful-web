@@ -8,12 +8,14 @@ import {
   FormErrorMessage,
   FormLabel,
   HStack,
+  Image,
   Input,
   Select,
+  Text,
   Textarea,
   VStack,
 } from '@chakra-ui/react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { SubmitHandler, useForm } from 'react-hook-form';
 
@@ -29,13 +31,17 @@ const FormChampionship = ({
   resetChampionship,
 }: IFormChampionshipProps) => {
   const { Create, Edit } = useChampionshipData();
-
+  const [file, setFile] = useState<string>('');
   const {
     handleSubmit,
     register,
     reset,
     formState: { errors, isSubmitting },
   } = useForm<ChampionshipDTO>({ mode: 'onChange' });
+
+  function handleChange(e: any) {
+    setFile(URL.createObjectURL(e.target.files[0]));
+  }
 
   useEffect(() => {
     const startDate = oldChampionship?.startDate + '';
@@ -84,7 +90,7 @@ const FormChampionship = ({
             <FormControl isInvalid={!!errors.name}>
               <FormLabel mb={2}>Nome</FormLabel>
               <Input
-                placeholder='Nome do campeonato'
+                placeholder='Wodful games'
                 {...register('name', {
                   required: validationMessages['required'],
                   minLength: { value: 4, message: validationMessages['minLength'] },
@@ -123,7 +129,7 @@ const FormChampionship = ({
             <FormControl isInvalid={!!errors.address}>
               <FormLabel mb={2}>Local</FormLabel>
               <Input
-                placeholder='Endereço'
+                placeholder='Rua wodful, 10 - Jardim wodful'
                 {...register('address', {
                   required: validationMessages['required'],
                   minLength: { value: 4, message: validationMessages['minLength'] },
@@ -148,41 +154,93 @@ const FormChampionship = ({
               </FormErrorMessage>
             </FormControl>
 
-            <FormControl isInvalid={!!errors.accessCode}>
-              <FormLabel mb={2}>Código do campeonato</FormLabel>
-              <Input
-                textTransform='uppercase'
-                placeholder='Código'
-                {...register('accessCode', {
-                  required: validationMessages['required'],
-                  minLength: { value: 4, message: validationMessages['minLength'] },
-                  maxLength: { value: 20, message: validationMessages['maxLengthSm'] },
-                })}
-              />
-              <FormErrorMessage>{errors.accessCode && errors.accessCode.message}</FormErrorMessage>
-            </FormControl>
+            <HStack display={'flex'} width='100%' justify={'space-around'} gap={'8px'}>
+              <FormControl isInvalid={!!errors.accessCode}>
+                <FormLabel mb={2}>Código do campeonato</FormLabel>
+                <Input
+                  textTransform='uppercase'
+                  placeholder='WODFULGAMES'
+                  {...register('accessCode', {
+                    required: validationMessages['required'],
+                    minLength: { value: 4, message: validationMessages['minLength'] },
+                    maxLength: { value: 20, message: validationMessages['maxLengthSm'] },
+                  })}
+                />
+                <FormErrorMessage>
+                  {errors.accessCode && errors.accessCode.message}
+                </FormErrorMessage>
+              </FormControl>
 
-            <FormControl isInvalid={!!errors.resultType}>
-              <FormLabel mb={2}>Tipo de resultado</FormLabel>
-              <Select
-                {...register('resultType', { required: validationMessages['required'] })}
-                placeholder='Selecione o tipo'
-                disabled={!!oldChampionship?.resultType}
-              >
-                <option value='SCORE'>Pontuação</option>
-                <option value='RANKING'>Colocação</option>
-              </Select>
-              <FormErrorMessage>{errors.resultType && errors.resultType.message}</FormErrorMessage>
-            </FormControl>
+              <FormControl isInvalid={!!errors.resultType}>
+                <FormLabel mb={2}>Tipo de resultado</FormLabel>
+                <Select
+                  {...register('resultType', { required: validationMessages['required'] })}
+                  placeholder='Selecione o tipo'
+                  disabled={!!oldChampionship?.resultType}
+                >
+                  <option value='SCORE'>Pontuação</option>
+                  <option value='RANKING'>Colocação</option>
+                </Select>
+                <FormErrorMessage>
+                  {errors.resultType && errors.resultType.message}
+                </FormErrorMessage>
+              </FormControl>
+            </HStack>
+
             {!oldChampionship?.resultType && (
               <FormControl isInvalid={!!errors.banner}>
-                <FormLabel mb={2}>Capa do campeonato</FormLabel>
+                <FormLabel mb={0}>Capa do campeonato</FormLabel>
+                <Text
+                  as={'span'}
+                  display={'flex'}
+                  gap={'4px'}
+                  align={'center'}
+                  fontSize='xs'
+                  mb={2}
+                >
+                  Resolução ideal para o banner:{' '}
+                  <Text as={'span'} fontSize='sm' fontWeight={'bold'}>
+                    880x360
+                  </Text>
+                </Text>
+
                 <Input
                   p={1}
                   type='file'
                   multiple={false}
-                  {...register('banner', { required: validationMessages['required'] })}
+                  accept='image/png, image/jpeg'
+                  {...register('banner', {
+                    required: validationMessages['required'],
+                    onChange: handleChange,
+                  })}
                 />
+
+                <HStack
+                  display={'flex'}
+                  width='100%'
+                  justify={'space-around'}
+                  mt={'2.5'}
+                  flexDirection={'column'}
+                  gap={'8px'}
+                >
+                  {file && (
+                    <Text as={'span'} fontSize='sm' fontWeight={'bold'}>
+                      Preview
+                    </Text>
+                  )}
+
+                  <Image src={file} />
+                  {/* <Trash
+                    width={'16px'}
+                    opacity='80%'
+                    cursor={'pointer'}
+                    color='red'
+                    onClick={() => {
+                      setFile('');
+                      setValue('banner', '');
+                    }}
+                  /> */}
+                </HStack>
                 <FormErrorMessage>{errors.banner && errors.banner.message}</FormErrorMessage>
               </FormControl>
             )}

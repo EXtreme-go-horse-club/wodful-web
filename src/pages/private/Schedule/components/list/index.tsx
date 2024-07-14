@@ -52,7 +52,6 @@ const ListSchedule = ({ championshipId }: IListSchedule) => {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-
   const openDelete = (id: string) => {
     setScheduleId(id);
     onOpen();
@@ -63,11 +62,12 @@ const ListSchedule = ({ championshipId }: IListSchedule) => {
   };
 
   useEffect(() => {
-    if (championshipId) {
-      ListPaginated(championshipId);
-      setCurrentTotal(schedulePages.results?.length);
-    }
-  }, [ListPaginated, championshipId, schedulePages.results?.length]);
+    ListPaginated(championshipId);
+  }, [ListPaginated, championshipId]);
+
+  useEffect(() => {
+    setCurrentTotal(schedulePages.results?.length);
+  }, [schedulePages.results?.length]);
 
   const previousPage = () => {
     setPage(page - 1);
@@ -100,9 +100,9 @@ const ListSchedule = ({ championshipId }: IListSchedule) => {
   return (
     <>
       <ComponentModal modalHeader='Remover cronograma' size='sm' isOpen={isOpen} onClose={onClose}>
-        <DeleteData onClose={onClose} removedData="o cronograma" confirmDelete={confirmDelete}/>
+        <DeleteData onClose={onClose} removedData='o cronograma' confirmDelete={confirmDelete} />
       </ComponentModal>
-    
+
       <TableContainer border='1px' borderColor='gray.100' fontSize='sm' color='#2D3748'>
         <Table variant='simple'>
           <Thead bg='gray.50' border='1px' borderColor='gray.100'>

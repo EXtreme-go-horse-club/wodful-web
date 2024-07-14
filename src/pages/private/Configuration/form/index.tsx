@@ -32,6 +32,7 @@ const FormConfiguration = ({ onClose, champId }: IFormChampionshipProps) => {
     handleSubmit,
     register,
     reset,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<IConfigurationForm>({ mode: 'all' });
   const [sizes, setSizes] = useState<string[]>([] as string[]);
@@ -78,27 +79,31 @@ const FormConfiguration = ({ onClose, champId }: IFormChampionshipProps) => {
               <FormErrorMessage>{errors.hasTshirt && errors.hasTshirt.message}</FormErrorMessage>
             </FormControl>
 
-            <HStack width='100%'>
-              <FormControl alignItems='start' isInvalid={!!errors.hasNameInTshirt}>
-                <FormLabel mb={2}>Nome na camisa?</FormLabel>
-                <Select
-                  disabled={!!errors.hasTshirt}
-                  placeholder='Selecione um valor'
-                  {...register('hasNameInTshirt', {
-                    required: validationMessages['required'],
-                  })}
-                >
-                  <option value='true'>Sim</option>
-                  <option value='false'>Não</option>
-                </Select>
-                <FormErrorMessage>
-                  {errors.hasNameInTshirt && errors.hasNameInTshirt.message}
-                </FormErrorMessage>
-              </FormControl>
-            </HStack>
-            <HStack width='100%'>
-              <ShirtSizeManager sizes={sizes} setSizes={setSizes} />
-            </HStack>
+            {watch('hasTshirt') === 'true' && (
+              <>
+                <HStack width='100%'>
+                  <FormControl alignItems='start' isInvalid={!!errors.hasNameInTshirt}>
+                    <FormLabel mb={2}>Nome na camisa?</FormLabel>
+                    <Select
+                      disabled={!!errors.hasTshirt}
+                      placeholder='Selecione um valor'
+                      {...register('hasNameInTshirt', {
+                        required: validationMessages['required'],
+                      })}
+                    >
+                      <option value='true'>Sim</option>
+                      <option value='false'>Não</option>
+                    </Select>
+                    <FormErrorMessage>
+                      {errors.hasNameInTshirt && errors.hasNameInTshirt.message}
+                    </FormErrorMessage>
+                  </FormControl>
+                </HStack>
+                <HStack width='100%'>
+                  <ShirtSizeManager sizes={sizes} setSizes={setSizes} />
+                </HStack>
+              </>
+            )}
 
             <ButtonGroup flexDirection='column' alignItems='end' gap='12px' w='100%'>
               <Button
