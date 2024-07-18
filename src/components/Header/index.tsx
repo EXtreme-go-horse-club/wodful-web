@@ -41,6 +41,8 @@ export const Header = () => {
       bg='gray.800'
       alignItems='center'
       justifyContent='space-between'
+      position={!signed ? 'fixed' : undefined}
+      zIndex={'1'}
     >
       <Flex alignItems='flex-end'>
         <Box>

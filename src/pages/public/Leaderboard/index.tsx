@@ -86,6 +86,7 @@ const PublicLeaderboardAccess = () => {
           alignItems='center'
           as='section'
           px={4}
+          marginTop={'130px'}
         >
           <Flex
             as='section'

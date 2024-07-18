@@ -23,7 +23,7 @@ export class ConfigurationService {
 
   async create(
     idChamp: string,
-    { hasNameInTshirt, hasTshirt, tShirtSizes }: ICreateConfigurationRequestDTO,
+    { hasNameInTshirt, hasTshirt, tShirtSizes, isAutoSchedule }: ICreateConfigurationRequestDTO,
   ): Promise<IConfiguration> {
     const { statusCode, body } = await this.httpClient.request({
       method: 'post',
@@ -32,6 +32,7 @@ export class ConfigurationService {
         hasNameInTshirt,
         hasTshirt,
         tShirtSizes,
+        isAutoSchedule: isAutoSchedule,
       },
     });
 

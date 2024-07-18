@@ -33,7 +33,7 @@ export interface ChampionshipContextData {
   GetConfiguration: (id: string) => Promise<void | IConfiguration>;
   CreateConfiguration(
     idChamp: string,
-    { hasTshirt, hasNameInTshirt, tShirtSizes }: IConfigurationForm,
+    { hasTshirt, hasNameInTshirt, tShirtSizes, isAutoSchedule }: IConfigurationForm,
   ): Promise<void | IConfiguration>;
   List: () => Promise<void>;
   Create({
@@ -252,11 +252,14 @@ export const ChampionshipProvider = ({ children, onClose }: ChampionshipProps) =
   }, []);
 
   const CreateConfiguration = useCallback(
-    async (idChamp: string, { hasNameInTshirt, hasTshirt, tShirtSizes }: IConfigurationForm) => {
+    async (
+      idChamp: string,
+      { hasNameInTshirt, hasTshirt, tShirtSizes, isAutoSchedule }: IConfigurationForm,
+    ) => {
       setIsLoading(true);
 
       const config = await new ConfigurationService(axios)
-        .create(idChamp, { hasNameInTshirt, hasTshirt, tShirtSizes })
+        .create(idChamp, { hasNameInTshirt, hasTshirt, tShirtSizes, isAutoSchedule })
         .then(() => {
           toast({
             title: championshipMessages['success_config'],
