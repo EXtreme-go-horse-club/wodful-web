@@ -3,7 +3,12 @@ import { HttpClient, HttpStatusCode } from '@/data/interfaces/http';
 
 export class ConfigurationService {
   constructor(
-    private readonly httpClient: HttpClient<IConfiguration>,
+    private readonly httpClient: HttpClient<
+      | IConfiguration
+      | {
+          isAutomatic: string;
+        }
+    >,
     private readonly path = '/configurations',
   ) {}
 
@@ -39,6 +44,30 @@ export class ConfigurationService {
     switch (statusCode) {
       case HttpStatusCode.created:
         return body! as IConfiguration;
+      default:
+        throw new Error();
+    }
+  }
+
+  async patchIsAutomatic(
+    idChamp: string,
+    isAutomatic: string,
+  ): Promise<{
+    isAutomatic: string;
+  }> {
+    const { statusCode, body } = await this.httpClient.request({
+      method: 'patch',
+      url: `${this.path}/${idChamp}/schedules/automatic`,
+      body: {
+        isAutomatic,
+      },
+    });
+
+    switch (statusCode) {
+      case HttpStatusCode.noContent:
+        return body! as {
+          isAutomatic: string;
+        };
       default:
         throw new Error();
     }
