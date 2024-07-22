@@ -60,8 +60,6 @@ const Schedule = () => {
   const handleToggleIsAutomatic = useCallback(
     (value: string) => {
       let key = 'true';
-      console.log({ value });
-
       if (value === 'true') key = 'false';
       if (id) {
         PatchIsAutoSchedule(id, key).then(() => {
