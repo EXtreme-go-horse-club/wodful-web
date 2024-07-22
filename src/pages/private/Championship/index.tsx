@@ -102,7 +102,7 @@ const Championship = () => {
 
           {modalType === 'CONFIG' && (
             <ComponentModal
-              modalHeader='Configurações do campeonato'
+              modalHeader='Configurações do evento'
               size='xl'
               isOpen={isOpen}
               onClose={onClose}

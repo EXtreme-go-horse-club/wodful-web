@@ -33,7 +33,7 @@ export interface ChampionshipContextData {
   GetConfiguration: (id: string) => Promise<void | IConfiguration>;
   CreateConfiguration(
     idChamp: string,
-    { hasTshirt, hasNameInTshirt, tShirtSizes }: IConfigurationForm,
+    { hasTshirt, hasNameInTshirt, tShirtSizes, isAutoSchedule }: IConfigurationForm,
   ): Promise<void | IConfiguration>;
   List: () => Promise<void>;
   Create({
@@ -55,6 +55,7 @@ export interface ChampionshipContextData {
     address,
     description,
   }: IChampionshipEditDTO): Promise<void>;
+  PatchIsAutoSchedule(idChamp: string, isAutomatic: string): Promise<void>;
 }
 
 const ChampionshipContext = createContext({} as ChampionshipContextData);
@@ -252,11 +253,14 @@ export const ChampionshipProvider = ({ children, onClose }: ChampionshipProps) =
   }, []);
 
   const CreateConfiguration = useCallback(
-    async (idChamp: string, { hasNameInTshirt, hasTshirt, tShirtSizes }: IConfigurationForm) => {
+    async (
+      idChamp: string,
+      { hasNameInTshirt, hasTshirt, tShirtSizes, isAutoSchedule }: IConfigurationForm,
+    ) => {
       setIsLoading(true);
 
       const config = await new ConfigurationService(axios)
-        .create(idChamp, { hasNameInTshirt, hasTshirt, tShirtSizes })
+        .create(idChamp, { hasNameInTshirt, hasTshirt, tShirtSizes, isAutoSchedule })
         .then(() => {
           toast({
             title: championshipMessages['success_config'],
@@ -267,6 +271,33 @@ export const ChampionshipProvider = ({ children, onClose }: ChampionshipProps) =
         .catch(() => {
           toast({
             title: championshipMessages['remove_config_err'],
+            status: 'error',
+            isClosable: true,
+          });
+        })
+        .finally(() => setIsLoading(false));
+
+      return config;
+    },
+    [toast],
+  );
+
+  const PatchIsAutoSchedule = useCallback(
+    async (idChamp: string, isAutomatic: string) => {
+      setIsLoading(true);
+
+      const config = await new ConfigurationService(axios)
+        .patchIsAutomatic(idChamp, isAutomatic)
+        .then(() => {
+          toast({
+            title: championshipMessages['success_config_order'],
+            status: 'success',
+            isClosable: true,
+          });
+        })
+        .catch(() => {
+          toast({
+            title: championshipMessages['remove_config_err_order'],
             status: 'error',
             isClosable: true,
           });
@@ -297,6 +328,7 @@ export const ChampionshipProvider = ({ children, onClose }: ChampionshipProps) =
         Deactivate,
         GetConfiguration,
         CreateConfiguration,
+        PatchIsAutoSchedule,
       }}
     >
       {children}
