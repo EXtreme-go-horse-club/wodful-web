@@ -10,6 +10,7 @@ import {
   MenuList,
   Table,
   TableContainer,
+  Tag,
   Tbody,
   Td,
   Text,
@@ -23,9 +24,11 @@ import { MoreHorizontal } from 'react-feather';
 
 interface IListResultProps {
   openEdit: (id: string) => void;
+  categoryId: string;
+  clearFilter: () => void;
 }
 
-const ListResults = ({ openEdit }: IListResultProps) => {
+const ListResults = ({ openEdit, categoryId, clearFilter }: IListResultProps) => {
   const { resultPages, Delete } = useResultData();
   const [resultId, setResultId] = useState<string>('');
 
@@ -37,7 +40,8 @@ const ListResults = ({ openEdit }: IListResultProps) => {
   };
 
   const confirmDelete = () => {
-    Delete(resultId);
+    clearFilter();
+    Delete(resultId, categoryId);
   };
 
   return (
@@ -63,6 +67,9 @@ const ListResults = ({ openEdit }: IListResultProps) => {
               </Th>
               <Th>
                 <Text as='b'>PONTOS</Text>
+              </Th>
+              <Th>
+                <Text as='b'>STATUS</Text>
               </Th>
               <Th></Th>
             </Tr>
@@ -91,6 +98,17 @@ const ListResults = ({ openEdit }: IListResultProps) => {
                     : `${Number(result.points)} ${
                         Number(result.points) === 1 ? 'Ponto' : 'Pontos'
                       }`}
+                </Td>
+                <Td p={6}>
+                  {result.isReleased ? (
+                    <Tag size='md' key='md' variant='solid' colorScheme={'teal'}>
+                      LIBERADO
+                    </Tag>
+                  ) : (
+                    <Tag size='sm' key='md' variant='solid' colorScheme={'gray'}>
+                      OCULTO
+                    </Tag>
+                  )}
                 </Td>
                 <Td p={6}>
                   <Flex justify='end'>

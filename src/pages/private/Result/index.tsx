@@ -17,15 +17,20 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Select,
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
-import { Search } from 'react-feather';
+import { Menu as MenuIcon, Search } from 'react-feather';
 import { useParams } from 'react-router-dom';
 
 const ResultForm = lazy(() => import('./components/form'));
 const ListResults = lazy(() => import('./components/list'));
+const ReleaseResultsForm = lazy(() => import('./components/releaseResults'));
 
 const ResultWithProvider = () => {
   const { onClose } = useDisclosure();
@@ -49,6 +54,7 @@ const Result = () => {
   const [resultId, setResultId] = useState<string | undefined>(undefined);
   const [categoryId, setCategoryId] = useState<string>('');
   const [workoutId, setWorkoutId] = useState<string>('');
+  const [isOpenReleaseResults, setIsOpenReleaseResults] = useState<boolean>(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { List: CategoryList, categories } = useCategoryData();
   const { ListPaginated: ListResultsData, ListPaginatedByWorkout } = useResultData();
@@ -60,17 +66,13 @@ const Result = () => {
     }
   }, [CategoryList, id]);
 
-  const resetSelectData = () => {
-    setSelectedCategory('Todos');
+  const openCreate = () => {
     setResultId(undefined);
-    setWorkoutId('');
-    setCategoryId('');
+    onOpen();
   };
 
-  const openCreate = () => {
-    resetSelectData();
-    ListResultsData(id as string);
-    onOpen();
+  const openReleaseResults = () => {
+    setIsOpenReleaseResults(true);
   };
 
   const openEdit = useCallback(
@@ -138,7 +140,15 @@ const Result = () => {
         alignItems='center'
         p={6}
       >
-        <HStack as='section' role='textbox' w='100%' justifyContent='space-between'>
+        <HStack
+          as='section'
+          role='textbox'
+          flexDirection={['column', 'column', 'column', 'row']}
+          w='100%'
+          alignItems={['flex-start', 'flex-start', 'flex-start', 'flex-end']}
+          gap={['1rem', '1rem', '1rem', 'none']}
+          justifyContent='space-between'
+        >
           <Flex as='article' role='textbox' direction='column' gap='0.75rem'>
             <Text fontSize='2xl' as='b' role='heading'>
               Resultados
@@ -167,8 +177,7 @@ const Result = () => {
                 disabled={!categories.length || !categoryId}
                 as='input'
                 w='100%'
-                minW='320px'
-                placeholder='Buscar participantes'
+                placeholder='Buscar participante'
               />
             </InputGroup>
             <Select
@@ -198,6 +207,31 @@ const Result = () => {
                 </option>
               ))}
             </Select>
+            <Flex as='article' gap='1rem'>
+              <Menu>
+                <MenuButton
+                  w={'100%'}
+                  color={'white'}
+                  textColor={'#2D3748'}
+                  variant='outline'
+                  as={Button}
+                  leftIcon={<MenuIcon size={20} />}
+                >
+                  Opções
+                </MenuButton>
+                <MenuList>
+                  <MenuItem
+                    display={'flex'}
+                    alignItems={'center'}
+                    gap={'8px'}
+                    onClick={() => openReleaseResults()}
+                  >
+                    Liberar / Ocultar resultados
+                  </MenuItem>
+                </MenuList>
+              </Menu>
+            </Flex>
+
             <Button minW='170px' colorScheme='teal' size='md' onClick={openCreate}>
               Adicionar resultado
             </Button>
@@ -211,8 +245,21 @@ const Result = () => {
         >
           <ResultForm onClose={onClose} oldResultId={resultId} />
         </ComponentModal>
+
+        <ComponentModal
+          modalHeader={'Liberar / Ocultar resultados'}
+          size='lg'
+          isOpen={isOpenReleaseResults}
+          onClose={() => setIsOpenReleaseResults(false)}
+        >
+          <ReleaseResultsForm onClose={() => setIsOpenReleaseResults(false)} />
+        </ComponentModal>
         <Box as='section' w='100%' marginTop={6}>
-          <ListResults openEdit={openEdit} />
+          <ListResults
+            openEdit={openEdit}
+            categoryId={categoryId}
+            clearFilter={() => setWorkoutId('')}
+          />
         </Box>
       </Box>
     </Suspense>

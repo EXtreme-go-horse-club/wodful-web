@@ -6,6 +6,10 @@ export interface IResult {
     name: string;
   };
 }
+
+export interface IIsReleaseResult {
+  isReleased: boolean;
+}
 export interface IResultByCategory {
   id: string;
   nickname: string;
@@ -15,6 +19,7 @@ export interface IResultByCategory {
   result: string;
   classification: string;
   points: string;
+  isReleased: boolean;
 }
 
 export interface IResultData {
@@ -46,4 +51,10 @@ export interface IEditResultDTO {
   id: string;
   result: string;
   categoryId?: string;
+}
+
+export interface IEditReleaseResultDTO {
+  workoutId: string;
+  categoryId?: string;
+  release: boolean;
 }

@@ -1,7 +1,9 @@
 import { HttpClient, HttpStatusCode } from '@/data/interfaces/http';
 import {
   ICreateResultRequestDTO,
+  IEditReleaseResultDTO,
   IEditResultDTO,
+  IIsReleaseResult,
   IResult,
   IResultByCategory,
   IResultData,
@@ -9,7 +11,7 @@ import {
 
 export class ResultService {
   constructor(
-    private readonly httpClient: HttpClient<IResult[] | IResult>,
+    private readonly httpClient: HttpClient<IResult[] | IResult | IIsReleaseResult>,
     private readonly path = '/results',
   ) {}
 
@@ -26,6 +28,23 @@ export class ResultService {
 
     switch (statusCode) {
       case HttpStatusCode.created:
+        return body! as IResult;
+      default:
+        throw new Error();
+    }
+  }
+
+  async editReleaseResult({ workoutId, release }: IEditReleaseResultDTO): Promise<IResult> {
+    const { statusCode, body } = await this.httpClient.request({
+      method: 'patch',
+      url: `${this.path}/workouts/${workoutId}/release`,
+      body: {
+        release,
+      },
+    });
+
+    switch (statusCode) {
+      case HttpStatusCode.noContent:
         return body! as IResult;
       default:
         throw new Error();
@@ -59,6 +78,22 @@ export class ResultService {
     switch (statusCode) {
       case HttpStatusCode.ok:
         return body! as unknown as IResultData;
+      default:
+        throw new Error();
+    }
+  }
+
+  async getIsReleasedResult(workoutId: string): Promise<IIsReleaseResult> {
+    const { statusCode, body } = await this.httpClient.request({
+      method: 'get',
+      url: `${this.path}/workouts/${workoutId}/isReleased`,
+    });
+
+    switch (statusCode) {
+      case HttpStatusCode.ok:
+        return body! as unknown as IIsReleaseResult;
+      case HttpStatusCode.notFound:
+        return body! as unknown as IIsReleaseResult;
       default:
         throw new Error();
     }
