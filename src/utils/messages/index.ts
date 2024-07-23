@@ -61,11 +61,13 @@ export const workoutMessages = {
 
 export const resultMessages = {
   success: 'Resultado adicionado com sucesso',
+  successRelease: 'Resultados alterados com sucesso',
   error: 'Algo deu errado ao adicionar um resultado',
   success_edit: 'Resultado editado com sucesso',
   error_edit: 'Algo deu errado ao editar um resultado',
   remove: 'Resultado removido com sucesso',
   remove_err: 'Algo deu errado ao remover o Resultado',
+  remove_release: 'Algo deu errado ao alterar os resultados',
 };
 
 export const activityMessages = {
