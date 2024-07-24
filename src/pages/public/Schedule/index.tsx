@@ -2,6 +2,7 @@ import AnalyticsAdapter from '@/adapters/AnalyticsAdapter';
 import { Loader } from '@/components/Loader';
 import { CategoryProvider } from '@/contexts/category';
 import { ScheduleProvider } from '@/contexts/schedule';
+import useApp from '@/hooks/useApp';
 import useScheduleData from '@/hooks/useScheduleData';
 import { Box, Button, Center, Flex, Text } from '@chakra-ui/react';
 import { Suspense, lazy, useCallback, useEffect, useState } from 'react';
@@ -29,6 +30,8 @@ const PublicScheduleAccess = () => {
   const { PublicList } = useScheduleData();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  const { setPublicChampionshipName } = useApp();
+
   const handleIsAttList = useCallback(() => {
     AnalyticsAdapter.event({
       action: 'buscar_cronograma_atualizado',
@@ -49,6 +52,11 @@ const PublicScheduleAccess = () => {
   useEffect(() => {
     AnalyticsAdapter.pageview(location.pathname);
   }, [location.pathname]);
+
+  useEffect(() => {
+    const name = ValidateAccess.verify(code as string, navigate);
+    if (name) setPublicChampionshipName(name);
+  }, [code, navigate, setPublicChampionshipName]);
 
   useEffect(() => {
     ValidateAccess.verify(code as string, navigate);

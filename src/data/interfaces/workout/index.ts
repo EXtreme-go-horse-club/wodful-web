@@ -8,6 +8,13 @@ export interface IWorkoutDTO {
 export interface IWorkout {
   id: string;
   name: string;
-  workoutType: "AMRAP" | "EMOM" | "FORTIME" | "PR";
+  workoutType: 'AMRAP' | 'EMOM' | 'FORTIME' | 'PR';
   categoryName: string;
+}
+
+export interface IPublicWorkout {
+  id: string;
+  name: string;
+  workoutType: 'AMRAP' | 'EMOM' | 'FORTIME' | 'PR';
+  description: string;
 }
