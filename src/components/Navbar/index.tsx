@@ -69,6 +69,11 @@ export const Navbar = () => {
         label: 'Cronograma',
         path: `/access/${params.code}/schedules`,
       },
+      {
+        identifier: 'workouts',
+        label: 'Provas',
+        path: `/access/${params.code}/workouts`,
+      },
     ],
     [params.code],
   );

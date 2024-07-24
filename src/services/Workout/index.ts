@@ -1,10 +1,12 @@
 import { HttpClient, HttpStatusCode } from '@/data/interfaces/http';
 import { IPageResponse } from '@/data/interfaces/pageResponse';
-import { IWorkout, IWorkoutDTO } from '@/data/interfaces/workout';
+import { IPublicWorkout, IWorkout, IWorkoutDTO } from '@/data/interfaces/workout';
 
 export class WorkoutService {
   constructor(
-    private readonly httpClient: HttpClient<IPageResponse<IWorkout> | IWorkout[] | IWorkout>,
+    private readonly httpClient: HttpClient<
+      IPageResponse<IWorkout> | IWorkout[] | IWorkout | IPublicWorkout[]
+    >,
     private readonly path = '/workouts',
   ) {}
 
@@ -68,6 +70,22 @@ export class WorkoutService {
     switch (statusCode) {
       case HttpStatusCode.ok:
         return body! as IPageResponse<IWorkout> | IWorkout[];
+      default:
+        throw new Error();
+    }
+  }
+
+  async publicListByCategory(categoryId: string): Promise<IPublicWorkout[]> {
+    const url = `public/categories/${categoryId}${this.path}`;
+
+    const { statusCode, body } = await this.httpClient.request({
+      method: 'get',
+      url: url,
+    });
+
+    switch (statusCode) {
+      case HttpStatusCode.ok:
+        return body! as IPublicWorkout[];
       default:
         throw new Error();
     }
