@@ -66,8 +66,11 @@ const ListChampionship = ({ openEdit, openConfig }: IListChampionship) => {
 
   useEffect(() => {
     ListPaginated();
+  }, [ListPaginated]);
+
+  useEffect(() => {
     setCurrentTotal(championshipsPages.results?.length);
-  }, [ListPaginated, championshipsPages.results?.length]);
+  }, [championshipsPages.results?.length]);
 
   const openDelete = (id: string) => {
     setChampionshipId(id);

@@ -40,12 +40,29 @@ const ListPublicLeaderboard = () => {
               <VStack align='start' spacing={1} w='100%'>
                 <HStack justify='space-between' w='100%'>
                   <Heading color='black' as='h4' size='md'>
-                    {leaderboard.ranking === 0
-                      ? 'Sem resultados'
-                      : `${leaderboard.ranking}º Lugar geral`}
+                    {leaderboard.ranking === 0 ? (
+                      'Sem resultados'
+                    ) : (
+                      <Flex gap={'2'}>
+                        <Text
+                          as={'h3'}
+                          color={'blue.500'}
+                          fontSize={'medium'}
+                          background={'#31979517'}
+                          p={'0.125rem 0.25rem'}
+                          borderRadius={'0.25rem'}
+                        >
+                          {leaderboard.ranking}º{' '}
+                        </Text>
+                        <Text>Lugar geral</Text>
+                      </Flex>
+                    )}
                   </Heading>
                   <Spacer />
-                  <Text fontSize='14px'>{leaderboard.generalScore} pontos</Text>
+                  <Text fontSize='14px'>
+                    {leaderboard.generalScore}
+                    {leaderboard.generalScore === 1 ? ' ponto' : ' pontos'}
+                  </Text>
                 </HStack>
               </VStack>
 
@@ -135,7 +152,7 @@ const ListPublicLeaderboard = () => {
                                 </Text>
                                 <Spacer />
                                 <Text fontSize='12px' minW='50px'>
-                                  {content.points} pontos
+                                  {content.points} {content.points === 1 ? ' ponto' : ' pontos'}
                                 </Text>
                               </HStack>
                               <HStack w='100%'>

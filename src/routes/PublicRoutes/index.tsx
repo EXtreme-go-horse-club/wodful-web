@@ -4,6 +4,8 @@ import Access from '@/pages/public/Access';
 import PublicLeaderboard from '@/pages/public/Leaderboard';
 import Login from '@/pages/public/Login';
 import PublicSchedule from '@/pages/public/Schedule';
+import PublicWorkouts from '@/pages/public/Workout';
+
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 const PublicRoutes = () => {
@@ -21,6 +23,7 @@ const PublicRoutes = () => {
         <Route path='/access/:code/' element={<Navbar />}>
           <Route path='/access/:code/leaderboards' element={<PublicLeaderboard />} />
           <Route path='/access/:code/schedules' element={<PublicSchedule />} />
+          <Route path='/access/:code/workouts' element={<PublicWorkouts />} />
         </Route>
       </Routes>
     </BrowserRouter>

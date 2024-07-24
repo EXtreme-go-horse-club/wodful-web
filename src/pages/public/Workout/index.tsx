@@ -1,34 +1,36 @@
 import AnalyticsAdapter from '@/adapters/AnalyticsAdapter';
 import { Loader } from '@/components/Loader';
 import { CategoryProvider } from '@/contexts/category';
-import { LeaderboardProvider } from '@/contexts/leaderboard';
+import { WorkoutProvider } from '@/contexts/workout';
 import useApp from '@/hooks/useApp';
 import useCategoryData from '@/hooks/useCategoryData';
-import useLeaderboardData from '@/hooks/useLeaderboardData';
+import useWorkoutData from '@/hooks/useWorkoutData';
 import { Box, Center, Flex, Select, Text } from '@chakra-ui/react';
-import { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
+import { Suspense, lazy, useCallback, useEffect, useMemo, useState } from 'react';
 import { Server } from 'react-feather';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import ListPublicLeaderboard from './components';
-import { ValidateAccess } from './helper/ValidateAccess';
+import { ValidateAccess } from '../Leaderboard/helper/ValidateAccess';
 
-const PublicLeaderboard = () => {
+const ListPublicWorkouts = lazy(() => import('./components/'));
+
+const PublicWorkouts = () => {
   return (
-    <LeaderboardProvider>
+    <WorkoutProvider>
       <CategoryProvider>
-        <PublicLeaderboardAccess />
+        <Workouts />
       </CategoryProvider>
-    </LeaderboardProvider>
+    </WorkoutProvider>
   );
 };
 
-const PublicLeaderboardAccess = () => {
+const Workouts = () => {
   const { code } = useParams();
   const navigate = useNavigate();
-  const { setPublicChampionshipName } = useApp();
-  const { PublicList, publicCategories } = useCategoryData();
-  const { ListPublic } = useLeaderboardData();
   const location = useLocation();
+  const { setPublicChampionshipName } = useApp();
+
+  const { PublicList, publicCategories } = useCategoryData();
+  const { PublicListByCategory } = useWorkoutData();
   const [selectedCategory, setSelectedCategory] = useState<{ name: string; value: string }>({
     name: 'Sem categoria',
     value: '0',
@@ -42,14 +44,14 @@ const PublicLeaderboardAccess = () => {
   const handleSelection = useCallback(
     (event: React.ChangeEvent<HTMLSelectElement>) => {
       if (event.target.value) {
-        ListPublic(String(event.target.value));
+        PublicListByCategory(event.target.value);
         const category = publicCategories.find((selected) => selected.id === event.target.value);
         setSelectedCategory({ name: category!.name, value: category!.id });
 
         AnalyticsAdapter.event({
-          action: 'buscar_leaderboard_categoria',
+          action: 'buscar_provas_categoria',
           category: 'Atleta',
-          label: 'Buscar leaderboard por categoria',
+          label: 'Buscar provas por categoria',
           value: `${category!.name}`,
         });
         return;
@@ -59,22 +61,22 @@ const PublicLeaderboardAccess = () => {
         value: '0',
       });
     },
-    [ListPublic, publicCategories],
+    [PublicListByCategory, publicCategories],
   );
-
-  useEffect(() => {
-    if (code) PublicList(code);
-  }, [PublicList, code]);
-
-  useEffect(() => {
-    AnalyticsAdapter.pageview(location.pathname);
-  }, [location.pathname]);
 
   useEffect(() => {
     const name = ValidateAccess.verify(code as string, navigate);
     if (name) setPublicChampionshipName(name);
   }, [code, navigate, setPublicChampionshipName]);
 
+  useEffect(() => {
+    AnalyticsAdapter.pageview(location.pathname);
+    if (code) PublicList(code);
+  }, [PublicList, code, location.pathname]);
+
+  useEffect(() => {
+    ValidateAccess.verify(code as string, navigate);
+  }, [code, navigate]);
   return (
     <Suspense fallback={<Loader title='Carregando ...' />}>
       <Center as='main' role='main'>
@@ -99,7 +101,7 @@ const PublicLeaderboardAccess = () => {
             <Flex as='article' role='textbox' direction='column' gap='0.75rem'>
               {!hasSelectedCategory && (
                 <Text fontSize='2xl' as='b' role='heading'>
-                  Leaderboard
+                  Provas
                 </Text>
               )}
             </Flex>
@@ -124,7 +126,7 @@ const PublicLeaderboardAccess = () => {
           </Flex>
           <Box as='section' w='100%' maxW='1280px' p='1.5rem 0px'>
             {!hasSelectedCategory ? (
-              <ListPublicLeaderboard />
+              <ListPublicWorkouts />
             ) : (
               <Box
                 display='flex'
@@ -161,4 +163,4 @@ const PublicLeaderboardAccess = () => {
   );
 };
 
-export default PublicLeaderboard;
+export default PublicWorkouts;

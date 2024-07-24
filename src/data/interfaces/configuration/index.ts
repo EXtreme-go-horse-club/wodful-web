@@ -2,6 +2,7 @@ export interface ICreateConfigurationRequestDTO {
   hasTshirt: string;
   hasNameInTshirt: string;
   tShirtSizes: string[];
+  isAutoSchedule: string;
 }
 
 export interface IConfiguration {
@@ -13,5 +14,6 @@ export interface IConfiguration {
       hasTshirt: boolean;
       tShirtSizes: string[];
     };
+    isAutoSchedule: string;
   };
 }

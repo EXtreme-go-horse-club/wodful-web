@@ -9,6 +9,7 @@ export const validationMessages = {
 export const championshipMessages = {
   success: 'Campeonato adicionado com sucesso',
   success_config: 'Configurações salvas com sucesso',
+  success_config_order: 'Ordenação automática atualizada com sucesso',
   success_edit: 'Campeonato editado com sucesso',
   success_activate: 'Seu campeonato está público',
   success_deactivate: 'Seu campeonato está privado',
@@ -20,6 +21,7 @@ export const championshipMessages = {
   remove: 'Campeonato removido com sucesso',
   remove_err: 'Algo deu errado ao remover o campeonato',
   remove_config_err: 'Algo deu errado ao salvar suas configurações',
+  remove_config_err_order: 'Algo deu errado ao atualizar a ordenação automática',
 };
 
 export const participantMessages = {
@@ -59,11 +61,13 @@ export const workoutMessages = {
 
 export const resultMessages = {
   success: 'Resultado adicionado com sucesso',
+  successRelease: 'Resultados alterados com sucesso',
   error: 'Algo deu errado ao adicionar um resultado',
   success_edit: 'Resultado editado com sucesso',
   error_edit: 'Algo deu errado ao editar um resultado',
   remove: 'Resultado removido com sucesso',
   remove_err: 'Algo deu errado ao remover o Resultado',
+  remove_release: 'Algo deu errado ao alterar os resultados',
 };
 
 export const activityMessages = {

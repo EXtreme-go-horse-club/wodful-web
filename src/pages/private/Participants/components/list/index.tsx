@@ -53,9 +53,11 @@ const ListParticipants = ({ participantOrTeamName, openModal }: IListParticipant
 
   useEffect(() => {
     ListPaginated(id as string, participantOrTeamName as string);
+  }, [ListPaginated, id, participantOrTeamName]);
 
+  useEffect(() => {
     setCurrentTotal(participantsPages.results?.length);
-  }, [ListPaginated, id, participantOrTeamName, participantsPages.results?.length]);
+  }, [participantsPages.results?.length]);
 
   const previousPage = () => {
     setPage(page - 1);

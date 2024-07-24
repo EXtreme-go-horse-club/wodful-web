@@ -55,8 +55,11 @@ const ListSubscription = ({ id, categoryId, onEdit }: IListSubscription) => {
 
   useEffect(() => {
     ListPaginated(id, categoryId);
+  }, [ListPaginated, id, categoryId]);
+
+  useEffect(() => {
     setCurrentTotal(subscriptionsPages.results?.length);
-  }, [ListPaginated, subscriptionsPages.results?.length, id, categoryId]);
+  }, [subscriptionsPages.results?.length]);
 
   const openDelete = (id: string) => {
     setSubscriptionId(id);

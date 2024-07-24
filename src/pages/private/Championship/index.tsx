@@ -74,11 +74,11 @@ const Championship = () => {
               {hasElements && (
                 <>
                   <Heading as='h4' size='md'>
-                    Lista de campeonatos
+                    Seus eventos
                   </Heading>
 
                   <Button size='lg' colorScheme='teal' onClick={openCreate}>
-                    Criar campeonato
+                    Criar Evento
                   </Button>
                 </>
               )}
@@ -87,8 +87,8 @@ const Championship = () => {
 
           {(modalType === 'EDIT' || modalType === 'CREATE') && (
             <ComponentModal
-              modalHeader={championship ? 'Editar Campeonato' : ' Criar Campeonato'}
-              size='lg'
+              modalHeader={championship ? 'Editar Evento' : 'Novo Evento'}
+              size='xl'
               isOpen={isOpen}
               onClose={onClose}
             >
@@ -102,8 +102,8 @@ const Championship = () => {
 
           {modalType === 'CONFIG' && (
             <ComponentModal
-              modalHeader='Configurações do campeonato'
-              size='lg'
+              modalHeader='Configurações do evento'
+              size='xl'
               isOpen={isOpen}
               onClose={onClose}
             >
