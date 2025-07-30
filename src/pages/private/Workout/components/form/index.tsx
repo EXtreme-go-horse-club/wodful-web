@@ -68,7 +68,7 @@ const FormWorkout = ({ id, onClose }: IFormChampionshipProps) => {
             {...register('description', {
               required: validationMessages['required'],
               minLength: { value: 4, message: validationMessages['minLength'] },
-              maxLength: { value: 1500, message: validationMessages['maxLengthSm'] },
+              maxLength: { value: 1400, message: validationMessages['maxLengthSm'] },
             })}
           />
           <FormErrorMessage>{errors.description && errors.description.message}</FormErrorMessage>
