@@ -1,6 +1,6 @@
 import { AxiosAdapter } from '@/adapters/AxiosAdapter';
 import { IPageResponse } from '@/data/interfaces/pageResponse';
-import { IWorkout, IWorkoutDTO } from '@/data/interfaces/workout';
+import { IPublicWorkout, IWorkout, IWorkoutDTO } from '@/data/interfaces/workout';
 import { WorkoutService } from '@/services/Workout';
 import { workoutMessages } from '@/utils/messages';
 import { useToast } from '@chakra-ui/react';
@@ -14,6 +14,7 @@ interface WorkoutProviderProps {
 
 export interface WorkoutContextData {
   workouts: IWorkout[];
+  publicWorkouts: IPublicWorkout[];
   workoutsPages: IPageResponse<IWorkout>;
   isLoading: boolean;
   limit: number;
@@ -23,6 +24,7 @@ export interface WorkoutContextData {
   Delete: (id: string) => Promise<void>;
   List: (id: string) => Promise<void>;
   ListByCategory: (id: string) => Promise<void>;
+  PublicListByCategory: (categoryId: string) => Promise<void>;
   ListPaginated: (id: string) => Promise<void>;
   Create: ({
     name,
@@ -45,6 +47,7 @@ export const WorkoutProvider = ({ children, onClose }: WorkoutProviderProps) => 
   const [limit, setLimit] = useState<number>(5);
   const [page, setPage] = useState<number>(1);
   const [workouts, setWorkouts] = useState<IWorkout[]>([] as IWorkout[]);
+  const [publicWorkouts, setPublicWorkouts] = useState<IPublicWorkout[]>([] as IPublicWorkout[]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { id } = useParams();
@@ -78,6 +81,16 @@ export const WorkoutProvider = ({ children, onClose }: WorkoutProviderProps) => 
       .listByCategory(categoryId)
       .then((allWorkouts) => {
         setWorkouts(allWorkouts as IWorkout[]);
+      })
+      .finally(() => setIsLoading(false));
+  }, []);
+
+  const PublicListByCategory = useCallback(async (categoryId: string) => {
+    setIsLoading(true);
+    await new WorkoutService(axios)
+      .publicListByCategory(categoryId)
+      .then((allWorkouts) => {
+        setPublicWorkouts(allWorkouts as IPublicWorkout[]);
       })
       .finally(() => setIsLoading(false));
   }, []);
@@ -130,6 +143,7 @@ export const WorkoutProvider = ({ children, onClose }: WorkoutProviderProps) => 
     <WorkoutContext.Provider
       value={{
         workouts,
+        publicWorkouts,
         Delete,
         workoutsPages,
         isLoading,
@@ -141,6 +155,7 @@ export const WorkoutProvider = ({ children, onClose }: WorkoutProviderProps) => 
         List,
         ListPaginated,
         ListByCategory,
+        PublicListByCategory,
       }}
     >
       {children}
