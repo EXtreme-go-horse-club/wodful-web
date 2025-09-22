@@ -32,13 +32,14 @@ const FormTicket = ({ onClose, oldTicket, resetTicket }: IFormChampionshipProps)
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors, isValid },
   } = useForm<TicketDTO>({
     mode: 'onChange',
     defaultValues: {
+      categoryId: oldTicket?.category.id,
       name: oldTicket?.name,
       description: oldTicket?.description,
+      paymentLink: oldTicket?.paymentLink,
       price: oldTicket?.price,
       quantity: oldTicket?.quantity,
       endDate: oldTicket?.endDate?.toString().substring(0, 10),
@@ -60,6 +61,7 @@ const FormTicket = ({ onClose, oldTicket, resetTicket }: IFormChampionshipProps)
         endDate: ticket.endDate,
         startDate: ticket.startDate,
         categoryId: ticket.categoryId,
+        paymentLink: ticket.paymentLink,
       };
       await Edit(editedTicket);
       resetTicket();
@@ -73,12 +75,7 @@ const FormTicket = ({ onClose, oldTicket, resetTicket }: IFormChampionshipProps)
 
   useEffect(() => {
     List(id as string);
-    if (oldTicket?.category.id) {
-      reset({
-        categoryId: oldTicket?.category.id,
-      });
-    }
-  }, [List, id, oldTicket?.category.id, reset]);
+  }, [List, id]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -122,6 +119,12 @@ const FormTicket = ({ onClose, oldTicket, resetTicket }: IFormChampionshipProps)
             })}
           />
           <FormErrorMessage>{errors.description && errors.description.message}</FormErrorMessage>
+        </FormControl>
+
+        <FormControl isInvalid={!!errors.paymentLink}>
+          <FormLabel>Link de pagamento</FormLabel>
+          <Input placeholder='https://mpago.la/seu_link' {...register('paymentLink')} />
+          <FormErrorMessage>{errors.paymentLink && errors.paymentLink.message}</FormErrorMessage>
         </FormControl>
 
         <HStack width='100%'>

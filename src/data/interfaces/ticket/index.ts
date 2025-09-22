@@ -8,6 +8,7 @@ export interface ITicket {
   price: number;
   quantity: number;
   inUse: number;
+  paymentLink: string;
   category: {
     id: string;
     members: number;
@@ -19,6 +20,7 @@ export interface TicketDTO {
   id?: string;
   name: string;
   description: string;
+  paymentLink: string;
   startDate: Date | string;
   endDate: Date | string;
   price: number;
