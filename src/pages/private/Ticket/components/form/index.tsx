@@ -32,11 +32,11 @@ const FormTicket = ({ onClose, oldTicket, resetTicket }: IFormChampionshipProps)
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors, isValid },
   } = useForm<TicketDTO>({
     mode: 'onChange',
     defaultValues: {
+      categoryId: oldTicket?.category.id,
       name: oldTicket?.name,
       description: oldTicket?.description,
       paymentLink: oldTicket?.paymentLink,
@@ -75,12 +75,7 @@ const FormTicket = ({ onClose, oldTicket, resetTicket }: IFormChampionshipProps)
 
   useEffect(() => {
     List(id as string);
-    if (oldTicket?.category.id) {
-      reset({
-        categoryId: oldTicket?.category.id,
-      });
-    }
-  }, [List, id, oldTicket?.category.id, reset]);
+  }, [List, id]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
