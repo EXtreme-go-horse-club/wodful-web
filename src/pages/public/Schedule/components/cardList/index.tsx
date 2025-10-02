@@ -117,40 +117,43 @@ const ListCardPublicSchedule = () => {
                         </AccordionButton>
                         {isMobile && (
                           <AccordionPanel py={3} px={0}>
-                            {schedule.subscriptions?.map((subscription, index) => (
-                              <Box
-                                key={`${Math.random() * 1000}_${index}_${subscription.nickname}`}
-                              >
-                                <HStack
-                                  justify='space-between'
-                                  w='100%'
-                                  key={`${index * subscription.ranking}_${subscription.nickname}`}
+                            {schedule.subscriptions?.map((subscription, index) => {
+                              const count_baias = schedule.subscriptions.length;
+                              return (
+                                <Box
+                                  key={`${Math.random() * 1000}_${index}_${subscription.nickname}`}
                                 >
-                                  <Text
-                                    overflow={'hidden'}
-                                    whiteSpace='nowrap'
-                                    textOverflow='ellipsis'
-                                    maxW='80%'
-                                    fontSize='0.8rem'
-                                    as='b'
-                                    color='gray.600'
-                                    size='sm'
+                                  <HStack
+                                    justify='space-between'
+                                    w='100%'
+                                    key={`${index * subscription.ranking}_${subscription.nickname}`}
                                   >
-                                    {subscription.nickname}
-                                  </Text>
-                                  <Text
-                                    fontSize='12px'
-                                    color='gray.500'
-                                    size='xs'
-                                    textAlign='center'
-                                    minW='50px'
-                                  >
-                                    Baia {index + 1}
-                                  </Text>
-                                </HStack>
-                                <Divider />
-                              </Box>
-                            ))}
+                                    <Text
+                                      overflow={'hidden'}
+                                      whiteSpace='nowrap'
+                                      textOverflow='ellipsis'
+                                      maxW='80%'
+                                      fontSize='0.8rem'
+                                      as='b'
+                                      color='gray.600'
+                                      size='sm'
+                                    >
+                                      {subscription.nickname}
+                                    </Text>
+                                    <Text
+                                      fontSize='12px'
+                                      color='gray.500'
+                                      size='xs'
+                                      textAlign='center'
+                                      minW='50px'
+                                    >
+                                      Baia {Math.abs(index - count_baias)}
+                                    </Text>
+                                  </HStack>
+                                  <Divider />
+                                </Box>
+                              );
+                            })}
                           </AccordionPanel>
                         )}
                       </>
