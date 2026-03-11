@@ -22,6 +22,8 @@ interface IFormScheduleProps {
   onClose: () => void;
 }
 
+const NUMBERS_1_TO_15 = Array.from({ length: 15 }, (_, index) => index + 1);
+
 const ScheduleForm = ({ onClose }: IFormScheduleProps) => {
   const { List, categories } = useCategoryData();
   const { ListByCategory, workouts } = useWorkoutData();
@@ -122,16 +124,11 @@ const ScheduleForm = ({ onClose }: IFormScheduleProps) => {
         <FormControl isInvalid={!!errors.heat}>
           <FormLabel>Bateria</FormLabel>
           <Select as='select' {...register('heat', { required: validationMessages['required'] })}>
-            <option value='1'>1</option>
-            <option value='2'>2</option>
-            <option value='3'>3</option>
-            <option value='4'>4</option>
-            <option value='5'>5</option>
-            <option value='6'>6</option>
-            <option value='7'>7</option>
-            <option value='8'>8</option>
-            <option value='9'>9</option>
-            <option value='10'>10</option>
+            {NUMBERS_1_TO_15.map((value) => (
+              <option key={value} value={value}>
+                {value}
+              </option>
+            ))}
           </Select>
           <FormErrorMessage>{errors.heat && errors.heat.message}</FormErrorMessage>
         </FormControl>
@@ -142,16 +139,11 @@ const ScheduleForm = ({ onClose }: IFormScheduleProps) => {
             as='select'
             {...register('laneQuantity', { required: validationMessages['required'] })}
           >
-            <option value='1'>1</option>
-            <option value='2'>2</option>
-            <option value='3'>3</option>
-            <option value='4'>4</option>
-            <option value='5'>5</option>
-            <option value='6'>6</option>
-            <option value='7'>7</option>
-            <option value='8'>8</option>
-            <option value='9'>9</option>
-            <option value='10'>10</option>
+            {NUMBERS_1_TO_15.map((value) => (
+              <option key={value} value={value}>
+                {value}
+              </option>
+            ))}
           </Select>
           <FormErrorMessage>{errors.laneQuantity && errors.laneQuantity.message}</FormErrorMessage>
         </FormControl>
