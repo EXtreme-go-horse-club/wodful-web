@@ -4,12 +4,14 @@ export interface IWorkoutDTO {
   workoutType: string;
   championshipId: string;
   categoryId: string;
+  worthHalfPoints?: boolean;
 }
 export interface IWorkout {
   id: string;
   name: string;
   workoutType: 'AMRAP' | 'EMOM' | 'FORTIME' | 'PR';
   categoryName: string;
+  worthHalfPoints?: boolean;
 }
 
 export interface IPublicWorkout {
@@ -17,4 +19,6 @@ export interface IPublicWorkout {
   name: string;
   workoutType: 'AMRAP' | 'EMOM' | 'FORTIME' | 'PR';
   description: string;
+  worthHalfPoints?: boolean;
+  resultType?: string;
 }

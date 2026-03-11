@@ -10,12 +10,15 @@ import {
   Heading,
   HStack,
   SimpleGrid,
+  Tag,
   Text,
   VStack,
 } from '@chakra-ui/react';
 
 const ListPublicWorkouts = () => {
   const { publicWorkouts } = useWorkoutData();
+
+  const showPontuacao = publicWorkouts?.[0]?.resultType !== 'RANKING';
 
   return (
     <>
@@ -34,19 +37,30 @@ const ListPublicWorkouts = () => {
           >
             <VStack gap='8px' align='start'>
               <Heading color='black' as='h3' size='sm' width={'100%'}>
-                <Flex gap={'2'} justify={'space-between'}>
+                <Flex gap={'2'} justify={'space-between'} align='flex-start'>
                   <Text>{workout.name}</Text>
-                  <Text
-                    as={'h4'}
-                    color={'blue.500'}
-                    fontSize={'medium'}
-                    background={'#31979517'}
-                    p={'0.125rem 0.25rem'}
-                    borderRadius={'0.25rem'}
-                    height={'fit-content'}
-                  >
-                    {workout.workoutType}
-                  </Text>
+                  <VStack gap={1} align='flex-end' flexShrink={0}>
+                    <Text
+                      as='span'
+                      color='blue.500'
+                      fontSize='medium'
+                      background='#31979517'
+                      px='0.25rem'
+                      py='0.125rem'
+                      borderRadius='0.25rem'
+                    >
+                      {workout.workoutType}
+                    </Text>
+                    {showPontuacao && (
+                      <Tag
+                        size='sm'
+                        variant='subtle'
+                        colorScheme={workout.worthHalfPoints ? 'orange' : 'gray'}
+                      >
+                        {workout.worthHalfPoints ? '50 pts' : '100 pts'}
+                      </Tag>
+                    )}
+                  </VStack>
                 </Flex>
               </Heading>
 

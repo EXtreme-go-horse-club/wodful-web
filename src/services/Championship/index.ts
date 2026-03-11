@@ -10,7 +10,7 @@ export class ChampionshipService {
   constructor(
     private readonly httpClient: HttpClient<IChampionship | IChampionship[]>,
     private readonly path = '/championships',
-  ) {}
+  ) { }
 
   async create({
     name,
@@ -114,6 +114,20 @@ export class ChampionshipService {
     const { statusCode, body } = await this.httpClient.request({
       method: 'patch',
       url: `${this.path}/${id}/deactivate`,
+    });
+
+    switch (statusCode) {
+      case HttpStatusCode.ok:
+        return body! as IChampionship;
+      default:
+        throw new Error();
+    }
+  }
+
+  async getById(id: string): Promise<IChampionship> {
+    const { statusCode, body } = await this.httpClient.request({
+      method: 'get',
+      url: `${this.path}/${id}`,
     });
 
     switch (statusCode) {
