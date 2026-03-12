@@ -8,7 +8,7 @@ export class WorkoutService {
       IPageResponse<IWorkout> | IWorkout[] | IWorkout | IPublicWorkout[]
     >,
     private readonly path = '/workouts',
-  ) {}
+  ) { }
 
   async create({
     name,
@@ -16,11 +16,12 @@ export class WorkoutService {
     workoutType,
     championshipId,
     categoryId,
+    worthHalfPoints,
   }: IWorkoutDTO): Promise<IWorkout> {
     const { statusCode, body } = await this.httpClient.request({
       method: 'post',
       url: this.path,
-      body: { name, description, workoutType, championshipId, categoryId },
+      body: { name, description, workoutType, championshipId, categoryId, worthHalfPoints },
     });
 
     switch (statusCode) {

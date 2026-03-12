@@ -30,9 +30,10 @@ import { ChevronLeft, ChevronRight, MoreHorizontal } from 'react-feather';
 
 interface IListWorkout {
   id: string;
+  showPontuacaoColumn?: boolean;
 }
 
-const ListWorkout = ({ id }: IListWorkout) => {
+const ListWorkout = ({ id, showPontuacaoColumn = false }: IListWorkout) => {
   const [currentTotal, setCurrentTotal] = useState<number>(0);
 
   const { ListPaginated, workoutsPages, page, limit, setLimit, setPage, isLoading, Delete } =
@@ -86,6 +87,11 @@ const ListWorkout = ({ id }: IListWorkout) => {
               <Th>
                 <Text as='b'>CATEGORIA</Text>
               </Th>
+              {showPontuacaoColumn && (
+                <Th>
+                  <Text as='b'>PONTUAÇÃO</Text>
+                </Th>
+              )}
               <Th></Th>
             </Tr>
           </Thead>
@@ -104,6 +110,19 @@ const ListWorkout = ({ id }: IListWorkout) => {
                   </Tag>
                 </Td>
                 <Td p={6}>{workout.categoryName}</Td>
+                {showPontuacaoColumn && (
+                  <Td p={6}>
+                    {workout.worthHalfPoints ? (
+                      <Tag size='sm' variant='subtle' colorScheme='orange'>
+                        50 Pontos
+                      </Tag>
+                    ) : (
+                      <Tag size='sm' variant='subtle' colorScheme='gray'>
+                        100 Pontos
+                      </Tag>
+                    )}
+                  </Td>
+                )}
                 <Td p={6}>
                   <Flex justify='end'>
                     <Menu>
@@ -143,6 +162,7 @@ const ListWorkout = ({ id }: IListWorkout) => {
               </Th>
               <Th></Th>
               <Th></Th>
+              {showPontuacaoColumn && <Th></Th>}
               <Th>
                 <Flex justify='end'>
                   <HStack>

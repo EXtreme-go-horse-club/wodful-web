@@ -32,6 +32,7 @@ export interface WorkoutContextData {
     workoutType,
     championshipId,
     categoryId,
+    worthHalfPoints,
   }: IWorkoutDTO) => Promise<void>;
 }
 
@@ -96,10 +97,17 @@ export const WorkoutProvider = ({ children, onClose }: WorkoutProviderProps) => 
   }, []);
 
   const Create = useCallback(
-    async ({ name, description, workoutType, championshipId, categoryId }: IWorkoutDTO) => {
+    async ({
+      name,
+      description,
+      workoutType,
+      championshipId,
+      categoryId,
+      worthHalfPoints,
+    }: IWorkoutDTO) => {
       setIsLoading(true);
       await new WorkoutService(axios)
-        .create({ name, description, workoutType, championshipId, categoryId })
+        .create({ name, description, workoutType, championshipId, categoryId, worthHalfPoints })
         .then(() => {
           toast({
             title: workoutMessages['success'],

@@ -5,8 +5,10 @@ import { validationMessages } from '@/utils/messages';
 import {
   Button,
   ButtonGroup,
+  Checkbox,
   FormControl,
   FormErrorMessage,
+  FormHelperText,
   FormLabel,
   Input,
   Select,
@@ -19,9 +21,10 @@ import { useForm } from 'react-hook-form';
 interface IFormChampionshipProps {
   id: string;
   onClose: () => void;
+  showHalfPointsOption?: boolean;
 }
 
-const FormWorkout = ({ id, onClose }: IFormChampionshipProps) => {
+const FormWorkout = ({ id, onClose, showHalfPointsOption = false }: IFormChampionshipProps) => {
   const { Create } = useWorkoutData();
   const { List, categories } = useCategoryData();
   useEffect(() => {
@@ -33,9 +36,12 @@ const FormWorkout = ({ id, onClose }: IFormChampionshipProps) => {
     formState: { errors, isValid },
   } = useForm<IWorkoutDTO>({
     mode: 'onChange',
+    defaultValues: { worthHalfPoints: false },
   });
   function onSubmit(workout: IWorkoutDTO) {
     workout.championshipId = id;
+    if (!showHalfPointsOption) workout.worthHalfPoints = false;
+    else workout.worthHalfPoints = !!workout.worthHalfPoints;
     Create(workout);
     onClose();
   }
@@ -108,6 +114,16 @@ const FormWorkout = ({ id, onClose }: IFormChampionshipProps) => {
           </Select>
           <FormErrorMessage>{errors.workoutType && errors.workoutType.message}</FormErrorMessage>
         </FormControl>
+        {showHalfPointsOption && (
+          <FormControl>
+            <Checkbox id='worthHalfPoints' {...register('worthHalfPoints')}>
+              Vale metade da pontuação (50 pts)
+            </Checkbox>
+            <FormHelperText>
+              Aplica-se apenas no padrão de pontuação (SCORE). Quando marcado, a prova vale 50 pontos.
+            </FormHelperText>
+          </FormControl>
+        )}
         <ButtonGroup flexDirection='column' alignItems='end' gap={6} w='100%'>
           <Button colorScheme='teal' w='100%' mt={4} type='submit' disabled={!isValid}>
             Adicionar
