@@ -4,7 +4,7 @@ import { CouponDTO, ICoupon } from '@/data/interfaces/coupon';
 
 export class CouponService {
   constructor(
-    private readonly httpClient: HttpClient<IPageResponse<ICoupon> | ICoupon[]>,
+    private readonly httpClient: HttpClient<any>,
     private readonly path = '/coupons',
   ) {}
 
