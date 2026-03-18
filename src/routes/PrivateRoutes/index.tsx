@@ -11,6 +11,7 @@ import Schedule from '@/pages/private/Schedule';
 import Subscription from '@/pages/private/Subscription';
 import Ticket from '@/pages/private/Ticket';
 import Workout from '@/pages/private/Workout';
+import Coupons from '@/pages/private/Coupons';
 
 const PrivateRoutes = () => {
   return (
@@ -32,6 +33,7 @@ const PrivateRoutes = () => {
           <Route path='/championships/:id/results' element={<Result />} />
           <Route path='/championships/:id/subscriptions' element={<Subscription />} />
           <Route path='/championships/:id/schedules' element={<Schedule />} />
+          <Route path='/championships/:id/coupons' element={<Coupons />} />
         </Route>
       </Routes>
     </BrowserRouter>
