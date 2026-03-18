@@ -29,6 +29,11 @@ export const Navbar = () => {
         path: `/championships/${params.id}/tickets`,
       },
       {
+        identifier: 'coupons',
+        label: 'Cupons',
+        path: `/championships/${params.id}/coupons`,
+      },
+      {
         identifier: 'workouts',
         label: 'Provas',
         path: `/championships/${params.id}/workouts`,
