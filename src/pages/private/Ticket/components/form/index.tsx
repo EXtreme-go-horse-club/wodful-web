@@ -29,6 +29,17 @@ const FormTicket = ({ onClose, oldTicket, resetTicket }: IFormChampionshipProps)
   const { Create, Edit } = useTicketData();
   const { id } = useParams();
 
+  const parsePriceBR = (value: unknown) => {
+    if (value === null || value === undefined) return undefined;
+    const raw = String(value).trim();
+    if (!raw) return undefined;
+
+    const normalized = raw.replace(/\./g, "").replace(",", ".");
+    const num = Number(normalized);
+    if (!Number.isFinite(num)) return undefined;
+    return num;
+  };
+
   const {
     register,
     handleSubmit,
@@ -132,12 +143,16 @@ const FormTicket = ({ onClose, oldTicket, resetTicket }: IFormChampionshipProps)
             <FormLabel>Valor</FormLabel>
             <Input
               as='input'
-              type='number'
-              placeholder='Valor do ticket'
+              type='text'
+              inputMode='decimal'
+              placeholder='Valor do ticket (ex.: 289,90)'
               {...register('price', {
                 required: validationMessages['required'],
-                minLength: { value: 1, message: validationMessages['minLength'] },
-                maxLength: { value: 15, message: validationMessages['maxLengthSm'] },
+                setValueAs: parsePriceBR,
+                validate: (v) =>
+                  typeof v === 'number' && Number.isFinite(v) && v >= 0
+                    ? true
+                    : validationMessages['invalidField'],
               })}
             />
             <FormErrorMessage>{errors.price && errors.price.message}</FormErrorMessage>
