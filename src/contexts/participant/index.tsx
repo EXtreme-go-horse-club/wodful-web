@@ -82,7 +82,7 @@ export const ParticipantProvider = ({ children }: TicketProviderProps) => {
             status: 'success',
             isClosable: true,
           });
-          await ListPaginated(idChampionship, currentSearch);
+          ListPaginated(idChampionship, currentSearch);
         })
         .catch(() => {
           toast({
@@ -109,7 +109,7 @@ export const ParticipantProvider = ({ children }: TicketProviderProps) => {
             status: 'success',
             isClosable: true,
           });
-          await ListPaginated(idChampionship, currentSearch);
+          ListPaginated(idChampionship, currentSearch);
         })
         .catch(() => {
           toast({
@@ -136,7 +136,7 @@ export const ParticipantProvider = ({ children }: TicketProviderProps) => {
             status: 'success',
             isClosable: true,
           });
-          await ListPaginated(idChampionship, currentSearch);
+          ListPaginated(idChampionship, currentSearch);
         })
         .catch(() => {
           toast({
