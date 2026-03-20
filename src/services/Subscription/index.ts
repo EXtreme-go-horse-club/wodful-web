@@ -112,6 +112,20 @@ export class SubscriptionService {
     }
   }
 
+  async resendApprovedEmail(id: string): Promise<void> {
+    const { statusCode } = await this.httpClient.request({
+      method: 'post',
+      url: `${this.path}/${id}/resend-approved-email`,
+    });
+
+    switch (statusCode) {
+      case HttpStatusCode.noContent:
+        return;
+      default:
+        throw new Error();
+    }
+  }
+
   async listAllByCategory(
     id: string,
     categoryId: string,

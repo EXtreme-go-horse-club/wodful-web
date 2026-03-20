@@ -90,6 +90,8 @@ export const subscriptionMessages = {
   status_update_err: 'Algo deu errado ao alterar o status da inscrição',
   update: 'Inscrição alterado com sucesso',
   update_err: 'Algo deu errado ao alterar a inscrição',
+  resend_email_success: 'E-mail reenviado com sucesso',
+  resend_email_error: 'Algo deu errado ao reenviar o e-mail',
 };
 
 export const subscriptionStatus = {

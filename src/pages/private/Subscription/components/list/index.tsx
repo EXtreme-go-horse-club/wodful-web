@@ -4,6 +4,7 @@ import useSubscriptionData from '@/hooks/useSubscriptionData';
 import { subscriptionStatus } from '@/utils/messages';
 import {
   Button,
+  ButtonGroup,
   Flex,
   HStack,
   IconButton,
@@ -18,6 +19,7 @@ import {
   Tbody,
   Td,
   Text,
+  VStack,
   Tfoot,
   Th,
   Thead,
@@ -47,11 +49,21 @@ const ListSubscription = ({ id, categoryId, onEdit }: IListSubscription) => {
     isLoading,
     Delete,
     UpdateStatus,
+    ResendApprovedEmail,
   } = useSubscriptionData();
 
   const [subscriptionId, setSubscriptionId] = useState<string>('');
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isDeleteOpen,
+    onOpen: onDeleteOpen,
+    onClose: onDeleteClose,
+  } = useDisclosure();
+  const {
+    isOpen: isResendOpen,
+    onOpen: onResendOpen,
+    onClose: onResendClose,
+  } = useDisclosure();
 
   useEffect(() => {
     ListPaginated(id, categoryId);
@@ -63,7 +75,7 @@ const ListSubscription = ({ id, categoryId, onEdit }: IListSubscription) => {
 
   const openDelete = (id: string) => {
     setSubscriptionId(id);
-    onOpen();
+    onDeleteOpen();
   };
 
   const confirmDelete = () => {
@@ -72,6 +84,16 @@ const ListSubscription = ({ id, categoryId, onEdit }: IListSubscription) => {
 
   const changeSubscriptionStatus = (id: string, status: string) => {
     UpdateStatus(id, status);
+  };
+
+  const openResendEmail = (id: string) => {
+    setSubscriptionId(id);
+    onResendOpen();
+  };
+
+  const confirmResendEmail = () => {
+    ResendApprovedEmail(subscriptionId);
+    onResendClose();
   };
 
   const previousPage = () => {
@@ -84,8 +106,35 @@ const ListSubscription = ({ id, categoryId, onEdit }: IListSubscription) => {
 
   return (
     <>
-      <ComponentModal modalHeader='Remover inscrição' size='sm' isOpen={isOpen} onClose={onClose}>
-        <DeleteData onClose={onClose} removedData='a inscrição' confirmDelete={confirmDelete} />
+      <ComponentModal
+        modalHeader='Remover inscrição'
+        size='sm'
+        isOpen={isDeleteOpen}
+        onClose={onDeleteClose}
+      >
+        <DeleteData onClose={onDeleteClose} removedData='a inscrição' confirmDelete={confirmDelete} />
+      </ComponentModal>
+      <ComponentModal
+        modalHeader='Reenviar e-mail'
+        size='sm'
+        isOpen={isResendOpen}
+        onClose={onResendClose}
+      >
+        <VStack align='start' w='100%' spacing={6} pb={4} flexDirection='column'>
+          <HStack w='100%'>
+            <Text fontSize='14px'>
+              Deseja reenviar o e-mail de confirmação para o responsável desta inscrição?
+            </Text>
+          </HStack>
+          <ButtonGroup flexDirection='column' alignItems='end' gap={6} w='100%'>
+            <Button variant='outline' w='100%' onClick={onResendClose}>
+              Cancelar
+            </Button>
+            <Button colorScheme='teal' w='100%' onClick={confirmResendEmail}>
+              Reenviar e-mail
+            </Button>
+          </ButtonGroup>
+        </VStack>
       </ComponentModal>
       <TableContainer border='1px' borderColor='gray.100' fontSize='sm' color='#2D3748'>
         <Table variant='simple'>
@@ -165,6 +214,11 @@ const ListSubscription = ({ id, categoryId, onEdit }: IListSubscription) => {
                           Recusar
                         </MenuItem>
                         <MenuItem onClick={() => onEdit(subscription.id)}>Editar</MenuItem>
+                        {subscription.status === 'APPROVED' && (
+                          <MenuItem onClick={() => openResendEmail(subscription.id)}>
+                            Reenviar e-mail
+                          </MenuItem>
+                        )}
                         <MenuItem onClick={() => openDelete(subscription.id)}>Deletar</MenuItem>
                       </MenuList>
                     </Menu>

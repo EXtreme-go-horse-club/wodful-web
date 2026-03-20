@@ -32,6 +32,7 @@ export interface SubscriptionContextData {
   Delete: (id: string) => Promise<void>;
   List: (id: string) => Promise<void>;
   UpdateStatus: (id: string, status: string) => Promise<void>;
+  ResendApprovedEmail: (id: string) => Promise<void>;
   ListPaginated: (id: string, categoryId?: string) => Promise<void>;
   ListAllByCategory: (categoryId: string) => Promise<void>;
   Create: (participants: IParticipantForm) => Promise<void>;
@@ -220,6 +221,30 @@ export const SubscriptionProvider = ({ children, onClose }: SubscriptionProvider
     [ListPaginated, id, toast],
   );
 
+  const ResendApprovedEmail = useCallback(
+    async (idSub: string) => {
+      setIsLoading(true);
+      await new SubscriptionService(axios)
+        .resendApprovedEmail(idSub)
+        .then(() => {
+          toast({
+            title: subscriptionMessages['resend_email_success'],
+            status: 'success',
+            isClosable: true,
+          });
+        })
+        .catch(() => {
+          toast({
+            title: subscriptionMessages['resend_email_error'],
+            status: 'error',
+            isClosable: true,
+          });
+        })
+        .finally(() => setIsLoading(false));
+    },
+    [toast],
+  );
+
   return (
     <SubscriptionContext.Provider
       value={{
@@ -235,6 +260,7 @@ export const SubscriptionProvider = ({ children, onClose }: SubscriptionProvider
         Create,
         Delete,
         UpdateStatus,
+        ResendApprovedEmail,
         List,
         ListPaginated,
         ListAllByCategory,
