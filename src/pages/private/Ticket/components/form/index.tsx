@@ -40,6 +40,16 @@ const FormTicket = ({ onClose, oldTicket, resetTicket }: IFormChampionshipProps)
     return num;
   };
 
+  const formatDateTimeLocal = (value?: Date | string) => {
+    if (!value) return '';
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return '';
+
+    const tzOffsetMs = date.getTimezoneOffset() * 60000;
+    const localTime = new Date(date.getTime() - tzOffsetMs);
+    return localTime.toISOString().slice(0, 16);
+  };
+
   const {
     register,
     handleSubmit,
@@ -53,8 +63,8 @@ const FormTicket = ({ onClose, oldTicket, resetTicket }: IFormChampionshipProps)
       paymentLink: oldTicket?.paymentLink,
       price: oldTicket?.price,
       quantity: oldTicket?.quantity,
-      endDate: oldTicket?.endDate?.toString().substring(0, 10),
-      startDate: oldTicket?.startDate?.toString().substring(0, 10),
+      endDate: formatDateTimeLocal(oldTicket?.endDate),
+      startDate: formatDateTimeLocal(oldTicket?.startDate),
     },
   });
 
@@ -175,10 +185,10 @@ const FormTicket = ({ onClose, oldTicket, resetTicket }: IFormChampionshipProps)
 
         <HStack width='100%'>
           <FormControl isInvalid={!!errors.startDate}>
-            <FormLabel>Data de início</FormLabel>
+            <FormLabel>Data e hora de início</FormLabel>
             <Input
-              type='date'
-              placeholder='DD/MM/AAAA'
+              type='datetime-local'
+              placeholder='DD/MM/AAAA HH:mm'
               {...register('startDate', {
                 required: validationMessages['required'],
               })}
@@ -187,10 +197,10 @@ const FormTicket = ({ onClose, oldTicket, resetTicket }: IFormChampionshipProps)
           </FormControl>
 
           <FormControl isInvalid={!!errors.endDate}>
-            <FormLabel>Data de encerramento</FormLabel>
+            <FormLabel>Data e hora de encerramento</FormLabel>
             <Input
-              type='date'
-              placeholder='DD/MM/AAAA'
+              type='datetime-local'
+              placeholder='DD/MM/AAAA HH:mm'
               {...register('endDate', {
                 required: validationMessages['required'],
               })}
