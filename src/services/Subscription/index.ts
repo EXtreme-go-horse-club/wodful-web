@@ -129,8 +129,10 @@ export class SubscriptionService {
   async listAllByCategory(
     id: string,
     categoryId: string,
+    workoutId?: string,
   ): Promise<IPageResponse<ISubscription> | ISubscription[]> {
-    const url = `championships/${id}${this.path}?category=${categoryId}`;
+    const workoutQuery = workoutId ? `&workoutId=${workoutId}` : '';
+    const url = `championships/${id}${this.path}?category=${categoryId}${workoutQuery}`;
 
     const { statusCode, body } = await this.httpClient.request({
       method: 'get',

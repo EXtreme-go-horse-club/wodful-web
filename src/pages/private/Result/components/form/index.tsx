@@ -36,11 +36,15 @@ const ResultForm = ({ onClose, oldResultId }: IFormResultProps) => {
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     reset,
     formState: { errors, isValid },
   } = useForm<ICreateResultRequestDTO>({
     mode: 'onChange',
   });
+  const selectedCategoryId = watch('categoryId');
+  const selectedWorkoutId = watch('workoutId');
   useEffect(() => {
     if (oldResultId && !alreadyCallOldResult) {
       Get(oldResultId);
@@ -71,7 +75,13 @@ const ResultForm = ({ onClose, oldResultId }: IFormResultProps) => {
       return;
     }
     await Create(resultData);
-    onClose();
+
+    // Mantem categoria/prova para acelerar lancamentos em lote.
+    if (selectedCategoryId && selectedWorkoutId) {
+      await ListAllByCategory(selectedCategoryId, selectedWorkoutId);
+    }
+    setValue('subscriptionId', '');
+    setValue('result', '');
   };
 
   return (
@@ -108,6 +118,8 @@ const ResultForm = ({ onClose, oldResultId }: IFormResultProps) => {
                       categories.find((selected) => selected.id === e.target.value)?.isTeam ||
                         false,
                     );
+                    setValue('workoutId', '');
+                    setValue('subscriptionId', '');
                     ListAllByCategory(e.target.value);
                     ListByCategory(e.target.value);
                   },
@@ -134,6 +146,10 @@ const ResultForm = ({ onClose, oldResultId }: IFormResultProps) => {
                       workouts.find((selected) => selected.id === event.target.value)
                         ?.workoutType || 'AMRAP',
                     );
+                    setValue('subscriptionId', '');
+                    if (selectedCategoryId) {
+                      ListAllByCategory(selectedCategoryId, event.target.value);
+                    }
                   },
                 })}
               >
@@ -164,6 +180,19 @@ const ResultForm = ({ onClose, oldResultId }: IFormResultProps) => {
               <FormErrorMessage>
                 {errors.subscriptionId && errors.subscriptionId.message}
               </FormErrorMessage>
+              {!errors.subscriptionId && selectedCategoryId && selectedWorkoutId && (
+                <Text mt={2} color='gray.500' fontSize='sm'>
+                  Pendentes: {subscriptions?.length || 0}
+                </Text>
+              )}
+              {!errors.subscriptionId &&
+                selectedCategoryId &&
+                selectedWorkoutId &&
+                subscriptions?.length === 0 && (
+                  <Text mt={2} color='gray.500' fontSize='sm'>
+                    Todos {isTeam ? 'as equipes' : 'os atletas'} ja tem resultado nesta prova.
+                  </Text>
+                )}
             </FormControl>
           </>
         )}
