@@ -255,11 +255,7 @@ const Result = () => {
           <ReleaseResultsForm onClose={() => setIsOpenReleaseResults(false)} />
         </ComponentModal>
         <Box as='section' w='100%' marginTop={6}>
-          <ListResults
-            openEdit={openEdit}
-            categoryId={categoryId}
-            clearFilter={() => setWorkoutId('')}
-          />
+          <ListResults openEdit={openEdit} categoryId={categoryId} />
         </Box>
       </Box>
     </Suspense>

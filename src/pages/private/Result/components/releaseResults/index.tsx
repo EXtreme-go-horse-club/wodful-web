@@ -25,7 +25,7 @@ export interface IReleaseResultsFormRequestDTO {
   categoryId: string;
 }
 
-const ReleaseResultsForm = ({ onClose }: IFormResultProps) => {
+const ReleaseResultsForm = ({ onClose: _onClose }: IFormResultProps) => {
   const { categories } = useCategoryData();
   const { workouts, ListByCategory } = useWorkoutData();
   const { GetIsReleasedResult, UpdateReleaseResult } = useResultData();
@@ -49,7 +49,8 @@ const ReleaseResultsForm = ({ onClose }: IFormResultProps) => {
       release: isRelease,
       categoryId: resultData.categoryId,
     });
-    onClose();
+    // Mantem o modal aberto para agilizar operacao durante o evento.
+    setAlertMessage(isRelease);
   };
 
   const handleIsResultReleased = (event: any) => {

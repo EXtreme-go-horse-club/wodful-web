@@ -25,10 +25,9 @@ import { MoreHorizontal } from 'react-feather';
 interface IListResultProps {
   openEdit: (id: string) => void;
   categoryId: string;
-  clearFilter: () => void;
 }
 
-const ListResults = ({ openEdit, categoryId, clearFilter }: IListResultProps) => {
+const ListResults = ({ openEdit, categoryId }: IListResultProps) => {
   const { resultPages, Delete } = useResultData();
   const [resultId, setResultId] = useState<string>('');
 
@@ -40,7 +39,6 @@ const ListResults = ({ openEdit, categoryId, clearFilter }: IListResultProps) =>
   };
 
   const confirmDelete = () => {
-    clearFilter();
     Delete(resultId, categoryId);
   };
 

@@ -38,15 +38,21 @@ const ResultContext = createContext({} as ResultContextData);
 
 const axios = new AxiosAdapter();
 
-export const ResultProvider = ({ children, onClose }: ResultProps) => {
+export const ResultProvider = ({ children }: ResultProps) => {
   const toast = useToast();
   const [resultPages, setResultPages] = useState<IResultByCategory[]>([] as IResultByCategory[]);
   const [page, setPage] = useState<number>(1);
   const [result, setResult] = useState<IResultData>({} as IResultData);
   const [limit, setLimit] = useState<number>(5);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [currentCategoryId, setCurrentCategoryId] = useState<string>('');
+  const [currentWorkoutId, setCurrentWorkoutId] = useState<string>('');
+  const [currentSearch, setCurrentSearch] = useState<string | undefined>(undefined);
 
   const ListPaginated = useCallback(async (categoryId: string, name?: string) => {
+    setCurrentCategoryId(categoryId);
+    setCurrentWorkoutId('');
+    setCurrentSearch(name);
     setIsLoading(true);
     await new ResultService(axios)
       .listByCategory(categoryId, name)
@@ -80,6 +86,9 @@ export const ResultProvider = ({ children, onClose }: ResultProps) => {
 
   const ListPaginatedByWorkout = useCallback(
     async (categoryId: string, workoutId: string, name?: string) => {
+      setCurrentCategoryId(categoryId);
+      setCurrentWorkoutId(workoutId);
+      setCurrentSearch(name);
       setIsLoading(true);
       await new ResultService(axios)
         .listByCategoryAndWorkout(categoryId, workoutId, name)
@@ -90,6 +99,15 @@ export const ResultProvider = ({ children, onClose }: ResultProps) => {
     },
     [],
   );
+
+  const refreshCurrentList = useCallback(async () => {
+    if (!currentCategoryId) return;
+    if (currentWorkoutId) {
+      await ListPaginatedByWorkout(currentCategoryId, currentWorkoutId, currentSearch);
+      return;
+    }
+    await ListPaginated(currentCategoryId, currentSearch);
+  }, [currentCategoryId, currentWorkoutId, currentSearch, ListPaginated, ListPaginatedByWorkout]);
 
   const Create = useCallback(
     async ({ workoutId, subscriptionId, result, categoryId }: ICreateResultRequestDTO) => {
@@ -102,8 +120,7 @@ export const ResultProvider = ({ children, onClose }: ResultProps) => {
             status: 'success',
             isClosable: true,
           });
-          ListPaginated(categoryId);
-          onClose!();
+          ListPaginatedByWorkout(categoryId, workoutId);
         })
         .catch(() => {
           toast({
@@ -114,11 +131,11 @@ export const ResultProvider = ({ children, onClose }: ResultProps) => {
         })
         .finally(() => setIsLoading(false));
     },
-    [ListPaginated, onClose, toast],
+    [ListPaginatedByWorkout, toast],
   );
 
   const UpdateReleaseResult = useCallback(
-    async ({ workoutId, release, categoryId }: IEditReleaseResultDTO) => {
+    async ({ workoutId, release, categoryId: _categoryId }: IEditReleaseResultDTO) => {
       setIsLoading(true);
       await new ResultService(axios)
         .editReleaseResult({ workoutId, release })
@@ -128,7 +145,7 @@ export const ResultProvider = ({ children, onClose }: ResultProps) => {
             status: 'success',
             isClosable: true,
           });
-          ListPaginated(categoryId!);
+          refreshCurrentList();
         })
         .catch(() => {
           toast({
@@ -139,11 +156,11 @@ export const ResultProvider = ({ children, onClose }: ResultProps) => {
         })
         .finally(() => setIsLoading(false));
     },
-    [ListPaginated, toast],
+    [refreshCurrentList, toast],
   );
 
   const Edit = useCallback(
-    async ({ id, result, categoryId }: IEditResultDTO) => {
+    async ({ id, result, categoryId: _categoryId }: IEditResultDTO) => {
       setIsLoading(true);
       await new ResultService(axios)
         .edit({ id, result })
@@ -153,7 +170,7 @@ export const ResultProvider = ({ children, onClose }: ResultProps) => {
             status: 'success',
             isClosable: true,
           });
-          ListPaginated(categoryId!);
+          refreshCurrentList();
         })
         .catch(() => {
           toast({
@@ -164,11 +181,11 @@ export const ResultProvider = ({ children, onClose }: ResultProps) => {
         })
         .finally(() => setIsLoading(false));
     },
-    [ListPaginated, toast],
+    [refreshCurrentList, toast],
   );
 
   const Delete = useCallback(
-    async (idCat: string, categoryId: string) => {
+    async (idCat: string, _categoryId: string) => {
       setIsLoading(true);
       await new ResultService(axios)
         .delete(idCat)
@@ -178,11 +195,11 @@ export const ResultProvider = ({ children, onClose }: ResultProps) => {
             status: 'success',
             isClosable: true,
           });
-          ListPaginated(categoryId as string);
+          refreshCurrentList();
         })
         .finally(() => setIsLoading(false));
     },
-    [ListPaginated, toast],
+    [refreshCurrentList, toast],
   );
 
   return (

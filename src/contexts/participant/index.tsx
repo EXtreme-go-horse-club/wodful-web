@@ -45,6 +45,7 @@ export const ParticipantProvider = ({ children }: TicketProviderProps) => {
   const [page, setPage] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isError] = useState<boolean>(false);
+  const [currentSearch, setCurrentSearch] = useState<string | undefined>(undefined);
 
   const ExportToCSV = useCallback(async (champId: string) => {
     setIsLoading(true);
@@ -55,6 +56,7 @@ export const ParticipantProvider = ({ children }: TicketProviderProps) => {
 
   const ListPaginated = useCallback(
     async (id: string | null, name?: string) => {
+      setCurrentSearch(name);
       setIsLoading(true);
       await new ParticipantsService(axios)
         .listAll(id, limit, page, name)
@@ -80,7 +82,7 @@ export const ParticipantProvider = ({ children }: TicketProviderProps) => {
             status: 'success',
             isClosable: true,
           });
-          ListPaginated(idChampionship);
+          await ListPaginated(idChampionship, currentSearch);
         })
         .catch(() => {
           toast({
@@ -93,7 +95,7 @@ export const ParticipantProvider = ({ children }: TicketProviderProps) => {
           setIsLoading(false);
         });
     },
-    [toast, ListPaginated],
+    [toast, ListPaginated, currentSearch],
   );
 
   const PatchKit = useCallback(
@@ -107,7 +109,7 @@ export const ParticipantProvider = ({ children }: TicketProviderProps) => {
             status: 'success',
             isClosable: true,
           });
-          ListPaginated(idChampionship);
+          await ListPaginated(idChampionship, currentSearch);
         })
         .catch(() => {
           toast({
@@ -120,7 +122,7 @@ export const ParticipantProvider = ({ children }: TicketProviderProps) => {
           setIsLoading(false);
         });
     },
-    [toast, ListPaginated],
+    [toast, ListPaginated, currentSearch],
   );
 
   const PatchMedal = useCallback(
@@ -134,7 +136,7 @@ export const ParticipantProvider = ({ children }: TicketProviderProps) => {
             status: 'success',
             isClosable: true,
           });
-          ListPaginated(idChampionship);
+          await ListPaginated(idChampionship, currentSearch);
         })
         .catch(() => {
           toast({
@@ -147,7 +149,7 @@ export const ParticipantProvider = ({ children }: TicketProviderProps) => {
           setIsLoading(false);
         });
     },
-    [toast, ListPaginated],
+    [toast, ListPaginated, currentSearch],
   );
 
   return (

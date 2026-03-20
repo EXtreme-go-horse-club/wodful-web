@@ -34,7 +34,7 @@ export interface SubscriptionContextData {
   UpdateStatus: (id: string, status: string) => Promise<void>;
   ResendApprovedEmail: (id: string) => Promise<void>;
   ListPaginated: (id: string, categoryId?: string) => Promise<void>;
-  ListAllByCategory: (categoryId: string) => Promise<void>;
+  ListAllByCategory: (categoryId: string, workoutId?: string) => Promise<void>;
   Create: (participants: IParticipantForm) => Promise<void>;
   Get: (id: string) => Promise<void>;
   Update: (id: string, data: UpdateSubscriptionDTO) => Promise<void>;
@@ -58,6 +58,8 @@ export const SubscriptionProvider = ({ children, onClose }: SubscriptionProvider
   const [subscriptions, setSubscriptions] = useState<ISubscription[]>([] as ISubscription[]);
   const [subscription, setSubscription] = useState<ISubscription>({} as ISubscription);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [currentChampionshipId, setCurrentChampionshipId] = useState<string>(String(id ?? ''));
+  const [currentCategoryFilter, setCurrentCategoryFilter] = useState<string | undefined>(undefined);
 
   const Get = useCallback(async (id: string) => {
     setIsLoading(true);
@@ -78,10 +80,10 @@ export const SubscriptionProvider = ({ children, onClose }: SubscriptionProvider
   }, []);
 
   const ListAllByCategory = useCallback(
-    async (categoryId: string) => {
+    async (categoryId: string, workoutId?: string) => {
       setIsLoading(true);
       await new SubscriptionService(axios)
-        .listAllByCategory(String(id), categoryId)
+        .listAllByCategory(String(id), categoryId, workoutId)
         .then((allSubs) => {
           setSubscriptions(allSubs as ISubscription[]);
         })
@@ -91,10 +93,12 @@ export const SubscriptionProvider = ({ children, onClose }: SubscriptionProvider
   );
 
   const ListPaginated = useCallback(
-    async (id: string, categoryId?: string) => {
+    async (championshipId: string, categoryId?: string) => {
+      setCurrentChampionshipId(championshipId);
+      setCurrentCategoryFilter(categoryId);
       setIsLoading(true);
       await new SubscriptionService(axios)
-        .listAll(id, limit, page, categoryId)
+        .listAll(championshipId, limit, page, categoryId)
         .then((paginatedSubscriptions) => {
           setSubscriptionsPages(paginatedSubscriptions as IPageResponse<ISubscription>);
         })
@@ -102,6 +106,11 @@ export const SubscriptionProvider = ({ children, onClose }: SubscriptionProvider
     },
     [limit, page],
   );
+
+  const refreshCurrentList = useCallback(async () => {
+    if (!currentChampionshipId) return;
+    await ListPaginated(currentChampionshipId, currentCategoryFilter);
+  }, [currentChampionshipId, currentCategoryFilter, ListPaginated]);
 
   const Create = useCallback(
     async (participants: IParticipantForm) => {
@@ -122,7 +131,7 @@ export const SubscriptionProvider = ({ children, onClose }: SubscriptionProvider
             status: 'success',
             isClosable: true,
           });
-          ListPaginated(id as string);
+          refreshCurrentList();
           onClose!();
         })
         .catch(() => {
@@ -140,8 +149,7 @@ export const SubscriptionProvider = ({ children, onClose }: SubscriptionProvider
       subscriptionForm.responsiblePhone,
       subscriptionForm.ticketId,
       toast,
-      ListPaginated,
-      id,
+      refreshCurrentList,
       onClose,
     ],
   );
@@ -157,7 +165,7 @@ export const SubscriptionProvider = ({ children, onClose }: SubscriptionProvider
             status: 'success',
             isClosable: true,
           });
-          ListPaginated(String(id));
+          refreshCurrentList();
         })
         .catch(() => {
           toast({
@@ -168,21 +176,21 @@ export const SubscriptionProvider = ({ children, onClose }: SubscriptionProvider
         })
         .finally(() => setIsLoading(false));
     },
-    [ListPaginated, id, toast],
+    [refreshCurrentList, toast],
   );
 
   const Update = useCallback(
-    async (id: string, data: UpdateSubscriptionDTO) => {
+    async (subscriptionId: string, data: UpdateSubscriptionDTO) => {
       setIsLoading(true);
       await new SubscriptionService(axios)
-        .update(id, data)
+        .update(subscriptionId, data)
         .then(() => {
           toast({
             title: subscriptionMessages['update'],
             status: 'success',
             isClosable: true,
           });
-          ListPaginated(String(id));
+          refreshCurrentList();
         })
         .catch(() => {
           toast({
@@ -193,7 +201,7 @@ export const SubscriptionProvider = ({ children, onClose }: SubscriptionProvider
         })
         .finally(() => setIsLoading(false));
     },
-    [ListPaginated, toast],
+    [refreshCurrentList, toast],
   );
 
   const UpdateStatus = useCallback(
@@ -207,7 +215,7 @@ export const SubscriptionProvider = ({ children, onClose }: SubscriptionProvider
             status: 'success',
             isClosable: true,
           });
-          ListPaginated(String(id));
+          refreshCurrentList();
         })
         .catch(() => {
           toast({
@@ -218,7 +226,7 @@ export const SubscriptionProvider = ({ children, onClose }: SubscriptionProvider
         })
         .finally(() => setIsLoading(false));
     },
-    [ListPaginated, id, toast],
+    [refreshCurrentList, toast],
   );
 
   const ResendApprovedEmail = useCallback(
