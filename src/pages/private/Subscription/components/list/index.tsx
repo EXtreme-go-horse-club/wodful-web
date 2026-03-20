@@ -1,6 +1,7 @@
 import ComponentModal from '@/components/ComponentModal';
 import DeleteData from '@/components/Delete';
 import useSubscriptionData from '@/hooks/useSubscriptionData';
+import { formatDate } from '@/utils/formatDate';
 import { subscriptionStatus } from '@/utils/messages';
 import {
   Button,
@@ -127,11 +128,11 @@ const ListSubscription = ({ id, categoryId, onEdit }: IListSubscription) => {
             </Text>
           </HStack>
           <ButtonGroup flexDirection='column' alignItems='end' gap={6} w='100%'>
-            <Button variant='outline' w='100%' onClick={onResendClose}>
-              Cancelar
-            </Button>
             <Button colorScheme='teal' w='100%' onClick={confirmResendEmail}>
               Reenviar e-mail
+            </Button>
+            <Button variant='outline' w='100%' onClick={onResendClose}>
+              Cancelar
             </Button>
           </ButtonGroup>
         </VStack>
@@ -152,6 +153,9 @@ const ListSubscription = ({ id, categoryId, onEdit }: IListSubscription) => {
               <Th>
                 <Text as='b'>STATUS</Text>
               </Th>
+              <Th>
+                <Text as='b'>CRIADA EM</Text>
+              </Th>
               <Th></Th>
             </Tr>
           </Thead>
@@ -161,6 +165,7 @@ const ListSubscription = ({ id, categoryId, onEdit }: IListSubscription) => {
                 <Td />
                 <Td />
                 <Td p={6}>Busque por uma categoria</Td>
+                <Td />
                 <Td />
                 <Td />
               </Tr>
@@ -193,6 +198,7 @@ const ListSubscription = ({ id, categoryId, onEdit }: IListSubscription) => {
                     {subscriptionStatus[subscription.status]}
                   </Tag>
                 </Td>
+                <Td p={6}>{formatDate(subscription.createdAt, 'dd/MM/yyyy HH:mm')}</Td>
                 <Td p={6}>
                   <Flex justify='end'>
                     <Menu>
@@ -246,6 +252,7 @@ const ListSubscription = ({ id, categoryId, onEdit }: IListSubscription) => {
                   <option value='20'>20</option>
                 </Select>
               </Th>
+              <Th />
               <Th />
               <Th />
               <Th />

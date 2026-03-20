@@ -33,6 +33,7 @@ export interface ISubscription {
   responsiblePhone?: string;
   nickname: string;
   status: 'APPROVED' | 'WAITING' | 'DECLINED';
+  createdAt: Date | string;
   category: {
     name: string;
   };
