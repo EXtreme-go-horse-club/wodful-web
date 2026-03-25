@@ -13,13 +13,17 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Text,
   Tooltip,
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
 import { ChangeEvent, Suspense, lazy, useState } from 'react';
-import { Search } from 'react-feather';
+import { Menu as MenuIcon, Search } from 'react-feather';
 import FormParticipant from './components/form';
 import FormKit from './components/formKit';
 import FormMedal from './components/formMedal';
@@ -40,7 +44,7 @@ const Participants = () => {
   const [participant, setParticipant] = useState<IParticipant>();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const { ExportToCSV } = useParticipantData();
+  const { ExportToCSV, ExportContactsToCSV } = useParticipantData();
   const { currentChampionship } = useApp();
   const toast = useToast();
 
@@ -72,6 +76,23 @@ const Participants = () => {
     });
   };
 
+  const exportContactsToCsv = () => {
+    AnalyticsAdapter.event({
+      action: 'exportar_contatos_inscricoes',
+      category: 'ADM',
+      label: 'Exportar contatos',
+      value: `contatos`,
+    });
+
+    ExportContactsToCSV(currentChampionship.id);
+
+    toast({
+      title: participantMessages['success_export_contacts'],
+      status: 'success',
+      isClosable: true,
+    });
+  };
+
   return (
     <Suspense fallback={<Loader title='Carregando ...' />}>
       <Box w='100%' display='flex' flexDirection='column' alignItems='center' p={6}>
@@ -88,16 +109,30 @@ const Participants = () => {
                 <Input
                   onChange={handleOnChange}
                   as='input'
-                  w='100%'
+                  w='73%'
                   minW='320px'
                   placeholder='Buscar participante ou time'
                 />
               </InputGroup>
-              <Tooltip label='Relação de camisetas entre os participantes' hasArrow>
-                <Button onClick={exportToCsv} colorScheme='teal' w='100%' type='button'>
-                  Baixar Relatório
-                </Button>
-              </Tooltip>
+              <Menu>
+                <Tooltip label='Opções de exportação de relatórios' hasArrow>
+                  <MenuButton
+                    as={Button}
+                    w={'100%'}
+                    color={'white'}
+                    textColor={'#2D3748'}
+                    variant='outline'
+                    leftIcon={<MenuIcon size={18} />}
+                    type='button'
+                  >
+                    Opções
+                  </MenuButton>
+                </Tooltip>
+                <MenuList>
+                  <MenuItem onClick={exportToCsv}>Exportar camisas</MenuItem>
+                  <MenuItem onClick={exportContactsToCsv}>Exportar contatos</MenuItem>
+                </MenuList>
+              </Menu>
             </HStack>
           </>
         </HStack>
@@ -107,8 +142,8 @@ const Participants = () => {
             whichModal == 'EDIT'
               ? 'Editar participante'
               : whichModal == 'MEDAL'
-              ? 'Retirar medalha'
-              : 'Retirar kit'
+                ? 'Retirar medalha'
+                : 'Retirar kit'
           }
           size='lg'
           isOpen={isOpen}

@@ -108,7 +108,7 @@ const Subscription = () => {
                 Categoria: {selectedCategory}
               </Text>
             </Flex>
-            <Flex as='article' gap='1rem'>
+            <Flex as='article' gap='1rem' alignSelf='flex-end'>
               <Select
                 as='select'
                 id='category'
