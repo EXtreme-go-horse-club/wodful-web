@@ -124,4 +124,20 @@ export class ParticipantsService {
         throw new Error();
     }
   }
+
+  async exportContactsToCsv(champID: string): Promise<DownloadLink> {
+    const url = `${this.path}/${champID}/exports/contacts`;
+
+    const { statusCode, body } = await this.httpClient.request({
+      method: 'get',
+      url: url,
+    });
+
+    switch (statusCode) {
+      case HttpStatusCode.ok:
+        return body! as DownloadLink;
+      default:
+        throw new Error();
+    }
+  }
 }
